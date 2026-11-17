@@ -1012,31 +1012,31 @@
                                  ondragleave="onHeroDragLeave(event)" 
                                  ondrop="onHeroDrop(event)" 
                                  onclick="triggerHeroUpload()" 
-                                 class="relative w-[285px] sm:w-[325px] h-[92px] sm:h-[96px] cursor-pointer group select-none transition-all duration-300 hover:scale-105 flex-shrink-0"
+                                 class="relative w-[290px] sm:w-[330px] h-[96px] sm:h-[102px] cursor-pointer group select-none transition-all duration-300 hover:scale-105 flex-shrink-0 overflow-visible"
                                  title="Kéo thả tệp dữ liệu vào đám mây hoặc nhấp để chọn tệp">
                                 <input type="file" id="heroFileInput" accept=".xlsx,.xls,.csv" onchange="onHeroFileSelected(event)" class="hidden">
 
-                                <!-- SVG Cloud Shape with Dashed Border -->
-                                <svg viewBox="0 0 320 100" class="w-full h-full absolute inset-0 pointer-events-none filter drop-shadow-[0_4px_12px_rgba(244,63,110,0.18)]" preserveAspectRatio="none">
+                                <!-- SVG Cloud Shape with Dashed Border and Generous Top Headroom -->
+                                <svg viewBox="-10 -18 340 128" class="w-full h-full absolute inset-0 pointer-events-none filter drop-shadow-[0_4px_12px_rgba(244,63,110,0.18)] overflow-visible" preserveAspectRatio="none">
                                     <defs>
                                         <linearGradient id="cloudBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" stop-color="rgba(255, 255, 255, 0.75)"/>
-                                            <stop offset="100%" stop-color="rgba(255, 241, 242, 0.6)"/>
+                                            <stop offset="0%" stop-color="rgba(255, 255, 255, 0.82)"/>
+                                            <stop offset="100%" stop-color="rgba(255, 241, 242, 0.68)"/>
                                         </linearGradient>
                                     </defs>
                                     <path id="cloudDashedPath" 
-                                          d="M 38,88 
-                                             L 282,88 
-                                             A 20,20 0 0,0 302,68 
-                                             A 18,18 0 0,0 294,44 
-                                             A 24,24 0 0,0 266,30 
-                                             A 30,30 0 0,0 220,16 
-                                             A 35,35 0 0,0 160,8 
-                                             A 34,34 0 0,0 104,18 
-                                             A 26,26 0 0,0 62,32 
-                                             A 20,20 0 0,0 32,48 
-                                             A 18,18 0 0,0 20,68 
-                                             A 20,20 0 0,0 38,88 Z" 
+                                          d="M 40,88 
+                                             L 280,88 
+                                             A 20,20 0 0,0 300,68 
+                                             A 18,18 0 0,0 292,45 
+                                             A 24,24 0 0,0 264,32 
+                                             A 30,30 0 0,0 218,18 
+                                             A 34,34 0 0,0 160,10 
+                                             A 32,32 0 0,0 106,20 
+                                             A 26,26 0 0,0 64,34 
+                                             A 20,20 0 0,0 34,50 
+                                             A 18,18 0 0,0 22,68 
+                                             A 20,20 0 0,0 40,88 Z" 
                                           fill="url(#cloudBgGrad)" 
                                           stroke="#f43f6e" 
                                           stroke-width="1.8" 
@@ -1045,7 +1045,7 @@
                                 </svg>
 
                                 <!-- Text & Icon Nested Centered INSIDE the Cloud -->
-                                <div class="relative z-10 w-full h-full flex flex-col items-center justify-center pt-2 px-6 text-center pointer-events-none">
+                                <div class="relative z-10 w-full h-full flex flex-col items-center justify-center pt-3 px-6 text-center pointer-events-none">
                                     <div class="flex items-center gap-1.5 text-rose-500 mb-0.5">
                                         <i class="fa-solid fa-cloud-arrow-up text-xs sm:text-sm animate-bounce"></i>
                                         <span class="font-extrabold text-[11px] sm:text-xs text-slate-800 dark:text-white group-hover:text-rose-600 transition tracking-tight">
