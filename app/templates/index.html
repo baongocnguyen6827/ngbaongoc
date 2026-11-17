@@ -444,6 +444,11 @@
             color: #f1f5f9 !important;
         }
 
+        body.dark #cloudDashedPath {
+            fill: rgba(30, 41, 59, 0.65) !important;
+            stroke: #fb7185 !important;
+        }
+
         /* ANIMATIONS & SCROLLBAR */
         .view-fade {
             animation: viewSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1);
@@ -995,90 +1000,64 @@
                             Chào mừng bạn đến với <b>Bảo Ngọc AI — Retail Agent OS</b>. Hệ thống tự động hóa thông minh giúp giải quyết bài toán phức tạp trong quản trị vận hành: <b>đối soát doanh thu</b>, <b>bóc tách triệt để đơn hủy &amp; đổi trả</b>, <b>đo lường CSAT khách hàng thực tế</b> và <b>đề xuất kịch bản can thiệp kịp thời</b> theo 4 bước chuẩn hóa.
                         </p>
 
-                        <!-- CTA Actions: Bắt Đầu Khám Phá & Enterprise Data Upload Drag/Drop Zone -->
-                        <div class="pt-3 space-y-3">
-                            <div class="flex items-center gap-3">
-                                <button onclick="switchTab('step1')" class="btn-pink-pill px-6 py-3.5 text-xs sm:text-sm font-black flex items-center gap-2.5 shadow-lg shadow-rose-500/25 hover:scale-105 transition cursor-pointer">
-                                    <span data-i18n="hero_btn_explore">Bắt Đầu Khám Phá Quy Trình (4 Bước) <i class="fa-solid fa-arrow-right"></i></span>
-                                </button>
-                                <span class="text-xs text-slate-400 font-semibold hidden sm:inline">hoặc nạp dữ liệu trực tiếp:</span>
-                            </div>
+                        <!-- CTA Actions: Bắt Đầu Khám Phá & Compact Cloud Drag/Drop Zone -->
+                        <div class="pt-3 flex flex-wrap items-center gap-4">
+                            <button onclick="switchTab('step1')" class="btn-pink-pill px-6 py-3.5 text-xs sm:text-sm font-black flex items-center gap-2.5 shadow-lg shadow-rose-500/25 hover:scale-105 transition cursor-pointer flex-shrink-0">
+                                <span data-i18n="hero_btn_explore">Bắt Đầu Khám Phá Quy Trình (4 Bước) <i class="fa-solid fa-arrow-right"></i></span>
+                            </button>
 
-                            <!-- Enterprise Cloud-Shaped Drag & Drop Zone (Hình Đám Mây Bồng Bềnh) -->
+                            <!-- Compact Cloud Drag & Drop Zone (Hình Đám Mây Nhỏ Gọn Chứa Chữ Bên Trong) -->
                             <div id="heroDropZone" 
                                  ondragover="onHeroDragOver(event)" 
                                  ondragleave="onHeroDragLeave(event)" 
                                  ondrop="onHeroDrop(event)" 
                                  onclick="triggerHeroUpload()" 
-                                 class="relative border-2 border-dashed border-rose-300/90 dark:border-rose-700/80 hover:border-rose-500 dark:hover:border-rose-400 bg-white/50 dark:bg-slate-900/50 hover:bg-rose-50/70 dark:hover:bg-rose-950/35 backdrop-blur-2xl rounded-[32px] sm:rounded-[36px] p-5 sm:p-6 transition-all duration-300 cursor-pointer group shadow-sm overflow-hidden">
+                                 class="relative w-[285px] sm:w-[325px] h-[92px] sm:h-[96px] cursor-pointer group select-none transition-all duration-300 hover:scale-105 flex-shrink-0"
+                                 title="Kéo thả tệp dữ liệu vào đám mây hoặc nhấp để chọn tệp">
                                 <input type="file" id="heroFileInput" accept=".xlsx,.xls,.csv" onchange="onHeroFileSelected(event)" class="hidden">
-                                
-                                <!-- Ambient Cloud Silhouette Watermark in Background -->
-                                <div class="absolute -right-6 -bottom-6 w-48 h-36 opacity-15 dark:opacity-10 pointer-events-none text-rose-500 transition-transform duration-500 group-hover:scale-115 group-hover:rotate-3">
-                                    <svg viewBox="0 0 72 52" class="w-full h-full fill-current">
-                                        <path d="M 20 44 L 54 44 A 13 13 0 0 0 65 31 A 11 11 0 0 0 59 17 A 14 14 0 0 0 44 11 A 16 16 0 0 0 27 13 A 13 13 0 0 0 15 24 A 11 11 0 0 0 10 34 A 10 10 0 0 0 20 44 Z" />
-                                    </svg>
-                                </div>
 
-                                <div class="relative z-10 flex items-center gap-4 sm:gap-5">
-                                    <!-- Fluffy 3D Cloud Graphic Shape (Hình Đám Mây Bồng Bềnh) -->
-                                    <div class="relative w-18 h-15 sm:w-22 sm:h-17 flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">
-                                        <svg viewBox="0 0 72 52" class="w-full h-full filter drop-shadow-[0_8px_16px_rgba(244,63,110,0.4)]">
-                                            <defs>
-                                                <linearGradient id="cloudGradHero" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                    <stop offset="0%" stop-color="#fb7185"/>
-                                                    <stop offset="45%" stop-color="#f43f6e"/>
-                                                    <stop offset="100%" stop-color="#fb923c"/>
-                                                </linearGradient>
-                                                <linearGradient id="cloudSheenHero" x1="0%" y1="0%" x2="0%" y2="100%">
-                                                    <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/>
-                                                    <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-                                                </linearGradient>
-                                            </defs>
-                                            <!-- Fluffy Multi-Lobed Cloud Body -->
-                                            <path d="M 20 44 
-                                                     L 54 44 
-                                                     A 13 13 0 0 0 65 31 
-                                                     A 11 11 0 0 0 59 17 
-                                                     A 14 14 0 0 0 44 11 
-                                                     A 16 16 0 0 0 27 13 
-                                                     A 13 13 0 0 0 15 24 
-                                                     A 11 11 0 0 0 10 34 
-                                                     A 10 10 0 0 0 20 44 Z" 
-                                                  fill="url(#cloudGradHero)" />
-                                            <!-- Cloud Top Sheen Highlight -->
-                                            <path d="M 26 15 
-                                                     A 14 14 0 0 1 42 12 
-                                                     A 12 12 0 0 1 56 18" 
-                                                  stroke="url(#cloudSheenHero)" 
-                                                  stroke-width="2.5" 
-                                                  stroke-linecap="round" 
-                                                  fill="none" />
-                                        </svg>
-                                        <!-- Floating Arrow in Center of Cloud -->
-                                        <div class="absolute inset-0 flex items-center justify-center pt-1 text-white text-base sm:text-lg animate-bounce drop-shadow-md pointer-events-none">
-                                            <i class="fa-solid fa-arrow-up-from-bracket"></i>
-                                        </div>
+                                <!-- SVG Cloud Shape with Dashed Border -->
+                                <svg viewBox="0 0 320 100" class="w-full h-full absolute inset-0 pointer-events-none filter drop-shadow-[0_4px_12px_rgba(244,63,110,0.18)]" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="cloudBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="rgba(255, 255, 255, 0.75)"/>
+                                            <stop offset="100%" stop-color="rgba(255, 241, 242, 0.6)"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <path id="cloudDashedPath" 
+                                          d="M 38,88 
+                                             L 282,88 
+                                             A 20,20 0 0,0 302,68 
+                                             A 18,18 0 0,0 294,44 
+                                             A 24,24 0 0,0 266,30 
+                                             A 30,30 0 0,0 220,16 
+                                             A 35,35 0 0,0 160,8 
+                                             A 34,34 0 0,0 104,18 
+                                             A 26,26 0 0,0 62,32 
+                                             A 20,20 0 0,0 32,48 
+                                             A 18,18 0 0,0 20,68 
+                                             A 20,20 0 0,0 38,88 Z" 
+                                          fill="url(#cloudBgGrad)" 
+                                          stroke="#f43f6e" 
+                                          stroke-width="1.8" 
+                                          stroke-dasharray="4 4" 
+                                          class="group-hover:stroke-rose-600 transition-colors duration-300"/>
+                                </svg>
+
+                                <!-- Text & Icon Nested Centered INSIDE the Cloud -->
+                                <div class="relative z-10 w-full h-full flex flex-col items-center justify-center pt-2 px-6 text-center pointer-events-none">
+                                    <div class="flex items-center gap-1.5 text-rose-500 mb-0.5">
+                                        <i class="fa-solid fa-cloud-arrow-up text-xs sm:text-sm animate-bounce"></i>
+                                        <span class="font-extrabold text-[11px] sm:text-xs text-slate-800 dark:text-white group-hover:text-rose-600 transition tracking-tight">
+                                            Khu Vực Kéo &amp; Thả Dữ Liệu
+                                        </span>
                                     </div>
-
-                                    <div class="flex-1 min-w-0 text-left">
-                                        <div class="flex items-center gap-2 flex-wrap">
-                                            <p class="font-black text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition">
-                                                Khu Vực Kéo &amp; Thả Đám Mây (Cloud Data Upload)
-                                            </p>
-                                            <span class="px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 text-[10px] font-black border border-rose-200 dark:border-rose-900 flex items-center gap-1">
-                                                <i class="fa-solid fa-cloud text-[9px]"></i>
-                                                <span>Đám Mây Dữ Liệu</span>
-                                            </span>
-                                        </div>
-                                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">
-                                            Kéo &amp; thả file <span class="font-bold text-rose-600 dark:text-rose-400 font-mono">.xlsx, .xls, .csv</span> vào đám mây hoặc <span class="text-rose-600 dark:text-rose-400 font-bold underline">nhấp để duyệt file</span> • Tự động kích hoạt đối soát chéo &amp; AI Guardrails
-                                        </p>
-                                    </div>
-
-                                    <div class="hidden sm:flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-white/70 dark:bg-slate-800 border border-rose-200 dark:border-slate-700 text-rose-600 dark:text-rose-400 font-bold text-xs flex-shrink-0 group-hover:bg-rose-500 group-hover:text-white group-hover:border-rose-500 transition shadow-2xs">
-                                        <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
-                                        <span>Chọn File</span>
+                                    <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">
+                                        Thả file <b class="text-rose-600 dark:text-rose-400 font-mono">.xlsx, .csv</b> vào đây hoặc <span class="text-rose-600 dark:text-rose-400 font-bold underline pointer-events-auto">nhấp chọn</span>
+                                    </p>
+                                    <div class="mt-1 inline-flex items-center gap-1 px-2 py-0.2 rounded-full bg-rose-500/10 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 text-[9px] font-black border border-rose-200/80 dark:border-rose-900">
+                                        <i class="fa-solid fa-bolt text-[8px]"></i>
+                                        <span>Tự động đối soát</span>
                                     </div>
                                 </div>
                             </div>
@@ -2679,14 +2658,20 @@
         function onHeroDragOver(e) {
             e.preventDefault();
             e.stopPropagation();
-            const z = document.getElementById('heroDropZone');
-            if (z) z.classList.add('border-rose-500', 'bg-rose-100/60');
+            const p = document.getElementById('cloudDashedPath');
+            if (p) {
+                p.setAttribute('stroke-width', '2.6');
+                p.setAttribute('stroke', '#e11d48');
+            }
         }
         function onHeroDragLeave(e) {
             e.preventDefault();
             e.stopPropagation();
-            const z = document.getElementById('heroDropZone');
-            if (z) z.classList.remove('border-rose-500', 'bg-rose-100/60');
+            const p = document.getElementById('cloudDashedPath');
+            if (p) {
+                p.setAttribute('stroke-width', '1.8');
+                p.setAttribute('stroke', '#f43f6e');
+            }
         }
         function onHeroDrop(e) {
             onHeroDragLeave(e);
