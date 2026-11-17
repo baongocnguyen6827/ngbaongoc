@@ -897,6 +897,11 @@ Hệ thống AI Agent đã tự động làm sạch tệp `{self.active_file_nam
         if any(w in msg for w in ["feedback", "phản hồi", "đánh giá", "csat", "khiếu nại", "ý kiến"]):
             summary = self.get_feedback_summary()
             fb_list = self.customer_feedbacks or []
+            if len(fb_list) == 0:
+                return """### 💬 Báo Cáo Phản Hồi Khách Hàng (Customer Feedback & CSAT)
+- **Trạng thái hệ thống:** Hiện tại trang web **chưa có dữ liệu phản hồi** từ khách hàng (0 lượt đánh giá).
+- **Điểm CSAT trung bình:** `-- / 5.0 ★`
+- **Hệ thống đo lường:** Sẵn sàng tiếp nhận ý kiến đóng góp & đo lường CSAT thực tế khi khách hàng gửi đánh giá mới!"""
             neg_fbs = [f for f in fb_list if f.get("sentiment") == "TIÊU CỰC"]
             neg_text = "\n".join([f"• [{f['store_id']} - {f['category']}]: \"{f['comment']}\" -> **AI:** {f['ai_analysis']}" for f in neg_fbs[:3]])
             return f"""### 💬 Báo Cáo Phản Hồi Khách Hàng (Customer Feedback & CSAT)
@@ -909,8 +914,6 @@ Hệ thống AI Agent đã tự động làm sạch tệp `{self.active_file_nam
 
 #### ⚠️ Các khiếu nại cần lưu ý đặc biệt:
 {neg_text if neg_text else '• Không có khiếu nại nghiêm trọng nào chưa được xử lý.'}
-
-💡 **Khuyến nghị AI Agent:** Tiếp tục duy trì kiểm kê FIFO tại ST09 để khắc phục phản ánh cận date & bao bì móp méo, đồng thời bổ sung điều chuyển hàng kịp thời cho chi nhánh ST18 Cần Thơ.
 """
 
         # 5. Trả lời tổng quan

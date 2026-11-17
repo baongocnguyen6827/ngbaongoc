@@ -11,4 +11,6 @@ ENV/
 .vscode/
 *.swp
 .DS_Store
+scripts/
+
 
