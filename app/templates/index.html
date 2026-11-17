@@ -50,10 +50,11 @@
             font-family: 'Be Vietnam Pro', 'Plus Jakarta Sans', sans-serif;
             background-color: #fce7ee;
             background-image:
-                radial-gradient(at 10% 12%, rgba(255, 143, 177, 0.45) 0px, transparent 55%),
-                radial-gradient(at 90% 15%, rgba(255, 209, 220, 0.65) 0px, transparent 50%),
-                radial-gradient(at 30% 70%, rgba(254, 205, 211, 0.5) 0px, transparent 55%),
-                radial-gradient(at 85% 85%, rgba(244, 63, 110, 0.28) 0px, transparent 60%);
+                radial-gradient(at 8% 10%, rgba(255, 120, 168, 0.6) 0px, transparent 55%),
+                radial-gradient(at 92% 14%, rgba(255, 180, 210, 0.72) 0px, transparent 50%),
+                radial-gradient(at 22% 65%, rgba(254, 165, 195, 0.55) 0px, transparent 55%),
+                radial-gradient(at 85% 85%, rgba(244, 63, 110, 0.38) 0px, transparent 60%),
+                radial-gradient(at 50% 38%, rgba(255, 210, 225, 0.65) 0px, transparent 65%);
             background-attachment: fixed;
             color: #1e293b;
             overflow-x: hidden;
@@ -64,91 +65,92 @@
         html.dark body, body.dark {
             background-color: #0b0f19 !important;
             background-image:
-                radial-gradient(at 12% 15%, rgba(244, 63, 110, 0.25) 0px, transparent 55%),
-                radial-gradient(at 85% 25%, rgba(139, 92, 246, 0.22) 0px, transparent 50%),
-                radial-gradient(at 40% 80%, rgba(225, 29, 90, 0.2) 0px, transparent 55%),
-                radial-gradient(at 85% 85%, rgba(56, 189, 248, 0.15) 0px, transparent 50%) !important;
+                radial-gradient(at 10% 12%, rgba(244, 63, 110, 0.35) 0px, transparent 55%),
+                radial-gradient(at 85% 20%, rgba(139, 92, 246, 0.3) 0px, transparent 50%),
+                radial-gradient(at 30% 75%, rgba(225, 29, 90, 0.28) 0px, transparent 55%),
+                radial-gradient(at 85% 85%, rgba(56, 189, 248, 0.22) 0px, transparent 50%),
+                radial-gradient(at 50% 45%, rgba(168, 85, 247, 0.2) 0px, transparent 60%) !important;
             background-attachment: fixed !important;
             color: #e2e8f0 !important;
         }
 
         /* Top Header & Horizontal Nav Bar Glass Effect */
         header {
-            background: rgba(255, 255, 255, 0.68) !important;
-            backdrop-filter: blur(24px) saturate(180%) !important;
-            -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.75) !important;
-            box-shadow: 0 4px 20px -2px rgba(244, 63, 110, 0.05) !important;
+            background: rgba(255, 255, 255, 0.42) !important;
+            backdrop-filter: blur(28px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.65) !important;
+            box-shadow: 0 4px 24px -2px rgba(244, 63, 110, 0.06) !important;
         }
         body.dark header {
-            background: rgba(15, 23, 42, 0.68) !important;
-            backdrop-filter: blur(24px) saturate(180%) !important;
-            -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3) !important;
+            background: rgba(15, 23, 42, 0.45) !important;
+            backdrop-filter: blur(28px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.4) !important;
         }
 
         #horizontalNavBar {
-            background: rgba(255, 255, 255, 0.62) !important;
-            backdrop-filter: blur(24px) saturate(180%) !important;
-            -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.75) !important;
-            box-shadow: 0 4px 16px -4px rgba(244, 63, 110, 0.04) !important;
+            background: rgba(255, 255, 255, 0.38) !important;
+            backdrop-filter: blur(28px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.65) !important;
+            box-shadow: 0 4px 20px -4px rgba(244, 63, 110, 0.05) !important;
         }
         body.dark #horizontalNavBar {
-            background: rgba(15, 23, 42, 0.62) !important;
-            backdrop-filter: blur(24px) saturate(180%) !important;
-            -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-            box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.3) !important;
+            background: rgba(15, 23, 42, 0.40) !important;
+            backdrop-filter: blur(28px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.4) !important;
         }
 
         /* Frosted Glass Utilities for Inner Containers */
         .bg-white {
-            background-color: rgba(255, 255, 255, 0.72) !important;
-            backdrop-filter: blur(16px) saturate(170%);
-            -webkit-backdrop-filter: blur(16px) saturate(170%);
+            background-color: rgba(255, 255, 255, 0.42) !important;
+            backdrop-filter: blur(20px) saturate(190%);
+            -webkit-backdrop-filter: blur(20px) saturate(190%);
         }
         body.dark .bg-white {
-            background-color: rgba(30, 41, 59, 0.68) !important;
-            backdrop-filter: blur(16px) saturate(170%);
-            -webkit-backdrop-filter: blur(16px) saturate(170%);
+            background-color: rgba(20, 29, 47, 0.42) !important;
+            backdrop-filter: blur(20px) saturate(190%);
+            -webkit-backdrop-filter: blur(20px) saturate(190%);
         }
         .bg-slate-50, .bg-slate-50\/90 {
-            background-color: rgba(255, 255, 255, 0.58) !important;
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            background-color: rgba(255, 255, 255, 0.28) !important;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
         body.dark .bg-slate-50, body.dark .bg-slate-50\/90 {
-            background-color: rgba(15, 23, 42, 0.6) !important;
+            background-color: rgba(15, 23, 42, 0.35) !important;
         }
 
         /* LUXURY CRYSTAL GLASSMORPHISM CARDS (.os-card) */
         .os-card {
-            background: rgba(255, 255, 255, 0.68) !important;
-            backdrop-filter: blur(22px) saturate(190%) !important;
-            -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.85) !important;
+            background: rgba(255, 255, 255, 0.42) !important;
+            backdrop-filter: blur(28px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.75) !important;
             border-radius: 24px;
-            box-shadow: 0 12px 36px 0 rgba(244, 63, 110, 0.07), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 14px 40px -10px rgba(244, 63, 110, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.9) !important;
             transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease, background-color 0.25s ease;
         }
         .os-card-hover:hover {
             transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.82) !important;
+            background: rgba(255, 255, 255, 0.58) !important;
             border-color: rgba(244, 63, 110, 0.35) !important;
             box-shadow: 0 20px 48px -10px rgba(244, 63, 110, 0.18), inset 0 1px 2px 0 rgba(255, 255, 255, 1) !important;
         }
 
         body.dark .os-card {
-            background: rgba(30, 41, 59, 0.6) !important;
-            backdrop-filter: blur(22px) saturate(190%) !important;
-            -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12) !important;
+            background: rgba(20, 29, 47, 0.42) !important;
+            backdrop-filter: blur(28px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: 0 14px 40px -10px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15) !important;
         }
         body.dark .os-card-hover:hover {
-            background: rgba(30, 41, 59, 0.78) !important;
+            background: rgba(30, 41, 59, 0.6) !important;
             border-color: rgba(244, 63, 110, 0.5) !important;
             box-shadow: 0 20px 48px -10px rgba(244, 63, 110, 0.3), inset 0 1px 2px 0 rgba(255, 255, 255, 0.2) !important;
         }
@@ -163,10 +165,10 @@
             font-size: 12px;
             font-weight: 600;
             color: #475569;
-            background: rgba(255, 255, 255, 0.6) !important;
-            backdrop-filter: blur(14px) saturate(160%) !important;
-            -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.85) !important;
+            background: rgba(255, 255, 255, 0.38) !important;
+            backdrop-filter: blur(20px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.75) !important;
             box-shadow: 0 2px 8px rgba(244, 63, 110, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
             transition: all 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
             cursor: pointer;
@@ -174,7 +176,7 @@
             white-space: nowrap;
         }
         .nav-tab:hover, .sidebar-link:hover {
-            background: rgba(255, 241, 245, 0.85) !important;
+            background: rgba(255, 241, 245, 0.68) !important;
             color: #e11d5a !important;
             border-color: rgba(244, 63, 110, 0.35) !important;
             transform: translateY(-2px);
@@ -207,9 +209,9 @@
         }
 
         body.dark .nav-tab {
-            background: rgba(30, 41, 59, 0.5) !important;
-            backdrop-filter: blur(14px) !important;
-            -webkit-backdrop-filter: blur(14px) !important;
+            background: rgba(20, 29, 47, 0.35) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
             border-color: rgba(255, 255, 255, 0.08) !important;
             color: #94a3b8 !important;
         }
@@ -234,13 +236,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 241, 245, 0.8);
+            background: rgba(255, 241, 245, 0.65);
             color: #f43f6e;
             flex-shrink: 0;
             transition: all 0.2s ease;
         }
         body.dark .sb-icon {
-            background: rgba(15, 23, 42, 0.6) !important;
+            background: rgba(15, 23, 42, 0.45) !important;
             color: #f43f6e !important;
         }
 
@@ -267,11 +269,11 @@
 
         /* SECONDARY OUTLINED BUTTON - CRYSTAL GLASS */
         .btn-outline-clean {
-            background: rgba(255, 255, 255, 0.62) !important;
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
+            background: rgba(255, 255, 255, 0.40) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
             color: #1e293b !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.75) !important;
             border-radius: 16px;
             font-weight: 700;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
@@ -279,12 +281,12 @@
         }
         .btn-outline-clean:hover {
             border-color: #fda4b8 !important;
-            background: rgba(255, 245, 248, 0.85) !important;
+            background: rgba(255, 245, 248, 0.68) !important;
             color: #e11d5a !important;
             transform: translateY(-1px);
         }
         body.dark .btn-outline-clean {
-            background: rgba(30, 41, 59, 0.55) !important;
+            background: rgba(20, 29, 47, 0.38) !important;
             color: #e2e8f0 !important;
             border-color: rgba(255, 255, 255, 0.1) !important;
         }
@@ -296,38 +298,38 @@
 
         /* INPUTS, SELECTS, DATE PICKERS - FROSTED GLASS */
         input, select, textarea {
-            background: rgba(255, 255, 255, 0.6) !important;
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.85) !important;
+            background: rgba(255, 255, 255, 0.38) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.75) !important;
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
             transition: all 0.2s ease;
         }
         input:focus, select:focus, textarea:focus {
-            background: rgba(255, 255, 255, 0.92) !important;
+            background: rgba(255, 255, 255, 0.75) !important;
             border-color: rgba(244, 63, 110, 0.5) !important;
             box-shadow: 0 0 0 3px rgba(244, 63, 110, 0.15) !important;
         }
         body.dark input, 
         body.dark select, 
         body.dark textarea {
-            background: rgba(15, 23, 42, 0.6) !important;
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
+            background: rgba(15, 23, 42, 0.38) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
             border-color: rgba(255, 255, 255, 0.1) !important;
             color: #f8fafc !important;
         }
         body.dark input:focus, body.dark select:focus, body.dark textarea:focus {
-            background: rgba(15, 23, 42, 0.85) !important;
+            background: rgba(15, 23, 42, 0.75) !important;
             border-color: rgba(244, 63, 110, 0.6) !important;
             box-shadow: 0 0 0 3px rgba(244, 63, 110, 0.25) !important;
         }
 
         /* BLUSH TABLE HEADER & ROWS - FROSTED GLASS */
         .table-blush thead tr {
-            background: rgba(253, 232, 238, 0.78) !important;
-            backdrop-filter: blur(14px) !important;
-            -webkit-backdrop-filter: blur(14px) !important;
+            background: rgba(255, 235, 242, 0.45) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
             color: #475569;
         }
         .table-blush thead th {
@@ -339,17 +341,17 @@
             color: #334155;
         }
         .table-blush tbody tr {
-            border-bottom: 1px solid rgba(253, 242, 245, 0.75);
+            border-bottom: 1px solid rgba(253, 242, 245, 0.5);
             transition: background-color 0.18s ease;
         }
         .table-blush tbody tr:hover {
-            background-color: rgba(255, 241, 245, 0.65) !important;
+            background-color: rgba(255, 241, 245, 0.45) !important;
         }
 
         body.dark .table-blush thead tr {
-            background: rgba(43, 24, 40, 0.78) !important;
-            backdrop-filter: blur(14px) !important;
-            -webkit-backdrop-filter: blur(14px) !important;
+            background: rgba(43, 24, 40, 0.5) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
             color: #f8fafc !important;
         }
         body.dark .table-blush thead th {
@@ -359,7 +361,18 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
         }
         body.dark .table-blush tbody tr:hover {
-            background-color: rgba(244, 63, 110, 0.12) !important;
+            background-color: rgba(244, 63, 110, 0.18) !important;
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.38) !important;
+            backdrop-filter: blur(28px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+        }
+        body.dark footer {
+            background: rgba(15, 23, 42, 0.40) !important;
+            backdrop-filter: blur(28px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
         }
 
         /* MODALS - FROSTED GLASS DIALOGS */
@@ -479,7 +492,7 @@
     <div class="flex-1 flex flex-col min-h-screen w-full relative z-10">
 
         <!-- 1. TOP HEADER BAR: Brand, Search, Date, Status, Theme, Pipeline & User Profile -->
-        <header class="sticky top-0 z-30 bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border-b border-white/70 dark:border-white/10 px-4 sm:px-7 py-3 transition-colors shadow-xs">
+        <header class="sticky top-0 z-30 bg-white/45 dark:bg-slate-900/45 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 px-4 sm:px-7 py-2.5 transition-colors shadow-xs">
             <div class="max-w-[1700px] mx-auto flex flex-wrap items-center justify-between gap-4">
                 
                 <!-- Left: Brand Logo & Title -->
@@ -625,7 +638,7 @@
         </header>
 
         <!-- 2. HORIZONTAL WORKFLOW STEPPER BAR (ĐẦU MỤC NẰM THEO HÀNG NGANG Ở TRÊN CÙNG) -->
-        <nav id="horizontalNavBar" class="sticky top-[61px] z-20 bg-white/65 dark:bg-slate-900/65 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 shadow-xs transition-colors">
+        <nav id="horizontalNavBar" class="sticky top-[61px] z-20 bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 shadow-xs transition-colors">
             <div class="max-w-[1700px] mx-auto px-4 sm:px-7 py-2.5">
                 <div class="flex items-center justify-between gap-3 overflow-x-auto custom-scroll pb-1">
                     
@@ -910,7 +923,7 @@
                     </div>
 
                     <!-- Right: Author Profile Card (Balanced & Elegant Size) -->
-                    <div class="relative z-10 w-full lg:w-[360px] xl:w-[370px] flex-shrink-0 p-6 rounded-3xl bg-white/75 dark:bg-slate-800/75 border border-white/80 dark:border-white/10 shadow-xl text-center space-y-4 backdrop-blur-xl transition hover:shadow-rose-500/10 hover:border-rose-200">
+                    <div class="relative z-10 w-full lg:w-[360px] xl:w-[370px] flex-shrink-0 p-6 rounded-3xl os-card os-card-hover text-center space-y-4 backdrop-blur-2xl transition hover:shadow-rose-500/10 hover:border-rose-200">
                         <!-- Avatar -->
                         <div class="relative mx-auto w-20 h-20 rounded-2xl bg-gradient-to-tr from-rose-500 via-pink-500 to-amber-400 p-1 shadow-md hover:rotate-2 transition duration-300">
                             <img src="/static/avatar.jpg" alt="Nguyễn Bảo Ngọc" class="w-full h-full rounded-[14px] object-cover bg-white dark:bg-slate-900 shadow-inner">
@@ -930,7 +943,7 @@
 
                         <!-- Contact Details List (Compact Frosted Cards) -->
                         <div class="space-y-2 pt-1 text-left text-xs">
-                            <div class="px-3 py-2 rounded-xl bg-white/70 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-700/60 flex items-center justify-between shadow-2xs hover:border-rose-200 transition">
+                            <div class="px-3 py-2 rounded-xl bg-white/40 dark:bg-slate-900/40 border border-white/70 dark:border-slate-700/60 backdrop-blur-md flex items-center justify-between shadow-2xs hover:border-rose-200 transition">
                                 <div class="flex items-center gap-2">
                                     <span class="w-6 h-6 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-[10px] font-black flex-shrink-0">
                                         <i class="fa-solid fa-phone"></i>
@@ -940,7 +953,7 @@
                                 <a href="tel:0362848956" class="font-mono font-black text-rose-600 text-xs hover:underline">0362848956</a>
                             </div>
 
-                            <div class="px-3 py-2 rounded-xl bg-white/70 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-700/60 flex items-center justify-between shadow-2xs hover:border-pink-200 transition">
+                            <div class="px-3 py-2 rounded-xl bg-white/40 dark:bg-slate-900/40 border border-white/70 dark:border-slate-700/60 backdrop-blur-md flex items-center justify-between shadow-2xs hover:border-pink-200 transition">
                                 <div class="flex items-center gap-2">
                                     <span class="w-6 h-6 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center text-[10px] font-black flex-shrink-0">
                                         <i class="fa-solid fa-envelope"></i>
@@ -950,7 +963,7 @@
                                 <a href="mailto:baongocnguyen686827@gmail.com" class="font-bold text-slate-800 dark:text-slate-200 text-[11px] hover:text-rose-600 transition truncate max-w-[190px]" title="baongocnguyen686827@gmail.com">baongocnguyen686827@gmail.com</a>
                             </div>
 
-                            <div class="px-3 py-2 rounded-xl bg-white/70 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-700/60 flex items-center justify-between shadow-2xs hover:border-amber-200 transition">
+                            <div class="px-3 py-2 rounded-xl bg-white/40 dark:bg-slate-900/40 border border-white/70 dark:border-slate-700/60 backdrop-blur-md flex items-center justify-between shadow-2xs hover:border-amber-200 transition">
                                 <div class="flex items-center gap-2">
                                     <span class="w-6 h-6 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-[10px] font-black flex-shrink-0">
                                         <i class="fa-solid fa-location-dot"></i>
@@ -1890,7 +1903,7 @@
         <!-- ===================================================================== -->
         <!-- 3. FOOTER: THÔNG TIN LIÊN HỆ & BẢN QUYỀN HỆ THỐNG                     -->
         <!-- ===================================================================== -->
-        <footer class="w-full mt-12 border-t border-white/80 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl transition-colors">
+        <footer class="w-full mt-12 border-t border-white/60 dark:border-white/10 bg-white/35 dark:bg-slate-900/35 backdrop-blur-2xl transition-colors">
             <div class="max-w-[1700px] mx-auto px-4 sm:px-7 py-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     
@@ -4116,7 +4129,7 @@
                 <!-- Detail List -->
                 <div class="space-y-3 text-xs">
                     <!-- Phone -->
-                    <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700">
+                    <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white/45 dark:bg-slate-900/45 border border-white/70 dark:border-slate-700/60 backdrop-blur-md">
                         <div class="flex items-center gap-3">
                             <span class="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 flex items-center justify-center text-sm">
                                 <i class="fa-solid fa-phone"></i>
@@ -4135,7 +4148,7 @@
                     </div>
 
                     <!-- Email -->
-                    <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700">
+                    <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white/45 dark:bg-slate-900/45 border border-white/70 dark:border-slate-700/60 backdrop-blur-md">
                         <div class="flex items-center gap-3 min-w-0 pr-2">
                             <span class="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 flex items-center justify-center text-sm flex-shrink-0">
                                 <i class="fa-solid fa-envelope"></i>
@@ -4159,7 +4172,7 @@
                     </div>
 
                     <!-- Address -->
-                    <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700">
+                    <div class="flex items-center gap-3 p-3.5 rounded-2xl bg-white/45 dark:bg-slate-900/45 border border-white/70 dark:border-slate-700/60 backdrop-blur-md">
                         <span class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400 flex items-center justify-center text-sm flex-shrink-0">
                             <i class="fa-solid fa-location-dot"></i>
                         </span>
