@@ -522,7 +522,7 @@
                         </div>
                     </div>
 
-                    <!-- Language Selector Dropdown (Multi-Language: VI, EN, JA, ZH) -->
+                    <!-- Language Selector Dropdown (Multi-Language: VI, EN, JA, ZH, KO) -->
                     <div class="relative" id="langDropdownContainer">
                         <button id="langToggleBtn" onclick="toggleLangDropdown(event)" class="flex items-center gap-1.5 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs" title="Thay đổi ngôn ngữ / Change Language">
                             <span id="currentLangFlag" class="text-sm">🇻🇳</span>
@@ -558,6 +558,13 @@
                                 <div class="leading-tight">
                                     <p class="font-bold">中文</p>
                                     <span class="text-[10px] text-slate-400 font-medium">Simplified</span>
+                                </div>
+                            </button>
+                            <button onclick="changeLanguage('ko')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
+                                <span class="text-base">🇰🇷</span>
+                                <div class="leading-tight">
+                                    <p class="font-bold">한국어</p>
+                                    <span class="text-[10px] text-slate-400 font-medium">Korean</span>
                                 </div>
                             </button>
                         </div>
@@ -870,29 +877,26 @@
                         </div>
 
                         <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-normal">
-                            <span class="block text-slate-900 dark:text-white">Tối Ưu Hóa Vận Hành Bằng</span>
-                            <span class="inline-block bg-gradient-to-r from-rose-600 via-pink-600 to-amber-600 bg-clip-text text-transparent mt-1.5 sm:mt-2.5 pb-2.5 sm:pb-3.5 pr-1 leading-snug tracking-normal filter drop-shadow-[0_1px_2px_rgba(244,63,110,0.25)]">
+                            <span class="block text-slate-900 dark:text-white" data-i18n="hero_slogan_l1">Tối Ưu Hóa Vận Hành Bằng</span>
+                            <span data-i18n="hero_slogan_l2" class="inline-block bg-gradient-to-r from-rose-600 via-pink-600 to-amber-600 bg-clip-text text-transparent mt-1.5 sm:mt-2.5 pb-2.5 sm:pb-3.5 pr-1 leading-snug tracking-normal filter drop-shadow-[0_1px_2px_rgba(244,63,110,0.25)]">
                                 Trí Tuệ Nhân Tạo AI Agent
                             </span>
                         </h1>
 
-                        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal" data-i18n="hero_intro">
                             Chào mừng bạn đến với <b>Bảo Ngọc AI — Retail Agent OS</b>. Hệ thống tự động hóa thông minh giúp giải quyết bài toán phức tạp trong quản trị vận hành: <b>đối soát doanh thu</b>, <b>bóc tách triệt để đơn hủy &amp; đổi trả</b>, <b>đo lường CSAT khách hàng thực tế</b> và <b>đề xuất kịch bản can thiệp kịp thời</b> theo 4 bước chuẩn hóa.
                         </p>
 
                         <!-- CTA Actions -->
                         <div class="pt-3 flex flex-wrap items-center justify-center sm:justify-start gap-3.5">
                             <button onclick="switchTab('step1')" class="btn-pink-pill px-6 py-3.5 text-xs sm:text-sm font-black flex items-center gap-2.5 shadow-lg shadow-rose-500/25 hover:scale-105 transition cursor-pointer">
-                                <span>Bắt Đầu Khám Phá Quy Trình (4 Bước)</span>
-                                <i class="fa-solid fa-arrow-right"></i>
+                                <span data-i18n="hero_btn_explore">Bắt Đầu Khám Phá Quy Trình (4 Bước) <i class="fa-solid fa-arrow-right"></i></span>
                             </button>
                             <button onclick="switchTab('step1'); setTimeout(() => document.getElementById('fileInputElem').click(), 200);" class="btn-outline-clean px-5 py-3.5 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer hover:border-rose-400">
-                                <i class="fa-solid fa-cloud-arrow-up text-rose-500"></i>
-                                <span>Tải Lên File Dữ Liệu (.xlsx, .csv)</span>
+                                <span data-i18n="hero_btn_upload"><i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> Tải Lên File Dữ Liệu (.xlsx, .csv)</span>
                             </button>
                             <button onclick="switchTab('copilot')" class="px-4 py-3.5 rounded-2xl bg-slate-100/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-bold hover:bg-slate-200 transition flex items-center gap-2 cursor-pointer">
-                                <i class="fa-solid fa-comments text-amber-500"></i>
-                                <span>Trợ Lý AI Co-Pilot</span>
+                                <span data-i18n="hero_btn_copilot"><i class="fa-solid fa-comments text-amber-500"></i> Trợ Lý AI Co-Pilot</span>
                             </button>
                         </div>
                     </div>
@@ -912,9 +916,9 @@
                             <h3 class="font-black text-lg text-slate-900 dark:text-white tracking-tight">Nguyễn Bảo Ngọc</h3>
                             <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-300 text-[11px] font-black border border-rose-100">
                                 <i class="fa-solid fa-crown text-[9px] text-amber-500"></i>
-                                <span>Trưởng Dự Án • AI Retail Lead</span>
+                                <span data-i18n="author_role">Trưởng Dự Án • AI Retail Lead</span>
                             </div>
-                            <p class="text-[11px] text-slate-400 font-semibold mt-0.5">Dự án: Thi Cuối Môn AI301</p>
+                            <p class="text-[11px] text-slate-400 font-semibold mt-0.5" data-i18n="author_project">Dự án: Thi Cuối Môn AI301</p>
                         </div>
 
                         <!-- Contact Details List (Compact Frosted Cards) -->
@@ -924,7 +928,7 @@
                                     <span class="w-6 h-6 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-[10px] font-black flex-shrink-0">
                                         <i class="fa-solid fa-phone"></i>
                                     </span>
-                                    <span class="font-bold text-slate-500 dark:text-slate-400 text-[11px]">SĐT:</span>
+                                    <span class="font-bold text-slate-500 dark:text-slate-400 text-[11px]" data-i18n="author_phone_lbl">SĐT:</span>
                                 </div>
                                 <a href="tel:0362848956" class="font-mono font-black text-rose-600 text-xs hover:underline">0362848956</a>
                             </div>
@@ -934,7 +938,7 @@
                                     <span class="w-6 h-6 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center text-[10px] font-black flex-shrink-0">
                                         <i class="fa-solid fa-envelope"></i>
                                     </span>
-                                    <span class="font-bold text-slate-500 dark:text-slate-400 text-[11px]">Email:</span>
+                                    <span class="font-bold text-slate-500 dark:text-slate-400 text-[11px]" data-i18n="author_email_lbl">Email:</span>
                                 </div>
                                 <a href="mailto:baongocnguyen686827@gmail.com" class="font-bold text-slate-800 dark:text-slate-200 text-[11px] hover:text-rose-600 transition truncate max-w-[190px]" title="baongocnguyen686827@gmail.com">baongocnguyen686827@gmail.com</a>
                             </div>
@@ -944,16 +948,15 @@
                                     <span class="w-6 h-6 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-[10px] font-black flex-shrink-0">
                                         <i class="fa-solid fa-location-dot"></i>
                                     </span>
-                                    <span class="font-bold text-slate-500 dark:text-slate-400 text-[11px]">Địa chỉ:</span>
+                                    <span class="font-bold text-slate-500 dark:text-slate-400 text-[11px]" data-i18n="author_addr_lbl">Địa chỉ:</span>
                                 </div>
-                                <span class="font-bold text-slate-800 dark:text-slate-200 text-[11px]">Hà Nội, Việt Nam</span>
+                                <span class="font-bold text-slate-800 dark:text-slate-200 text-[11px]" data-i18n="contact_address_val">Hà Nội, Việt Nam</span>
                             </div>
                         </div>
 
                         <!-- CTA Button -->
                         <button onclick="openContactModal()" class="w-full py-2.5 rounded-xl btn-pink-pill font-extrabold text-xs shadow-md shadow-rose-500/20 hover:scale-[1.02] transition cursor-pointer flex items-center justify-center gap-2 mt-1">
-                            <i class="fa-solid fa-address-card text-xs"></i>
-                            <span>Xem Thẻ Liên Hệ Chi Tiết</span>
+                            <span data-i18n="author_card_btn"><i class="fa-solid fa-address-card text-xs"></i> Xem Thẻ Liên Hệ Chi Tiết</span>
                         </button>
                     </div>
 
@@ -3450,7 +3453,7 @@
 
 
         // =====================================================================
-        // MULTI-LANGUAGE SYSTEM (I18N: VI, EN, JA, ZH)
+        // MULTI-LANGUAGE SYSTEM (I18N: VI, EN, JA, ZH, KO)
         // =====================================================================
         const I18N = {
             vi: {
@@ -3491,6 +3494,19 @@
                 kpi3_btn: 'Xem chi tiết',
                 kpi4_title: 'Dữ Liệu Đạt Chuẩn<br>Phê Duyệt',
                 kpi4_btn: 'Duyệt Hàng Loạt 1-Chạm',
+                hero_badge: 'Hệ Điều Hành Thông Minh Thế Hệ Mới • Bảo Ngọc AI',
+                hero_slogan_l1: 'Tối Ưu Hóa Vận Hành Bằng',
+                hero_slogan_l2: 'Trí Tuệ Nhân Tạo AI Agent',
+                hero_intro: 'Chào mừng bạn đến với <b>Bảo Ngọc AI — Retail Agent OS</b>. Hệ thống tự động hóa thông minh giúp giải quyết bài toán phức tạp trong quản trị vận hành: <b>đối soát doanh thu</b>, <b>bóc tách triệt để đơn hủy &amp; đổi trả</b>, <b>đo lường CSAT khách hàng thực tế</b> và <b>đề xuất kịch bản can thiệp kịp thời</b> theo 4 bước chuẩn hóa.',
+                hero_btn_explore: 'Bắt Đầu Khám Phá Quy Trình (4 Bước) <i class="fa-solid fa-arrow-right"></i>',
+                hero_btn_upload: '<i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> Tải Lên File Dữ Liệu (.xlsx, .csv)',
+                hero_btn_copilot: '<i class="fa-solid fa-comments text-amber-500"></i> Trợ Lý AI Co-Pilot',
+                author_role: 'Trưởng Dự Án • AI Retail Lead',
+                author_project: 'Dự án: Thi Cuối Môn AI301',
+                author_phone_lbl: 'SĐT:',
+                author_email_lbl: 'Email:',
+                author_addr_lbl: 'Địa chỉ:',
+                author_card_btn: '<i class="fa-solid fa-address-card text-xs"></i> Xem Thẻ Liên Hệ Chi Tiết',
                 spotlight_csat_title: 'Phản Hồi Khách Hàng & Đo Lường CSAT Thực Tế',
                 spotlight_btn_view: 'Xem Bảng CSAT & Biểu Đồ →',
                 spotlight_btn_new: '+ Gửi Phản Hồi Mới',
@@ -3545,6 +3561,19 @@
                 kpi3_btn: 'View details',
                 kpi4_title: 'Verified Clean<br>Audit Data',
                 kpi4_btn: '1-Click Bulk Approve',
+                hero_badge: 'Next-Gen Intelligent Operating System • Bảo Ngọc AI',
+                hero_slogan_l1: 'Optimizing Retail Operations With',
+                hero_slogan_l2: 'Autonomous AI Agent Intelligence',
+                hero_intro: 'Welcome to <b>Bảo Ngọc AI — Retail Agent OS</b>. An intelligent automation system designed to solve complex operational challenges: <b>revenue reconciliation</b>, <b>complete returns &amp; cancellations deduction</b>, <b>real-world CSAT measurement</b>, and <b>proactive intervention strategies</b> across 4 standardized steps.',
+                hero_btn_explore: 'Explore 4-Step Workflow <i class="fa-solid fa-arrow-right"></i>',
+                hero_btn_upload: '<i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> Upload Data File (.xlsx, .csv)',
+                hero_btn_copilot: '<i class="fa-solid fa-comments text-amber-500"></i> AI Co-Pilot Assistant',
+                author_role: 'Project Lead • AI Retail Lead',
+                author_project: 'Course: AI301 Final Project',
+                author_phone_lbl: 'Phone:',
+                author_email_lbl: 'Email:',
+                author_addr_lbl: 'Address:',
+                author_card_btn: '<i class="fa-solid fa-address-card text-xs"></i> View Full Contact Card',
                 spotlight_csat_title: 'Customer Feedback & Real-Time CSAT Intelligence',
                 spotlight_btn_view: 'View CSAT Dashboard & Charts →',
                 spotlight_btn_new: '+ Submit New Review',
@@ -3599,6 +3628,19 @@
                 kpi3_btn: '詳細を見る',
                 kpi4_title: '承認適合データ<br>(100% 適格)',
                 kpi4_btn: 'ワンクリック一括承認',
+                hero_badge: '次世代スマートオペレーティングシステム • Bảo Ngọc AI',
+                hero_slogan_l1: '店舗運営を最適化する',
+                hero_slogan_l2: '自律型AIエージェント',
+                hero_intro: '<b>Bảo Ngọc AI — Retail Agent OS</b> へようこそ。店舗運営における重要課題を解決する自律型システムです：<b>売上照合</b>、<b>キャンセル・返品の徹底的控除</b>、<b>リアルタイム顧客満足度（CSAT）測定</b>、標準化された4ステップによる<b>迅速な改善施策提案</b>。',
+                hero_btn_explore: '4ステップ業務フローを開始 <i class="fa-solid fa-arrow-right"></i>',
+                hero_btn_upload: '<i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> データファイルをアップロード (.xlsx, .csv)',
+                hero_btn_copilot: '<i class="fa-solid fa-comments text-amber-500"></i> AIコパイロットアシスタント',
+                author_role: 'プロジェクト統括 • AI Retail Lead',
+                author_project: '科目: AI301 期末課題',
+                author_phone_lbl: '電話:',
+                author_email_lbl: 'メール:',
+                author_addr_lbl: '所在地:',
+                author_card_btn: '<i class="fa-solid fa-address-card text-xs"></i> 連絡先カードの詳細を見る',
                 spotlight_csat_title: '顧客フィードバック＆リアルタイムCSAT分析',
                 spotlight_btn_view: 'CSATダッシュボードを表示 →',
                 spotlight_btn_new: '+ 新規評価を投稿',
@@ -3613,7 +3655,7 @@
                 contact_address_val: 'ハノイ、ベトナム',
                 contact_manager_title: '担当管理者',
                 contact_hours_title: 'サポート受付時間',
-                footer_about: '小売チェーン向けAIエージェントOS：売上照合の自動化、返品・キャンセル分析、CSAT顧客満足度測定、成長戦略の試算。'
+                footer_about: '店舗データ照合の自動化、返品・キャンセル分析、CSAT顧客満足度測定、成長戦略の試算を行うAIエージェントOS。'
             },
             zh: {
                 flag: '🇨🇳',
@@ -3653,6 +3695,19 @@
                 kpi3_btn: '查看详情',
                 kpi4_title: '合规审核达标数据<br>(100% 洁净)',
                 kpi4_btn: '一键批量审核通过',
+                hero_badge: '新一代智能操作系统 • Bảo Ngọc AI',
+                hero_slogan_l1: '全面优化零售运营',
+                hero_slogan_l2: 'AI Agent 人工智能体',
+                hero_intro: '欢迎使用 <b>Bảo Ngọc AI — Retail Agent OS</b>。智能自动化系统，专为解决复杂运营难题打造：<b>精准对账</b>、<b>退换货与取消订单彻底剔除</b>、<b>真实客户满意度（CSAT）衡量</b>，并通过标准化4步流程<b>提供及时的经营决策建议</b>。',
+                hero_btn_explore: '开始探索4步标准化流程 <i class="fa-solid fa-arrow-right"></i>',
+                hero_btn_upload: '<i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> 上传数据文件 (.xlsx, .csv)',
+                hero_btn_copilot: '<i class="fa-solid fa-comments text-amber-500"></i> AI 智能副驾助理',
+                author_role: '项目主管 • AI Retail Lead',
+                author_project: '课程项目: AI301 期末结课',
+                author_phone_lbl: '电话:',
+                author_email_lbl: '邮箱:',
+                author_addr_lbl: '地址:',
+                author_card_btn: '<i class="fa-solid fa-address-card text-xs"></i> 查看完整联系卡片',
                 spotlight_csat_title: '客户真实反馈与实时 CSAT 满意度洞察',
                 spotlight_btn_view: '查看 CSAT 看板与图表 →',
                 spotlight_btn_new: '+ 提交客户新评价',
@@ -3667,7 +3722,74 @@
                 contact_address_val: '越南河内',
                 contact_manager_title: '负责人信息',
                 contact_hours_title: '服务支持时间',
-                footer_about: '面向零售连锁门店的智能体操作系统：自动化对账、退换货剔除、CSAT客户满意度洞察及智能经营决策建议。'
+                footer_about: '智能体操作系统：自动化数据对账、退换货剔除、CSAT客户满意度洞察及智能经营决策建议。'
+            },
+            ko: {
+                flag: '🇰🇷',
+                langName: '한국어',
+                search_ph: '매장, 주문 번호, 상품, 점장 검색...',
+                audit_date_label: '기준<br>대사 일자:',
+                theme_dark: '다크 모드',
+                theme_light: '라이트 모드',
+                feedback_quick: '고객 피드백<br><span class="text-[10px] text-yellow-200 font-bold">CSAT Live</span>',
+                btn_run_pipeline: 'AI 파이프라인<br class="hidden sm:inline"> 실행',
+                btn_export_report: '보고서<br class="hidden sm:inline"> 내보내기',
+                workflow_lbl: '업무 절차:',
+                postaudit_lbl: '사후 감사:',
+                welcome_nav_title: '홈',
+                welcome_nav_sub: '인사말 및 개요',
+                step1_title: '1단계: 데이터 연결',
+                step1_sub: '데이터 소스 선택',
+                step2_title: '2단계: 정제 및 표준화',
+                step2_sub: '검증 및 표준화',
+                step3_title: '3단계: 성과 분석',
+                step3_sub: '매출·이익·목표 비교',
+                step4_title: '4단계: 결과 내보내기',
+                step4_sub: '데이터 및 보고서 다운로드',
+                copilot_title: 'AI 코파일럿',
+                copilot_sub: '데이터 질의응답',
+                audit_title: '감사 추적 로그',
+                audit_sub: '대사 및 처리 이력',
+                feedback_title: '고객 피드백',
+                feedback_sub: 'CSAT 및 고객 평가',
+                kpi1_title: '순매출액<br>(Net Revenue)',
+                kpi1_completion_text: '목표 달성률',
+                kpi2_title: '취소 및 반품<br>(중복 제거 완료)',
+                kpi2_badge: '중복 집계<br>차단 완료',
+                kpi2_btn: '지금 검토',
+                kpi3_title: '우선 지원 매장<br>(지원 필요)',
+                kpi3_badge: '긴급<br>우선',
+                kpi3_btn: '상세 보기',
+                kpi4_title: '승인 적격 데이터<br>(100% 검증)',
+                kpi4_btn: '원클릭 일괄 승인',
+                hero_badge: '차세대 스마트 운영체제 • Bảo Ngọc AI',
+                hero_slogan_l1: '운영 프로세스를 최적화하는',
+                hero_slogan_l2: '인공지능 AI 에이전트',
+                hero_intro: '<b>Bảo Ngọc AI — Retail Agent OS</b>에 오신 것을 환영합니다. 복잡한 운영 관리 과제를 해결하는 스마트 자동화 시스템입니다: <b>매출 대사</b>, <b>주문 취소 및 반품 정밀 분리</b>, <b>실시간 CSAT 고객 만족도 측정</b>, 그리고 4단계 표준화 절차에 따른 <b>선제적 대응 전략 제안</b>.',
+                hero_btn_explore: '4단계 업무 절차 시작하기 <i class="fa-solid fa-arrow-right"></i>',
+                hero_btn_upload: '<i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> 데이터 파일 업로드 (.xlsx, .csv)',
+                hero_btn_copilot: '<i class="fa-solid fa-comments text-amber-500"></i> AI 코파일럿 어시스턴트',
+                author_role: '프로젝트 총괄 • AI Retail Lead',
+                author_project: '프로젝트: AI301 기말 과제',
+                author_phone_lbl: '전화:',
+                author_email_lbl: '이메일:',
+                author_addr_lbl: '소재지:',
+                author_card_btn: '<i class="fa-solid fa-address-card text-xs"></i> 상세 연락처 카드 보기',
+                spotlight_csat_title: '고객 피드백 및 실시간 CSAT 만족도 인텔리전스',
+                spotlight_btn_view: 'CSAT 대시보드 및 차트 보기 →',
+                spotlight_btn_new: '+ 신규 평가 작성',
+                step3_h2: '3단계: 18개 매장 다차원 심층 분석 및 성과 비교',
+                fb_view_title: '고객 경험 및 만족도 피드백 (CSAT 대시보드)',
+                toast_switched: '한국어로 전환되었습니다!',
+                contact_btn: '문의하기',
+                contact_title: '담당자 연락처 정보',
+                contact_phone_lbl: '전화번호:',
+                contact_email_lbl: '지원 이메일:',
+                contact_address_lbl: '소재지:',
+                contact_address_val: '베트남 하노이',
+                contact_manager_title: '프로젝트 총괄',
+                contact_hours_title: '지원 운영 시간',
+                footer_about: '데이터 대사 자동화, 반품·취소 정밀 분리, CSAT 측정 및 성장 의사결정을 지원하는 스마트 AI Agent OS.'
             }
         };
 
@@ -3688,7 +3810,7 @@
             }
         });
 
-        function changeLanguage(lang) {
+        function changeLanguage(lang, silent = false) {
             if (!I18N[lang]) return;
             currentAppLang = lang;
             localStorage.setItem('bn_lang', lang);
@@ -3720,7 +3842,9 @@
             });
 
             // Update dynamic table and dropdown labels if applicable
-            showToast(I18N[lang].toast_switched, 'success');
+            if (!silent) {
+                showToast(I18N[lang].toast_switched, 'success');
+            }
         }
 
 
@@ -3782,7 +3906,7 @@
 
         function initLanguage() {
             const savedLang = localStorage.getItem('bn_lang') || 'vi';
-            changeLanguage(savedLang);
+            changeLanguage(savedLang, true);
         }
 
         // Initialize on load
