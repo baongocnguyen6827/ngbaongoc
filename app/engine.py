@@ -917,6 +917,14 @@ Hệ thống AI Agent đã tự động làm sạch tệp `{self.active_file_nam
 """
 
         # 5. Trả lời tổng quan
+        if not self.management_report or not self.management_report.get("system_summary"):
+            return f"""Xin chào Nguyễn Bảo Ngọc! Tôi là **AI Agent Quản trị Bán lẻ Bảo Ngọc**. 
+Hệ thống hiện tại đang ở trạng thái ban đầu sạch (chưa có tệp dữ liệu bán hàng nào được kích hoạt).
+
+Bạn có thể tải lên tệp dữ liệu bán hàng mới (.xlsx, .csv) tại Bước 1 hoặc nhấn nút **'Chạy AI Pipeline'** trên thanh điều hướng để tôi bắt đầu đọc dữ liệu và đối soát tự động!
+
+Khi có dữ liệu, bạn có thể hỏi tôi bất kỳ lúc nào về doanh thu, tỷ lệ đổi trả, cửa hàng cần can thiệp hoặc điểm CSAT!"""
+
         sum_info = self.management_report["system_summary"]
         return f"""Xin chào Nguyễn Bảo Ngọc! Tôi là **AI Agent Quản trị Bán lẻ Bảo Ngọc**. 
 Tôi đã làm sạch và phân tích trực tiếp trên tệp dữ liệu: **`{self.active_file_name}`** cho 18 cửa hàng.

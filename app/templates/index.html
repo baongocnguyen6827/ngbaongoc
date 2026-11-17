@@ -620,14 +620,14 @@
                     <div class="flex items-center gap-2.5 flex-shrink-0">
                         <span data-i18n="workflow_lbl" class="text-[10px] font-extrabold tracking-wider text-slate-400 uppercase hidden 2xl:inline-block mr-1">QUY TRÌNH:</span>
 
-                        <!-- Bước 1: Kết Nối (Chọn Nguồn Dữ Liệu) -->
-                        <button onclick="switchTab('step1')" data-nav="step1" class="nav-tab group">
+                        <!-- Bước 1: Kết Nối (Chọn Nguồn Dữ Liệu) - ACTIVE BY DEFAULT -->
+                        <button onclick="switchTab('step1')" data-nav="step1" class="nav-tab active group">
                             <span class="sb-icon"><i class="fa-solid fa-database text-xs"></i></span>
                             <div class="text-left leading-tight">
                                 <div data-i18n="step1_title" class="nav-title font-extrabold text-xs text-slate-800">Bước 1: Kết Nối Dữ Liệu</div>
                                 <div data-i18n="step1_sub" class="sb-sub text-[10px] font-medium text-slate-400 mt-0.5">Chọn nguồn dữ liệu</div>
                             </div>
-                            <span id="sbBadgeStep1" class="sb-badge px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-rose-100 text-rose-600">1.006</span>
+                            <span id="sbBadgeStep1" class="sb-badge px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-slate-100 text-slate-500">0</span>
                         </button>
 
                         <!-- Bước 2: Làm Sạch & Chuẩn Hóa -->
@@ -637,17 +637,17 @@
                                 <div data-i18n="step2_title" class="nav-title font-extrabold text-xs text-slate-800">Bước 2: Làm Sạch &amp; Chuẩn Hóa</div>
                                 <div data-i18n="step2_sub" class="sb-sub text-[10px] font-medium text-slate-400 mt-0.5">Kiểm tra &amp; chuẩn hóa</div>
                             </div>
-                            <span id="sbBadgeStep2" class="sb-badge px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-rose-100 text-rose-600">469</span>
+                            <span id="sbBadgeStep2" class="sb-badge px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-slate-100 text-slate-500">0</span>
                         </button>
 
-                        <!-- Bước 3: Phân Tích (Số Liệu) - ACTIVE BY DEFAULT -->
-                        <button onclick="switchTab('step3')" data-nav="step3" class="nav-tab active group">
+                        <!-- Bước 3: Phân Tích (Số Liệu) -->
+                        <button onclick="switchTab('step3')" data-nav="step3" class="nav-tab group">
                             <span class="sb-icon"><i class="fa-solid fa-chart-pie text-xs"></i></span>
                             <div class="text-left leading-tight">
                                 <div data-i18n="step3_title" class="nav-title font-extrabold text-xs text-slate-800">Bước 3: Phân Tích Số Liệu</div>
                                 <div data-i18n="step3_sub" class="sb-sub text-[10px] font-medium text-slate-400 mt-0.5">So sánh DT, LN &amp; Mục tiêu</div>
                             </div>
-                            <span id="sbBadgeStep3" class="sb-badge px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-amber-100 text-amber-700">18</span>
+                            <span id="sbBadgeStep3" class="sb-badge px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-slate-100 text-slate-500">0</span>
                         </button>
 
                         <!-- Bước 4: Xuất Kết Quả -->
@@ -657,7 +657,7 @@
                                 <div data-i18n="step4_title" class="nav-title font-extrabold text-xs text-slate-800">Bước 4: Xuất Kết Quả</div>
                                 <div data-i18n="step4_sub" class="sb-sub text-[10px] font-medium text-slate-400 mt-0.5">Tải dữ liệu &amp; báo cáo</div>
                             </div>
-                            <span id="sbBadgeStep4" class="sb-badge px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-emerald-100 text-emerald-700">100%</span>
+                            <span id="sbBadgeStep4" class="sb-badge px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-slate-100 text-slate-500">0%</span>
                         </button>
                     </div>
 
@@ -715,37 +715,35 @@
                     <div>
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
                                 <span data-i18n="kpi1_title" class="text-xs font-bold text-slate-600 leading-snug">Doanh Thu Thuần<br>(Net Revenue)</span>
                             </div>
-                            <span class="px-2.5 py-1 rounded-xl bg-rose-50 text-rose-600 text-[10px] font-extrabold text-center leading-tight">
+                            <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-500 text-[10px] font-extrabold text-center leading-tight">
                                 Kỳ T10-<br>T09
                             </span>
                         </div>
 
                         <div id="topKpiNetRevenue" class="mt-3.5 text-[24px] sm:text-[26px] font-extrabold text-slate-900 tracking-tight">
-                            464.791.000 <span class="underline text-xl">đ</span>
+                            0 <span class="underline text-xl">đ</span>
                         </div>
 
                         <div class="mt-1 flex items-center gap-1.5 text-xs">
-                            <span id="topKpiRevCompletion" class="font-extrabold text-emerald-600">
-                                <i class="fa-solid fa-arrow-trend-up mr-0.5"></i>91.6%
+                            <span id="topKpiRevCompletion" class="font-extrabold text-slate-400">
+                                <i class="fa-solid fa-clock mr-0.5"></i>--%
                             </span>
-                            <span data-i18n="kpi1_completion_text" class="text-slate-400 font-medium">hoàn thành mục tiêu kỳ</span>
+                            <span data-i18n="kpi1_completion_text" class="text-slate-400 font-medium">chờ nạp dữ liệu</span>
                         </div>
                     </div>
 
                     <div class="mt-4 pt-2">
                         <!-- Multi-segment bar matching screenshot -->
                         <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden flex">
-                            <div id="barSeg1" class="h-full bg-rose-400 transition-all duration-700" style="width: 42%"></div>
-                            <div id="barSeg2" class="h-full bg-rose-500 transition-all duration-700" style="width: 33%"></div>
-                            <div id="barSeg3" class="h-full bg-purple-400 transition-all duration-700" style="width: 25%"></div>
+                            <div id="barSeg1" class="h-full bg-slate-200 transition-all duration-700" style="width: 0%"></div>
+                            <div id="barSeg2" class="h-full bg-slate-200 transition-all duration-700" style="width: 0%"></div>
+                            <div id="barSeg3" class="h-full bg-slate-200 transition-all duration-700" style="width: 0%"></div>
                         </div>
                         <div class="flex items-center justify-between text-[10px] text-slate-400 font-semibold mt-2">
-                            <span class="flex items-center gap-1"><i class="fa-solid fa-circle text-[6px] text-rose-400"></i>Sữa: 42%</span>
-                            <span class="flex items-center gap-1"><i class="fa-solid fa-circle text-[6px] text-rose-600"></i>Bỉm: 33%</span>
-                            <span class="flex items-center gap-1"><i class="fa-solid fa-circle text-[6px] text-purple-400"></i>Khác: 25%</span>
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-circle text-[6px] text-slate-300"></i>Chưa có giao dịch</span>
                         </div>
                     </div>
                 </div>
@@ -755,19 +753,19 @@
                     <div>
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-triangle-exclamation text-rose-500 text-xs"></i>
+                                <i class="fa-solid fa-triangle-exclamation text-slate-400 text-xs"></i>
                                 <span data-i18n="kpi2_title" class="text-xs font-bold text-slate-600 leading-snug">Đơn Hủy &amp; Đổi Trả<br>Đã Bóc Tách</span>
                             </div>
-                            <span data-i18n="kpi2_badge" class="px-2.5 py-1 rounded-xl bg-rose-50 text-rose-600 text-[10px] font-extrabold text-center leading-tight uppercase">CHẶN<br>ĐẾM TRÙNG</span>
+                            <span data-i18n="kpi2_badge" class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-500 text-[10px] font-extrabold text-center leading-tight uppercase">CHẶN<br>ĐẾM TRÙNG</span>
                         </div>
 
                         <div class="mt-3 flex items-baseline gap-1.5">
-                            <span id="topKpiCancelReturnCount" class="text-[28px] font-extrabold text-rose-600">69</span>
+                            <span id="topKpiCancelReturnCount" class="text-[28px] font-extrabold text-slate-400">0</span>
                             <span class="text-xs font-medium text-slate-400">đơn hàng</span>
                         </div>
 
-                        <p id="topKpiCancelReturnDesc" class="text-xs text-slate-500 mt-0.5">
-                            41 đơn hủy &amp; 28 đơn trả (-18,3tr đ)
+                        <p id="topKpiCancelReturnDesc" class="text-xs text-slate-400 mt-0.5">
+                            0 đơn hủy &amp; 0 đơn trả (0 đ)
                         </p>
                     </div>
 
@@ -785,25 +783,25 @@
                     <div>
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-clock-rotate-left text-amber-500 text-xs"></i>
+                                <i class="fa-solid fa-clock-rotate-left text-slate-400 text-xs"></i>
                                 <span data-i18n="kpi3_title" class="text-xs font-bold text-slate-600 leading-snug">Cửa Hàng Cần<br>Hỗ Trợ Trước</span>
                             </div>
-                            <span data-i18n="kpi3_badge" class="px-2.5 py-1 rounded-xl bg-amber-50 text-amber-700 text-[10px] font-extrabold text-center leading-tight uppercase">ƯU TIÊN<br>GẤP</span>
+                            <span data-i18n="kpi3_badge" class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-500 text-[10px] font-extrabold text-center leading-tight uppercase">ƯU TIÊN<br>GẤP</span>
                         </div>
 
                         <div class="mt-3 flex items-baseline gap-1.5">
-                            <span id="topKpiUrgentStores" class="text-[28px] font-extrabold text-amber-600">6</span>
+                            <span id="topKpiUrgentStores" class="text-[28px] font-extrabold text-slate-400">0</span>
                             <span class="text-xs font-medium text-slate-400">cửa hàng</span>
                         </div>
 
-                        <p class="text-xs text-slate-500 mt-0.5">
-                            Tỷ lệ trả &gt; 12% hoặc sụt giảm MoM sâu
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Chưa có cảnh báo bất thường nào
                         </p>
                     </div>
 
                     <div class="mt-4 pt-2 flex items-center justify-between gap-2">
                         <span id="topKpiUrgentList" class="text-[11px] text-slate-400 leading-tight truncate max-w-[55%]">
-                            ST09, ST18, ST05, ST12...
+                            Hệ thống sẵn sàng
                         </span>
                         <button onclick="switchTab('step4')" class="px-3.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold text-xs transition flex items-center gap-1">
                             <span data-i18n="kpi3_btn">Xem chi tiết</span>
@@ -817,26 +815,26 @@
                     <div>
                         <div class="flex items-start justify-between gap-2">
                             <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-circle-check text-emerald-500 text-xs"></i>
+                                <i class="fa-solid fa-circle-check text-slate-400 text-xs"></i>
                                 <span data-i18n="kpi4_title" class="text-xs font-bold text-slate-600 leading-snug">Dữ Liệu Đạt Chuẩn<br>Phê Duyệt</span>
                             </div>
-                            <span id="topKpiCleanBadge" class="px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-700 text-[10px] font-extrabold text-center leading-tight uppercase">
-                                100%<br>SẠCH
+                            <span id="topKpiCleanBadge" class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-500 text-[10px] font-extrabold text-center leading-tight uppercase">
+                                CHỜ<br>DỮ LIỆU
                             </span>
                         </div>
 
                         <div class="mt-3 flex items-baseline gap-1">
-                            <span id="topKpiValidRows" class="text-[28px] font-extrabold text-emerald-600">469</span>
-                            <span id="topKpiTotalRows" class="text-xs font-semibold text-slate-400">/ 1.006 dòng</span>
+                            <span id="topKpiValidRows" class="text-[28px] font-extrabold text-slate-400">0</span>
+                            <span id="topKpiTotalRows" class="text-xs font-semibold text-slate-400">/ 0 dòng</span>
                         </div>
 
-                        <p class="text-xs text-slate-500 mt-0.5">
-                            Khớp 100% đối soát, sẵn sàng báo cáo
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Chưa có tệp dữ liệu nào được xử lý
                         </p>
                     </div>
 
                     <div class="mt-4 pt-2">
-                        <button onclick="submitHumanVerification(true)" id="btnOneClickVerify" class="w-full py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs shadow-md shadow-emerald-500/20 transition flex items-center justify-center gap-2">
+                        <button onclick="submitHumanVerification(true)" id="btnOneClickVerify" class="w-full py-2.5 px-4 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-400 font-bold text-xs transition flex items-center justify-center gap-2 cursor-not-allowed">
                             <i class="fa-solid fa-check"></i>
                             <span data-i18n="kpi4_btn">Duyệt Hàng Loạt 1-Chạm</span>
                         </button>
@@ -847,7 +845,7 @@
             <!-- ===================================================================== -->
             <!-- VIEW 1: BƯỚC 1 - KẾT NỐI (CHỌN NGUỒN DỮ LIỆU)                          -->
             <!-- ===================================================================== -->
-            <section id="step1View" class="view-section view-fade hidden space-y-6">
+            <section id="step1View" class="view-section view-fade space-y-6">
                 <div class="os-card p-6 space-y-5">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div class="flex items-start gap-3">
@@ -857,26 +855,18 @@
                             <div>
                                 <div class="flex items-center gap-2">
                                     <h2 class="text-base font-extrabold text-slate-900">Bước 1: Kết Nối (Chọn Nguồn Dữ Liệu Đầu Vào)</h2>
-                                    <span id="step1StatusChip" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-700">ĐÃ KẾT NỐI</span>
+                                    <span id="step1StatusChip" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-500">CHƯA KẾT NỐI</span>
                                 </div>
                                 <p class="text-xs text-slate-500 mt-0.5">
-                                    Tệp đang kích hoạt: <b id="activeFileNameLabel" class="text-rose-600 font-mono">PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx</b> (Gồm giao dịch, đổi trả, giá vốn, mục tiêu 18 cửa hàng).
+                                    Tệp đang kích hoạt: <b id="activeFileNameLabel" class="text-slate-400 font-mono">Chưa có tệp dữ liệu nào</b> <span class="text-slate-400">(Vui lòng chọn hoặc kéo thả tệp bán hàng bên dưới).</span>
                                 </p>
                             </div>
                         </div>
 
                         <div class="flex flex-wrap items-center gap-2">
-                            <button onclick="loadUploadedExcel()" id="btnLoadExcel" class="btn-outline-clean px-3.5 py-2 text-xs flex items-center gap-2">
-                                <i class="fa-solid fa-file-excel text-emerald-600"></i>
-                                <span>Nạp File .xlsx (1.006 dòng)</span>
-                            </button>
-                            <button onclick="loadSample60k()" id="btnLoadSample60k" class="btn-outline-clean px-3.5 py-2 text-xs flex items-center gap-2">
-                                <i class="fa-solid fa-server text-rose-500"></i>
-                                <span>Nạp Mẫu 60.000 Dòng</span>
-                            </button>
-                            <button onclick="switchTab('step2')" class="btn-pink-pill px-4 py-2 text-xs flex items-center gap-2">
-                                <span>Sang Bước 2: Làm Sạch</span>
-                                <i class="fa-solid fa-arrow-right"></i>
+                            <button onclick="document.getElementById('fileInputElem').click()" class="btn-pink-pill px-4 py-2 text-xs flex items-center gap-2 cursor-pointer shadow-md">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                <span>Chọn Tệp Dữ Liệu (.xlsx, .csv)</span>
                             </button>
                         </div>
                     </div>
@@ -950,7 +940,13 @@
                                     <th>Ghi Chú / Lý Do Đổi Trả</th>
                                 </tr>
                             </thead>
-                            <tbody id="step1RawTableBody"></tbody>
+                            <tbody id="step1RawTableBody">
+                                <tr>
+                                    <td colspan="8" class="text-center py-10 text-slate-400 font-bold text-xs">
+                                        <i class="fa-solid fa-cloud-arrow-up mr-2 text-rose-400"></i>Hệ thống chưa có dữ liệu giao dịch. Vui lòng tải lên tệp (.xlsx, .csv) ở trên để bắt đầu!
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -1068,7 +1064,13 @@
                                     <th>Ghi Chú Kiểm Toán</th>
                                 </tr>
                             </thead>
-                            <tbody id="step2CleanTableBody"></tbody>
+                            <tbody id="step2CleanTableBody">
+                                <tr>
+                                    <td colspan="8" class="text-center py-10 text-slate-400 font-bold text-xs">
+                                        <i class="fa-solid fa-wand-magic-sparkles mr-2 text-rose-400"></i>Chưa có dữ liệu làm sạch. Dữ liệu sẽ tự động bóc tách đơn hủy và đổi trả khi bạn tải tệp lên!
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -1078,7 +1080,7 @@
             <!-- VIEW 3: BƯỚC 3 - PHÂN TÍCH (SỐ LIỆU) — DEFAULT ACTIVE VIEW             -->
             <!-- Matches the exact table & card design in the Reference Screenshot      -->
             <!-- ===================================================================== -->
-            <section id="step3View" class="view-section view-fade space-y-6">
+            <section id="step3View" class="view-section view-fade hidden space-y-6">
 
                 <!-- ⭐ CSAT & CUSTOMER FEEDBACK SPOTLIGHT BANNER (Trạng Thái Trắng: Chưa Có Dữ Liệu Khách Hàng) -->
                 <div id="spotlightCsatBanner" class="os-card p-5 bg-gradient-to-r from-white via-rose-50/30 to-amber-50/40 dark:from-slate-900 dark:via-slate-800/80 dark:to-slate-900 border border-slate-200/80 dark:border-slate-700 shadow-md">
@@ -1166,7 +1168,11 @@
                                 </tr>
                             </thead>
                             <tbody id="analysisMainTableBody">
-                                <!-- Populated dynamically by JS -->
+                                <tr>
+                                    <td colspan="10" class="text-center py-12 text-slate-400 font-bold text-xs">
+                                        <i class="fa-solid fa-chart-pie mr-2 text-rose-400"></i>Hệ thống chưa có báo cáo phân tích. Vui lòng tải lên tệp dữ liệu tại Bước 1 hoặc nhấn nút "Chạy AI Pipeline" ở trên!
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -1945,7 +1951,7 @@
     <!-- ===================================================================== -->
     <script>
         let appState = {
-            currentTab: 'step3',
+            currentTab: 'step1',
             previewMode: 'cleaned',
             previewPage: 1,
             previewTotal: 0,
@@ -3502,7 +3508,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
             initLanguage();
-            runFullAiPipeline();
+            switchTab('step1');
             loadFeedbacks();
         });
     </script>
