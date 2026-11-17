@@ -1136,6 +1136,10 @@
                                 <i class="fa-solid fa-cloud-arrow-up"></i>
                                 <span>Chọn Tệp Dữ Liệu (.xlsx, .csv)</span>
                             </button>
+                            <button onclick="resetAllSystemData()" class="px-3.5 py-2 rounded-2xl border border-rose-200 dark:border-rose-900 bg-white dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs flex items-center gap-1.5" title="Xóa toàn bộ dữ liệu, đưa về trạng thái trống ban đầu">
+                                <i class="fa-solid fa-trash-can text-rose-500"></i>
+                                <span>Xóa Sạch Dữ Liệu</span>
+                            </button>
                         </div>
                     </div>
 
@@ -2556,37 +2560,59 @@
                 appState.previewTotal = json.total || 0;
                 const maxPage = Math.ceil(appState.previewTotal / 15) || 1;
 
-                const pageStr = `${json.page} / ${maxPage}`;
+                const pageStr = (json.total && json.total > 0) ? `${json.page} / ${maxPage}` : '0 / 0';
                 if (document.getElementById('step1PageLabel')) document.getElementById('step1PageLabel').innerText = pageStr;
                 if (document.getElementById('step2PageLabel')) document.getElementById('step2PageLabel').innerText = pageStr;
-                if (document.getElementById('step1TableCount')) document.getElementById('step1TableCount').innerText = `Tổng: ${fmtNum(json.total)} dòng`;
+                if (document.getElementById('step1TableCount')) document.getElementById('step1TableCount').innerText = `Tổng: ${fmtNum(json.total || 0)} dòng`;
 
-                const rowsHtml = (json.records || []).map(r => {
-                    const st = String(r.status || 'COMPLETED').toUpperCase();
-                    const stBadge = st === 'RETURNED'
-                        ? `<span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-extrabold text-[10px]">ĐỔI TRẢ (RETURNED)</span>`
-                        : (st === 'CANCELLED'
-                            ? `<span class="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-600 font-extrabold text-[10px]">ĐƠN HỦY (CANCELLED)</span>`
-                            : `<span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-extrabold text-[10px]">HOÀN THÀNH</span>`);
-
-                    return `
+                let rowsHtml = '';
+                if (!json.records || json.records.length === 0) {
+                    const emptyMsg = mode === 'raw'
+                        ? 'Chưa có tệp dữ liệu giao dịch nào được nạp. Vui lòng tải lên file (.xlsx, .csv) ở Bước 1!'
+                        : (mode === 'excluded'
+                            ? 'Chưa có dòng nào bị loại trừ hoặc chưa thực hiện quy trình làm sạch dữ liệu.'
+                            : 'Chưa có dữ liệu làm sạch. Vui lòng kết nối tệp ở Bước 1 và nhấn Làm Sạch để chuẩn hóa!');
+                    rowsHtml = `
                         <tr>
-                            <td class="py-3 px-4 font-mono font-bold text-slate-800">${r.transaction_id || '--'}</td>
-                            <td class="py-3 px-4 text-slate-600 font-medium">${r.transaction_date || '--'}</td>
-                            <td class="py-3 px-4">
-                                <div class="font-bold text-slate-800">${r.store_name || '--'}</div>
-                                <div class="text-[10px] font-mono text-rose-500 font-bold">${r.store_id || ''}</div>
+                            <td colspan="8" class="text-center py-14 text-slate-400 font-bold text-xs">
+                                <div class="flex flex-col items-center justify-center gap-2.5">
+                                    <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-rose-400 text-xl shadow-xs">
+                                        <i class="fa-solid fa-inbox"></i>
+                                    </div>
+                                    <p class="text-sm font-extrabold text-slate-600 dark:text-slate-300">${emptyMsg}</p>
+                                    <p class="text-[11px] font-normal text-slate-400 max-w-md">Hệ thống đang ở trạng thái sạch ban đầu (không có dữ liệu ngầm). Hãy tải lên tệp tại Bước 1 khi bạn sẵn sàng.</p>
+                                </div>
                             </td>
-                            <td class="py-3 px-4 font-medium text-slate-700">${r.product_name || '--'}</td>
-                            <td class="py-3 px-4 text-center font-bold">${r.quantity || 1}</td>
-                            <td class="py-3 px-4 text-right font-extrabold ${st === 'RETURNED' ? 'text-rose-600' : 'text-slate-800'}">
-                                ${st === 'RETURNED' ? '-' : ''}${fmtVND(r.total_amount)}
-                            </td>
-                            <td class="py-3 px-4 text-center">${stBadge}</td>
-                            <td class="py-3 px-4 text-slate-500 text-[11px]">${r.note || 'Giao dịch hợp lệ'}</td>
                         </tr>
                     `;
-                }).join('');
+                } else {
+                    rowsHtml = (json.records || []).map(r => {
+                        const st = String(r.status || 'COMPLETED').toUpperCase();
+                        const stBadge = st === 'RETURNED'
+                            ? `<span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-extrabold text-[10px]">ĐỔI TRẢ (RETURNED)</span>`
+                            : (st === 'CANCELLED'
+                                ? `<span class="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-600 font-extrabold text-[10px]">ĐƠN HỦY (CANCELLED)</span>`
+                                : `<span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-extrabold text-[10px]">HOÀN THÀNH</span>`);
+
+                        return `
+                            <tr>
+                                <td class="py-3 px-4 font-mono font-bold text-slate-800">${r.transaction_id || '--'}</td>
+                                <td class="py-3 px-4 text-slate-600 font-medium">${r.transaction_date || '--'}</td>
+                                <td class="py-3 px-4">
+                                    <div class="font-bold text-slate-800">${r.store_name || '--'}</div>
+                                    <div class="text-[10px] font-mono text-rose-500 font-bold">${r.store_id || ''}</div>
+                                </td>
+                                <td class="py-3 px-4 font-medium text-slate-700">${r.product_name || '--'}</td>
+                                <td class="py-3 px-4 text-center font-bold">${r.quantity || 1}</td>
+                                <td class="py-3 px-4 text-right font-extrabold ${st === 'RETURNED' ? 'text-rose-600' : 'text-slate-800'}">
+                                    ${st === 'RETURNED' ? '-' : ''}${fmtVND(r.total_amount)}
+                                </td>
+                                <td class="py-3 px-4 text-center">${stBadge}</td>
+                                <td class="py-3 px-4 text-slate-500 text-[11px]">${r.note || 'Giao dịch hợp lệ'}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
 
                 if (document.getElementById('step1RawTableBody')) document.getElementById('step1RawTableBody').innerHTML = rowsHtml;
                 if (document.getElementById('step2CleanTableBody')) document.getElementById('step2CleanTableBody').innerHTML = rowsHtml;
@@ -3877,8 +3903,85 @@
 
 
         // =====================================================================
-        // EMPTY / SAMPLE CUSTOMER DATA MANAGEMENT
+        // EMPTY / RESET SYSTEM & CUSTOMER DATA MANAGEMENT
         // =====================================================================
+        async function resetAllSystemData() {
+            if (!confirm('Bạn có chắc muốn xóa sạch toàn bộ dữ liệu đang có trên hệ thống để đưa về trạng thái trống ban đầu 100%?')) return;
+            try {
+                const res = await (await fetch('/api/reset-all-data', { method: 'POST' })).json();
+                if (res.success) {
+                    appState.cleanInfo = null;
+                    appState.reportData = null;
+                    appState.auditData = null;
+                    appState.previewTotal = 0;
+                    appState.previewPage = 1;
+
+                    // Reset Top KPI cards to empty placeholders
+                    document.getElementById('topKpiNetRevenue').innerHTML = `0 <span class="underline text-xl">đ</span>`;
+                    document.getElementById('topKpiPeriodProgress').innerHTML = `0% hoàn thành mục tiêu kỳ`;
+                    document.getElementById('topKpiReturnsCount').innerText = `0`;
+                    document.getElementById('topKpiReturnsSub').innerText = `0 đơn hủy & 0 đơn trả (-0 đ)`;
+                    document.getElementById('topKpiUrgentStores').innerText = `0`;
+                    document.getElementById('topKpiUrgentList').innerText = `Hệ thống sẵn sàng`;
+                    document.getElementById('topKpiValidRows').innerText = `0`;
+                    document.getElementById('topKpiTotalRows').innerText = `/ 0 dòng`;
+                    
+                    const cleanBadge = document.getElementById('topKpiCleanBadge');
+                    if (cleanBadge) {
+                        cleanBadge.className = 'px-2.5 py-1 rounded-xl bg-slate-100 text-slate-500 text-[10px] font-extrabold text-center leading-tight uppercase';
+                        cleanBadge.innerHTML = 'CHỜ<br>DỮ LIỆU';
+                    }
+
+                    // Reset badges
+                    if (document.getElementById('sbBadgeStep1')) document.getElementById('sbBadgeStep1').innerText = '0';
+                    if (document.getElementById('sbBadgeStep2')) document.getElementById('sbBadgeStep2').innerText = '0';
+                    if (document.getElementById('sbBadgeStep3')) document.getElementById('sbBadgeStep3').innerText = '0';
+                    if (document.getElementById('sbBadgeStep4')) document.getElementById('sbBadgeStep4').innerText = '0%';
+                    if (document.getElementById('sbBadgeFeedback')) document.getElementById('sbBadgeFeedback').innerText = '0★ Mới';
+
+                    // Reset Step 1 Connection status
+                    const step1Chip = document.getElementById('step1StatusChip');
+                    if (step1Chip) {
+                        step1Chip.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-500';
+                        step1Chip.innerText = 'CHƯA KẾT NỐI';
+                    }
+                    const activeFile = document.getElementById('activeFileNameLabel');
+                    if (activeFile) activeFile.innerText = 'Chưa có tệp dữ liệu nào';
+
+                    // Reset Step 2 cleaning rules grid
+                    const clnGrid = document.getElementById('cleaningRulesGrid');
+                    if (clnGrid) {
+                        clnGrid.innerHTML = `
+                            <div class="col-span-2 py-8 text-center text-slate-400 font-bold text-xs bg-slate-50/50 dark:bg-slate-800/40 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
+                                <i class="fa-solid fa-wand-magic-sparkles text-rose-300 text-lg mb-1 block"></i>
+                                Chưa thực hiện quy tắc làm sạch. Vui lòng kết nối dữ liệu ở Bước 1 trước!
+                            </div>
+                        `;
+                    }
+
+                    // Reset Step 3 table
+                    const analysisTbody = document.getElementById('analysisMainTableBody');
+                    if (analysisTbody) {
+                        analysisTbody.innerHTML = `
+                            <tr>
+                                <td colspan="10" class="text-center py-12 text-slate-400 font-bold text-xs">
+                                    <i class="fa-solid fa-chart-pie mr-2 text-rose-400"></i>Hệ thống chưa có báo cáo phân tích. Vui lòng tải lên tệp dữ liệu tại Bước 1!
+                                </td>
+                            </tr>
+                        `;
+                    }
+
+                    // Reload empty tables
+                    loadDataPreview(appState.previewMode || 'cleaned', 1);
+
+                    showToast('Đã xóa toàn bộ dữ liệu, hệ thống đưa về trạng thái sạch 100%!', 'success');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('Lỗi khi xóa dữ liệu: ' + err.message, 'error');
+            }
+        }
+
         async function clearCustomerFeedbacks() {
             if (!confirm('Bạn có chắc muốn xóa toàn bộ dữ liệu phản hồi khách hàng để đưa hệ thống về trạng thái sạch ban đầu (chưa có dữ liệu)?')) return;
             try {

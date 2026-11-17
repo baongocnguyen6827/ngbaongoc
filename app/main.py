@@ -105,6 +105,8 @@ def upload_raw_data():
 def execute_cleaning():
     """Giai đoạn 1: AI Agent thực hiện làm sạch dữ liệu tự động"""
     try:
+        if engine.raw_df is None:
+            return jsonify({"success": False, "error": "Chưa có dữ liệu thô. Vui lòng tải lên tệp tại Bước 1 trước!"}), 400
         log = engine.execute_data_cleaning()
         return jsonify({"success": True, "data": log, "message": "Đã làm sạch dữ liệu thành công!"})
     except Exception as e:
@@ -119,35 +121,52 @@ def human_verify():
     res = engine.human_verify(approved, notes)
     return jsonify({"success": True, "data": res, "message": "Đã lưu xác thực của chuyên viên!"})
 
+@app.route("/api/reset-all-data", methods=["GET", "POST"])
+def reset_all_data():
+    """Xóa sạch toàn bộ dữ liệu giao dịch & báo cáo, đưa về trạng thái sạch 100%"""
+    res = engine.reset_all_data()
+    return jsonify({"success": True, "data": res, "message": "Đã xóa toàn bộ dữ liệu, hệ thống sạch 100%!"})
+
 @app.route("/api/cleaned-data-preview", methods=["GET"])
 def cleaned_data_preview():
-    """Xem trước các dòng dữ liệu sạch và dữ liệu bị loại trừ (Không bao giờ trả về NaN)"""
-    if engine.cleaned_df is None:
-        if engine.raw_df is not None:
-            engine.execute_data_cleaning()
-        else:
-            engine.load_raw_data()
-            engine.execute_data_cleaning()
-        
+    """Xem trước các dòng dữ liệu sạch và dữ liệu bị loại trừ (Không tự động nạp dữ liệu ngầm)"""
     page = int(request.args.get("page", 1))
     limit = int(request.args.get("limit", 20))
     status_filter = request.args.get("status", "")
     store_filter = request.args.get("store", "")
     mode = request.args.get("mode", "cleaned") # 'cleaned', 'raw', 'excluded'
     
-    if mode == "raw" and engine.raw_df is not None:
+    # Nếu hệ thống chưa nạp dữ liệu thô, trả về rỗng ngay lập tức
+    if engine.raw_df is None:
+        return jsonify({
+            "success": True,
+            "total": 0,
+            "page": 1,
+            "limit": limit,
+            "mode": mode,
+            "records": []
+        })
+    
+    if mode == "raw":
         df = engine.raw_df
-    elif mode == "excluded" and engine.raw_df is not None:
+    elif mode == "excluded":
         if engine.cleaned_df is not None:
             cleaned_ids = set(engine.cleaned_df["transaction_id"])
             df = engine.raw_df[~engine.raw_df["transaction_id"].isin(cleaned_ids)]
         else:
-            df = engine.raw_df
+            df = None
     else:
-        df = engine.cleaned_df if engine.cleaned_df is not None else engine.raw_df
+        df = engine.cleaned_df
         
-    if df is None:
-        return jsonify({"success": False, "error": "Chưa có dữ liệu"}), 400
+    if df is None or len(df) == 0:
+        return jsonify({
+            "success": True,
+            "total": 0,
+            "page": 1,
+            "limit": limit,
+            "mode": mode,
+            "records": []
+        })
         
     if status_filter and "status" in df.columns:
         df = df[df["status"] == status_filter]
@@ -188,6 +207,8 @@ def cleaned_data_preview():
 def generate_report():
     """Giai đoạn 2: Tạo Báo cáo Quản trị đa chiều"""
     try:
+        if engine.cleaned_df is None:
+            return jsonify({"success": False, "error": "Chưa có dữ liệu sạch. Vui lòng tải lên và làm sạch dữ liệu trước!"}), 400
         rep = engine.generate_management_report()
         return jsonify({"success": True, "data": rep, "message": "Báo cáo Quản trị đã được khởi tạo thành công!"})
     except Exception as e:
@@ -197,6 +218,8 @@ def generate_report():
 def cross_check_audit():
     """Giai đoạn 3: Đối chiếu chéo & Phát hiện bất thường & Xếp hạng ưu tiên"""
     try:
+        if engine.management_report is None:
+            return jsonify({"success": False, "error": "Chưa có báo cáo để đối soát. Vui lòng hoàn thành các bước trước!"}), 400
         audit = engine.perform_cross_check_audit()
         return jsonify({"success": True, "data": audit, "message": "Kiểm toán đối chiếu hoàn tất!"})
     except Exception as e:

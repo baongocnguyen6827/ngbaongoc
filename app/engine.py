@@ -28,7 +28,7 @@ class PhucAnRetailEngine:
         self.targets_df = None
         self.prior_df = None
         self.business_rules = None
-        self.active_file_name = "PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx"
+        self.active_file_name = None
         
         # State tracking
         self.cleaning_audit_log = {}
@@ -149,13 +149,31 @@ class PhucAnRetailEngine:
             "file_name": self.active_file_name
         }
 
+    def reset_all_data(self):
+        """Đưa toàn bộ hệ thống về trạng thái ban đầu sạch chưa nạp dữ liệu"""
+        self.raw_df = None
+        self.cleaned_df = None
+        self.active_file_name = None
+        self.cleaning_audit_log = {}
+        self.human_verification = {
+            "status": "PENDING",
+            "verified_by": "Chuyên viên Báo cáo - Nguyễn Thuỳ Linh",
+            "verified_at": None,
+            "notes": ""
+        }
+        self.management_report = None
+        self.audit_results = None
+        self.executive_decisions = []
+        self.customer_feedbacks = []
+        return {"status": "CLEAN", "message": "Đã xóa toàn bộ dữ liệu, hệ thống sẵn sàng tiếp nhận tệp mới."}
+
     # ==========================================
     # GIAI ĐOẠN 1: CHUẨN BỊ & LÀM SẠCH DỮ LIỆU
     # ==========================================
     def execute_data_cleaning(self):
         """Thực thi 4 quy tắc làm sạch dữ liệu tự động"""
         if self.raw_df is None:
-            self.load_raw_data()
+            raise ValueError("Chưa có dữ liệu thô. Vui lòng tải lên tệp dữ liệu trước khi làm sạch.")
             
         df = self.raw_df.copy()
         initial_count = len(df)
@@ -261,7 +279,10 @@ class PhucAnRetailEngine:
     def generate_management_report(self):
         """Tính toán và tạo Báo cáo Quản trị đa chiều cho 18 cửa hàng"""
         if self.cleaned_df is None:
-            self.execute_data_cleaning()
+            if self.raw_df is not None:
+                self.execute_data_cleaning()
+            else:
+                raise ValueError("Chưa có dữ liệu sạch để tạo báo cáo. Vui lòng tải lên và làm sạch dữ liệu trước.")
             
         df = self.cleaned_df.copy()
         store_reports = []
@@ -441,7 +462,10 @@ class PhucAnRetailEngine:
         4. Đề xuất hành động khắc phục cụ thể cho Giám đốc kinh doanh
         """
         if self.management_report is None:
-            self.generate_management_report()
+            if self.cleaned_df is not None or self.raw_df is not None:
+                self.generate_management_report()
+            else:
+                raise ValueError("Chưa có dữ liệu để thực hiện đối soát kiểm toán.")
             
         rep = self.management_report
         stores = rep["store_reports"]
@@ -805,12 +829,7 @@ class PhucAnRetailEngine:
         """AI Co-pilot phân tích sâu dữ liệu quản trị bán lẻ theo thời gian thực"""
         msg = user_message.lower().strip()
         
-        if self.audit_results is None:
-            self.perform_cross_check_audit()
-            
-        stores_map = {p["store_id"].lower(): p for p in self.audit_results["priority_stores"]}
-        
-        # 0. Hỏi về thông tin liên hệ / Hotline / Email / Địa chỉ
+        # 0. Hỏi về thông tin liên hệ / Hotline / Email / Địa chỉ (Hoạt động độc lập không phụ thuộc dữ liệu)
         if any(w in msg for w in ["liên hệ", "số điện thoại", "sđt", "phone", "email", "địa chỉ", "hotline", "contact", "bảo ngọc", "nguyễn bảo ngọc"]):
             return """### 📞 Thông Tin Liên Hệ — Bảo Ngọc AI (Retail Agent OS)
 - **Người phụ trách:** **Nguyễn Bảo Ngọc** (Bảo Ngọc Retail)
@@ -820,6 +839,14 @@ class PhucAnRetailEngine:
 - **Thời gian tiếp nhận:** Thứ 2 – Chủ Nhật (08:00 – 22:00) | Kênh kỹ thuật khẩn cấp: 24/7
 
 > 💡 *Anh/chị cũng có thể nhấn nút **"Liên Hệ"** ở thanh Header trên cùng hoặc xem thông tin chi tiết tại chân trang (Footer)!*"""
+
+        if self.raw_df is None:
+            return "Chào anh/chị! Hiện tại hệ thống **Bảo Ngọc AI** đang ở trạng thái ban đầu sạch (chưa nạp dữ liệu khách hàng/giao dịch). Anh/chị vui lòng tải lên tệp dữ liệu bán hàng (`.xlsx`, `.csv`) tại **Bước 1** hoặc nhấn nút **Chạy AI Pipeline** ở trên để em tiến hành phân tích nhé!"
+
+        if self.audit_results is None:
+            self.perform_cross_check_audit()
+            
+        stores_map = {p["store_id"].lower(): p for p in self.audit_results["priority_stores"]}
 
         # 1. Hỏi danh sách cửa hàng cần hỗ trợ trước / ưu tiên
         if any(w in msg for w in ["hỗ trợ trước", "ưu tiên", "cần hỗ trợ", "cửa hàng nào", "nguy hiểm", "bất thường", "p1", "khẩn cấp"]):
