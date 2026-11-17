@@ -908,16 +908,13 @@
                             Chào mừng bạn đến với <b>Bảo Ngọc AI — Retail Agent OS</b>. Hệ thống tự động hóa thông minh giúp giải quyết bài toán phức tạp trong quản trị vận hành: <b>đối soát doanh thu</b>, <b>bóc tách triệt để đơn hủy &amp; đổi trả</b>, <b>đo lường CSAT khách hàng thực tế</b> và <b>đề xuất kịch bản can thiệp kịp thời</b> theo 4 bước chuẩn hóa.
                         </p>
 
-                        <!-- CTA Actions -->
-                        <div class="pt-3 flex flex-wrap items-center justify-center sm:justify-start gap-3.5">
-                            <button onclick="switchTab('step1')" class="btn-pink-pill px-6 py-3.5 text-xs sm:text-sm font-black flex items-center gap-2.5 shadow-lg shadow-rose-500/25 hover:scale-105 transition cursor-pointer">
+                        <!-- CTA Actions: Bắt Đầu Khám Phá & Tải Lên File Dữ Liệu sát cạnh nhau trên cùng một hàng ngang -->
+                        <div class="pt-3 flex items-center gap-3 flex-wrap sm:flex-nowrap justify-center sm:justify-start">
+                            <button onclick="switchTab('step1')" class="btn-pink-pill px-5 sm:px-6 py-3.5 text-xs sm:text-sm font-black flex items-center gap-2 sm:gap-2.5 shadow-lg shadow-rose-500/25 hover:scale-105 transition cursor-pointer flex-shrink-0">
                                 <span data-i18n="hero_btn_explore">Bắt Đầu Khám Phá Quy Trình (4 Bước) <i class="fa-solid fa-arrow-right"></i></span>
                             </button>
-                            <button onclick="switchTab('step1'); setTimeout(() => document.getElementById('fileInputElem').click(), 200);" class="btn-outline-clean px-5 py-3.5 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer hover:border-rose-400">
+                            <button onclick="switchTab('step1'); setTimeout(() => document.getElementById('fileInputElem').click(), 200);" class="btn-outline-clean px-4 sm:px-5 py-3.5 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer hover:border-rose-400 flex-shrink-0">
                                 <span data-i18n="hero_btn_upload"><i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> Tải Lên File Dữ Liệu (.xlsx, .csv)</span>
-                            </button>
-                            <button onclick="switchTab('copilot')" class="px-4 py-3.5 rounded-2xl bg-slate-100/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-bold hover:bg-slate-200 transition flex items-center gap-2 cursor-pointer">
-                                <span data-i18n="hero_btn_copilot"><i class="fa-solid fa-comments text-amber-500"></i> Trợ Lý AI Co-Pilot</span>
                             </button>
                         </div>
                     </div>
@@ -4093,6 +4090,36 @@
             loadFeedbacks();
         });
     </script>
+
+    <!-- ===================================================================== -->
+    <!-- FLOATING ACTION BUTTON (FAB): TRỢ LÝ AI CO-PILOT (GÓC DƯỚI CÙNG PHẢI) -->
+    <!-- ===================================================================== -->
+    <div id="copilotFabContainer" class="fixed bottom-6 right-6 sm:bottom-7 sm:right-7 z-40 flex items-center gap-2.5 select-none view-fade group">
+        <!-- Floating Tooltip Pill (Interactive Glass Pill) -->
+        <button onclick="switchTab('copilot'); setTimeout(() => document.getElementById('copilotInput')?.focus(), 250);" 
+                class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-2xl os-card border border-white/90 dark:border-slate-700 shadow-xl hover:border-rose-400 dark:hover:border-rose-400 transition-all duration-300 cursor-pointer backdrop-blur-2xl hover:scale-105"
+                title="Mở Trợ Lý AI Co-Pilot để hỏi đáp số liệu">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span class="text-xs font-black text-slate-800 dark:text-slate-100" data-i18n="copilot_title">Trợ Lý AI Co-Pilot</span>
+            <span class="px-1.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/70 text-rose-600 dark:text-rose-300 text-[10px] font-black uppercase tracking-wider">Live</span>
+        </button>
+
+        <!-- Circular Floating Action Button -->
+        <button id="btnCopilotFab" 
+                onclick="switchTab('copilot'); setTimeout(() => document.getElementById('copilotInput')?.focus(), 250);" 
+                class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full btn-pink-pill flex items-center justify-center text-white shadow-2xl shadow-rose-500/50 hover:shadow-rose-500/80 hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer border-2 border-white/90 dark:border-white/30"
+                title="Hỏi đáp & Phân tích cùng Bảo Ngọc AI Co-Pilot"
+                aria-label="Trợ Lý AI Co-Pilot">
+            <!-- Icon with pulse animation -->
+            <i class="fa-solid fa-comments text-xl sm:text-2xl group-hover:rotate-6 transition duration-300"></i>
+            
+            <!-- Online status green ping badge -->
+            <span class="absolute top-0 right-0 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 shadow-sm flex items-center justify-center">
+                <span class="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400 opacity-75"></span>
+            </span>
+        </button>
+    </div>
+
     <!-- ===================================================================== -->
     <!-- MODAL: THÔNG TIN LIÊN HỆ CHI TIẾT (CONTACT MODAL)                     -->
     <!-- ===================================================================== -->
