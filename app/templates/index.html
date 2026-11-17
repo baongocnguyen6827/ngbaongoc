@@ -511,41 +511,40 @@
                     </div>
                 </div>
 
-                <!-- Row 2: Status, Actions, User Profile, Language, Contact & Theme Toggle -->
+                <!-- Row 2: Status on left, Actions + User Profile + Language/Contact/Theme on right -->
                 <div class="w-full flex flex-wrap items-center justify-between gap-3 pt-0.5">
-                    <!-- Left Actions Group -->
-                    <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
-                        <!-- Localhost Live Indicator -->
-                        <div class="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-xl">
+                    <!-- Left: Localhost Live Indicator -->
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 px-2.5 py-1 rounded-xl">
                             <span class="w-2.5 h-2.5 rounded-full bg-rose-500 live-dot"></span>
                             <div class="leading-tight">
                                 <p class="text-xs font-extrabold text-rose-800 dark:text-rose-400">Localhost: 5050</p>
                                 <p id="topApiStatusText" class="text-[10px] font-bold text-rose-600 dark:text-rose-400">(REST API Live)</p>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Quick Action: Feedback Khách Hàng (Always Visible on Top Header) -->
+                    <!-- Right Group: 3 Actions Shifted Close to Nguyễn Bảo Ngọc + Profile + Utility Controls -->
+                    <div class="flex items-center gap-2.5 sm:gap-3 ml-auto flex-wrap sm:flex-nowrap">
+                        <!-- Quick Action 1: Feedback Khách Hàng (CSAT Live) -->
                         <button onclick="switchTab('feedback')" class="btn-pink-pill px-3.5 py-2 text-xs flex items-center gap-2 bg-gradient-to-r from-amber-500 via-rose-500 to-pink-500 text-white font-extrabold shadow-md hover:scale-105 transition cursor-pointer" title="Xem Phản Hồi Khách Hàng & CSAT">
                             <i class="fa-solid fa-star text-yellow-300 animate-pulse"></i>
                             <span class="leading-tight text-left">Feedback KH<br><span class="text-[10px] text-yellow-200 font-bold">CSAT Live</span></span>
                         </button>
 
-                        <!-- Primary Action: Chạy AI Pipeline -->
+                        <!-- Primary Action 2: Chạy AI Pipeline -->
                         <button onclick="runFullAiPipeline()" id="btnRunPipeline" class="btn-pink-pill px-4 py-2 text-xs flex items-center gap-2">
                             <i class="fa-solid fa-bolt"></i>
                             <span data-i18n="btn_run_pipeline" class="leading-tight text-left">Chạy AI<br class="hidden sm:inline"> Pipeline</span>
                         </button>
 
-                        <!-- Secondary Action: Xuất Báo Cáo -->
+                        <!-- Secondary Action 3: Xuất Báo Cáo -->
                         <button onclick="switchTab('step4')" class="btn-outline-clean px-4 py-2 text-xs flex items-center gap-2">
                             <i class="fa-solid fa-file-arrow-down text-emerald-600"></i>
                             <span data-i18n="btn_export_report" class="leading-tight text-left">Xuất<br class="hidden sm:inline"> Báo Cáo</span>
                         </button>
-                    </div>
 
-                    <!-- Right Controls Group: User Profile & Utility Buttons (Pushed to the Right) -->
-                    <div class="flex items-center gap-2.5 sm:gap-3 ml-auto flex-shrink-0">
-                        <!-- User Profile Card -->
+                        <!-- User Profile Card: Nguyễn Bảo Ngọc -->
                         <div class="flex items-center gap-2.5 pl-3 border-l border-pink-100 dark:border-slate-700">
                             <img src="/static/avatar.jpg" alt="Nguyễn Bảo Ngọc" class="w-9 h-9 rounded-full object-cover border-2 border-rose-200 shadow-xs flex-shrink-0">
                             <div class="hidden lg:block text-left leading-tight">
