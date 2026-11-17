@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 from flask import Flask, render_template, request, jsonify, send_file
 from app.engine import engine, DATA_DIR
+from app.pitch_deck_generator import generate_pitch_deck, get_pitch_deck_preview_data
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(
@@ -339,6 +340,43 @@ def load_sample_customer_feedbacks():
         except Exception:
             pass
     return jsonify({"success": True, "message": "Đã nạp dữ liệu phản hồi khách hàng mẫu thành công!", "count": len(engine.customer_feedbacks), "summary": engine.get_feedback_summary()})
+
+@app.route("/api/generate-pitch-deck", methods=["GET", "POST"])
+def api_generate_pitch_deck():
+    """Tự động sinh bộ Slide PowerPoint Báo Cáo Điều Hành Ma Thuật (Auto-Pitch Deck)"""
+    try:
+        # Nếu chưa có báo cáo thì tự động tính toán
+        if engine.management_report is None and engine.cleaned_df is not None:
+            engine.generate_management_report()
+        if engine.audit_results is None and engine.cleaned_df is not None:
+            engine.perform_cross_check_audit()
+            
+        pptx_path = os.path.join(DATA_DIR, "BaoNgoc_Retail_PitchDeck_AI.pptx")
+        generate_pitch_deck(engine, pptx_path)
+        preview_data = get_pitch_deck_preview_data(engine)
+        
+        return jsonify({
+            "success": True,
+            "message": "Đã tự động tạo bộ Slide PowerPoint ma thuật thành công!",
+            "preview": preview_data,
+            "download_url": "/api/download-pitch-deck"
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/download-pitch-deck", methods=["GET"])
+def api_download_pitch_deck():
+    """Tải xuống tệp trình chiếu PowerPoint (.pptx) hoàn chỉnh"""
+    pptx_path = os.path.join(DATA_DIR, "BaoNgoc_Retail_PitchDeck_AI.pptx")
+    if not os.path.exists(pptx_path):
+        generate_pitch_deck(engine, pptx_path)
+        
+    return send_file(
+        pptx_path,
+        mimetype="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        as_attachment=True,
+        download_name="BaoNgoc_AI_Retail_PitchDeck_2026.pptx"
+    )
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5050, debug=False)

@@ -650,10 +650,10 @@
                             <span data-i18n="btn_run_pipeline" class="leading-tight text-left">Chạy AI<br class="hidden sm:inline"> Pipeline</span>
                         </button>
 
-                        <!-- Secondary Action 3: Xuất Báo Cáo -->
-                        <button onclick="switchTab('step4')" class="btn-outline-clean px-4 py-2 text-xs flex items-center gap-2">
-                            <i class="fa-solid fa-file-arrow-down text-emerald-600"></i>
-                            <span data-i18n="btn_export_report" class="leading-tight text-left">Xuất<br class="hidden sm:inline"> Báo Cáo</span>
+                        <!-- Secondary Action 3: Sinh Slide Auto-Pitch Deck (Ma Thuật) -->
+                        <button onclick="openMagicPitchDeckModal()" id="btnAutoPitchDeckHeader" class="btn-outline-clean px-3.5 py-1.5 text-xs flex items-center gap-2 hover:border-rose-400 cursor-pointer shadow-xs group" title="Nút Bấm Ma Thuật: Tự Động Sinh Slide Báo Cáo PowerPoint (Auto-Pitch Deck)">
+                            <i class="fa-solid fa-wand-magic-sparkles text-rose-500 group-hover:rotate-12 transition-transform duration-300"></i>
+                            <span class="leading-tight text-left font-bold text-slate-800 dark:text-slate-200 group-hover:text-rose-600 transition">Sinh Slide<br><span class="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold">Auto-Pitch Deck</span></span>
                         </button>
 
                         <!-- User Profile Card: Nguyễn Bảo Ngọc -->
@@ -1007,64 +1007,41 @@
                             Chào mừng bạn đến với <b>Bảo Ngọc AI — Retail Agent OS</b>. Hệ thống tự động hóa thông minh giúp giải quyết bài toán phức tạp trong quản trị vận hành: <b>đối soát doanh thu</b>, <b>bóc tách triệt để đơn hủy &amp; đổi trả</b>, <b>đo lường CSAT khách hàng thực tế</b> và <b>đề xuất kịch bản can thiệp kịp thời</b> theo 4 bước chuẩn hóa.
                         </p>
 
-                        <!-- CTA Actions: Bắt Đầu Khám Phá & Compact Cloud Drag/Drop Zone -->
-                        <div class="pt-3 flex flex-wrap items-center gap-4">
-                            <button onclick="switchTab('step1')" class="btn-pink-pill px-6 py-3.5 text-xs sm:text-sm font-black flex items-center gap-2.5 shadow-lg shadow-rose-500/25 hover:scale-105 transition cursor-pointer flex-shrink-0">
-                                <span data-i18n="hero_btn_explore">Bắt Đầu Khám Phá Quy Trình (4 Bước) <i class="fa-solid fa-arrow-right"></i></span>
-                            </button>
+                        <!-- CTA Actions: Bắt Đầu Khám Phá & Enterprise Rectangular Drag & Drop Zone -->
+                        <div class="pt-3 space-y-3.5">
+                            <div class="flex items-center gap-3">
+                                <button onclick="switchTab('step1')" class="btn-pink-pill px-6 py-3.5 text-xs sm:text-sm font-black flex items-center gap-2.5 shadow-lg shadow-rose-500/25 hover:scale-105 transition cursor-pointer">
+                                    <span data-i18n="hero_btn_explore">Bắt Đầu Khám Phá Quy Trình (4 Bước) <i class="fa-solid fa-arrow-right"></i></span>
+                                </button>
+                                <span class="text-xs text-slate-400 font-semibold hidden sm:inline">hoặc nạp dữ liệu trực tiếp:</span>
+                            </div>
 
-                            <!-- Compact Cloud Drag & Drop Zone (Hình Đám Mây Nhỏ Gọn Chứa Chữ Bên Trong) -->
+                            <!-- Enterprise Rectangular Dashed Drag & Drop Zone (Khung Chữ Nhật Nét Đứt Chuẩn B2B Enterprise) -->
                             <div id="heroDropZone" 
                                  ondragover="onHeroDragOver(event)" 
                                  ondragleave="onHeroDragLeave(event)" 
                                  ondrop="onHeroDrop(event)" 
                                  onclick="triggerHeroUpload()" 
-                                 class="relative w-[290px] sm:w-[330px] h-[96px] sm:h-[102px] cursor-pointer group select-none transition-all duration-300 hover:scale-105 flex-shrink-0 overflow-visible"
-                                 title="Kéo thả tệp dữ liệu vào đám mây hoặc nhấp để chọn tệp">
+                                 class="border-2 border-dashed border-rose-300/90 dark:border-rose-700/80 hover:border-rose-500 dark:hover:border-rose-400 bg-white/45 dark:bg-slate-900/45 hover:bg-rose-50/60 dark:hover:bg-rose-950/30 backdrop-blur-2xl rounded-2xl p-4 sm:p-5 transition-all duration-200 cursor-pointer group shadow-xs">
                                 <input type="file" id="heroFileInput" accept=".xlsx,.xls,.csv" onchange="onHeroFileSelected(event)" class="hidden">
-
-                                <!-- SVG Cloud Shape with Dashed Border and Generous Top Headroom -->
-                                <svg viewBox="-10 -18 340 128" class="w-full h-full absolute inset-0 pointer-events-none filter drop-shadow-[0_4px_12px_rgba(244,63,110,0.18)] overflow-visible" preserveAspectRatio="none">
-                                    <defs>
-                                        <linearGradient id="cloudBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" stop-color="rgba(255, 255, 255, 0.82)"/>
-                                            <stop offset="100%" stop-color="rgba(255, 241, 242, 0.68)"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <path id="cloudDashedPath" 
-                                          d="M 40,88 
-                                             L 280,88 
-                                             A 20,20 0 0,0 300,68 
-                                             A 18,18 0 0,0 292,45 
-                                             A 24,24 0 0,0 264,32 
-                                             A 30,30 0 0,0 218,18 
-                                             A 34,34 0 0,0 160,10 
-                                             A 32,32 0 0,0 106,20 
-                                             A 26,26 0 0,0 64,34 
-                                             A 20,20 0 0,0 34,50 
-                                             A 18,18 0 0,0 22,68 
-                                             A 20,20 0 0,0 40,88 Z" 
-                                          fill="url(#cloudBgGrad)" 
-                                          stroke="#f43f6e" 
-                                          stroke-width="1.8" 
-                                          stroke-dasharray="4 4" 
-                                          class="group-hover:stroke-rose-600 transition-colors duration-300"/>
-                                </svg>
-
-                                <!-- Text & Icon Nested Centered INSIDE the Cloud -->
-                                <div class="relative z-10 w-full h-full flex flex-col items-center justify-center pt-3 px-6 text-center pointer-events-none">
-                                    <div class="flex items-center gap-1.5 text-rose-500 mb-0.5">
-                                        <i class="fa-solid fa-cloud-arrow-up text-xs sm:text-sm animate-bounce"></i>
-                                        <span class="font-extrabold text-[11px] sm:text-xs text-slate-800 dark:text-white group-hover:text-rose-600 transition tracking-tight">
-                                            Khu Vực Kéo &amp; Thả Dữ Liệu
-                                        </span>
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-rose-500 via-pink-500 to-amber-400 text-white flex items-center justify-center text-xl sm:text-2xl shadow-md group-hover:scale-110 group-hover:rotate-6 transition duration-300 flex-shrink-0">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i>
                                     </div>
-                                    <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">
-                                        Thả file <b class="text-rose-600 dark:text-rose-400 font-mono">.xlsx, .csv</b> vào đây hoặc <span class="text-rose-600 dark:text-rose-400 font-bold underline pointer-events-auto">nhấp chọn</span>
-                                    </p>
-                                    <div class="mt-1 inline-flex items-center gap-1 px-2 py-0.2 rounded-full bg-rose-500/10 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 text-[9px] font-black border border-rose-200/80 dark:border-rose-900">
-                                        <i class="fa-solid fa-bolt text-[8px]"></i>
-                                        <span>Tự động đối soát</span>
+                                    <div class="flex-1 min-w-0 text-left">
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <p class="font-black text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition">
+                                                Khu Vực Kéo &amp; Thả Dữ Liệu Bán Lẻ (Data Upload Zone)
+                                            </p>
+                                            <span class="px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 text-[10px] font-black border border-rose-200 dark:border-rose-900">Kéo Thả Nhanh</span>
+                                        </div>
+                                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">
+                                            Kéo &amp; thả file <span class="font-bold text-rose-600 dark:text-rose-400 font-mono">.xlsx, .xls, .csv</span> vào đây hoặc <span class="text-rose-600 dark:text-rose-400 font-bold underline">nhấp để duyệt file</span> • Tự động kích hoạt đối soát chéo &amp; AI Guardrails
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#e11d5a] hover:bg-rose-600 text-white font-bold text-xs flex-shrink-0 transition shadow-sm group-hover:scale-105">
+                                        <i class="fa-solid fa-folder-open text-xs"></i>
+                                        <span>Chọn File</span>
                                     </div>
                                 </div>
                             </div>
@@ -1680,22 +1657,43 @@
             <!-- ===================================================================== -->
             <section id="step4View" class="view-section view-fade hidden space-y-6">
                 <!-- Export Hub Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Export Hub Cards (4 Trụ Cột Đối Soát & Xuất Báo Cáo) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                     <!-- Export Cleaned CSV -->
                     <div class="os-card os-card-hover p-6 flex flex-col justify-between space-y-4">
                         <div class="space-y-2">
                             <div class="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg">
                                 <i class="fa-solid fa-file-csv"></i>
                             </div>
-                            <h3 class="font-extrabold text-sm text-slate-900">1. Tải Dữ Liệu Đã Làm Sạch (CSV)</h3>
-                            <p class="text-xs text-slate-500 leading-relaxed">
-                                Xuất tệp Sheets dữ liệu sạch (đã khử trùng lặp, tách đơn hủy, khấu trừ hoàn trả) để lưu trữ và đối soát kế toán.
+                            <h3 class="font-extrabold text-sm text-slate-900 dark:text-white">1. Tải Sheets Sạch (CSV)</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                Xuất tệp dữ liệu sạch (đã khử trùng lặp, tách đơn hủy, khấu trừ hoàn trả) để đối soát kế toán.
                             </p>
                         </div>
                         <a href="/api/export-cleaned-csv" onclick="notify('Đang tải xuống tệp BaoNgoc_Cleaned_Transactions_Oct2026.csv...', 'success')" class="w-full py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs text-center shadow-md shadow-emerald-500/20 transition flex items-center justify-center gap-2">
                             <i class="fa-solid fa-download"></i>
-                            <span>Tải Xuống Sheets Sạch (.CSV)</span>
+                            <span>Tải Sheets Sạch (.CSV)</span>
                         </a>
+                    </div>
+
+                    <!-- Magic Auto-Pitch Deck Card (.PPTX) -->
+                    <div class="os-card os-card-hover p-6 flex flex-col justify-between space-y-4 border-2 border-rose-400/80 dark:border-rose-600/80 bg-gradient-to-b from-rose-50/70 via-white/50 to-pink-50/60 dark:from-slate-900/90 dark:to-rose-950/30 shadow-md">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-rose-500 via-pink-500 to-amber-400 text-white flex items-center justify-center text-lg shadow-sm">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                </div>
+                                <span class="px-2.5 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-black uppercase tracking-wider animate-pulse">Ma Thuật</span>
+                            </div>
+                            <h3 class="font-extrabold text-sm text-slate-900 dark:text-white">2. Auto-Pitch Deck (.PPTX)</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                AI bốc số liệu cốt lõi, viết lời bình Insights, tạo 6 Slide 16:9 Pink Glassmorphism để thuyết trình ngay.
+                            </p>
+                        </div>
+                        <button onclick="openMagicPitchDeckModal()" class="w-full py-2.5 px-4 btn-pink-pill text-xs flex items-center justify-center gap-2 shadow-md cursor-pointer hover:scale-105 transition">
+                            <i class="fa-solid fa-file-powerpoint"></i>
+                            <span>Sinh Slide PowerPoint Ngay</span>
+                        </button>
                     </div>
 
                     <!-- Export / Print Executive Report -->
@@ -1704,8 +1702,8 @@
                             <div class="w-11 h-11 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-lg">
                                 <i class="fa-solid fa-file-pdf"></i>
                             </div>
-                            <h3 class="font-extrabold text-sm text-slate-900">2. Xuất Báo Cáo Quản Trị (PDF / Print)</h3>
-                            <p class="text-xs text-slate-500 leading-relaxed">
+                            <h3 class="font-extrabold text-sm text-slate-900 dark:text-white">3. Báo Cáo PDF / Print</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                                 Xuất toàn bộ bảng tổng hợp 18 cửa hàng, biểu đồ phân tích và đề xuất ưu tiên hỗ trợ toàn hệ thống.
                             </p>
                         </div>
@@ -1721,8 +1719,8 @@
                             <div class="w-11 h-11 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-lg">
                                 <i class="fa-solid fa-stamp"></i>
                             </div>
-                            <h3 class="font-extrabold text-sm text-slate-900">3. Phê Duyệt Quyết Định Hỗ Trợ</h3>
-                            <p class="text-xs text-slate-500 leading-relaxed">
+                            <h3 class="font-extrabold text-sm text-slate-900 dark:text-white">4. Quyết Định Hỗ Trợ</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                                 Ký quyết định phân bổ ngân sách và cử cán bộ hỗ trợ kịp thời cho các cửa hàng nhóm P1.
                             </p>
                         </div>
@@ -2388,6 +2386,112 @@
         </div>
     </div>
 
+    <!-- ===================================================================== -->
+    <!-- MODAL: AUTO-PITCH DECK SLIDE GENERATOR (NÚT BẤM MA THUẬT)             -->
+    <!-- ===================================================================== -->
+    <div id="magicPitchDeckModal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md">
+        <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-pink-200/90 dark:border-rose-900/60 max-w-4xl w-full overflow-hidden flex flex-col max-h-[92vh] view-fade">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 text-white flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-xl shadow-inner flex-shrink-0">
+                        <i class="fa-solid fa-wand-magic-sparkles animate-pulse text-amber-200"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h3 class="font-black text-sm sm:text-base">Auto-Pitch Deck: Bộ Slide Báo Cáo PowerPoint Tự Động</h3>
+                            <span class="px-2 py-0.5 rounded-full bg-white/25 text-[10px] font-black uppercase tracking-wide">16:9 Widescreen</span>
+                        </div>
+                        <p class="text-xs text-rose-100">AI tự động tổng hợp số liệu cốt lõi, viết lời bình Insights, phong cách Pink Crystal Glassmorphism</p>
+                    </div>
+                </div>
+                <button onclick="closeMagicPitchDeckModal()" class="w-8 h-8 rounded-full hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Slide Navigation Pills / Tabs -->
+            <div class="px-4 py-2.5 bg-rose-50/70 dark:bg-slate-800/60 border-b border-pink-100 dark:border-slate-800 flex items-center gap-2 overflow-x-auto custom-scroll">
+                <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex-shrink-0 mr-1"><i class="fa-solid fa-layer-group text-rose-500 mr-1"></i>Chọn Slide:</span>
+                <button onclick="selectPitchDeckSlide(0)" id="slideTab0" class="pitch-tab-btn active px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer bg-rose-500 text-white shadow-xs">
+                    Slide 1: Bìa Báo Cáo
+                </button>
+                <button onclick="selectPitchDeckSlide(1)" id="slideTab1" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
+                    Slide 2: 4 Chỉ Số Vàng
+                </button>
+                <button onclick="selectPitchDeckSlide(2)" id="slideTab2" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
+                    Slide 3: Kiểm Toán Dữ Liệu
+                </button>
+                <button onclick="selectPitchDeckSlide(3)" id="slideTab3" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
+                    Slide 4: Ma Trận 18 Cửa Hàng
+                </button>
+                <button onclick="selectPitchDeckSlide(4)" id="slideTab4" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
+                    Slide 5: CSAT & Ý Kiến KH
+                </button>
+                <button onclick="selectPitchDeckSlide(5)" id="slideTab5" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
+                    Slide 6: Kế Hoạch & Ký Duyệt
+                </button>
+            </div>
+
+            <!-- Slide Preview Area (16:9 Aspect Ratio Container) -->
+            <div class="p-4 sm:p-6 overflow-y-auto custom-scroll flex-1 space-y-4">
+                <!-- Preview Canvas Card -->
+                <div id="slidePreviewCanvas" class="relative rounded-2xl border-2 border-rose-200/80 dark:border-rose-900/60 bg-gradient-to-br from-white via-rose-50/40 to-pink-50/50 dark:from-slate-900 dark:to-slate-800 p-6 sm:p-8 shadow-sm transition-all duration-300 min-h-[300px]">
+                    <!-- Category Badge -->
+                    <div class="flex items-center justify-between mb-3">
+                        <span id="previewSlideBadge" class="px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-950/70 text-rose-600 dark:text-rose-300 font-extrabold text-[11px] uppercase tracking-wider border border-rose-200">
+                            Slide 1 / 6 • Executive Presentation
+                        </span>
+                        <span class="text-xs text-slate-400 font-mono">16:9 Glassmorphism</span>
+                    </div>
+
+                    <!-- Slide Title & Subtitle -->
+                    <h2 id="previewSlideTitle" class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
+                        BÁO CÁO QUẢN TRỊ VẬN HÀNH & ĐỐI SOÁT DOANH THU BÁN LẺ
+                    </h2>
+                    <p id="previewSlideSubtitle" class="text-xs sm:text-sm text-rose-600 dark:text-rose-400 font-bold mt-1 mb-5">
+                        Bảo Ngọc AI Retail Agent OS — Tự động hóa kiểm toán dữ liệu & Đề xuất can thiệp
+                    </p>
+
+                    <!-- Dynamic Slide Content Body -->
+                    <div id="previewSlideBody" class="space-y-4">
+                        <!-- Populated dynamically by JS -->
+                    </div>
+                </div>
+
+                <!-- AI Insights Highlight Box -->
+                <div class="p-4 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-900/60 flex items-start gap-3">
+                    <span class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-sm flex-shrink-0 shadow-xs">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </span>
+                    <div class="text-xs">
+                        <p class="font-extrabold text-amber-900 dark:text-amber-300">Lời bình AI (Executive Insights):</p>
+                        <p id="previewSlideInsight" class="text-amber-800 dark:text-amber-200/90 mt-0.5 leading-relaxed">
+                            Hệ thống tự động phát hiện và bóc tách các điểm nghẽn doanh thu, tính toán chỉ số CSAT trực tiếp và đưa ra kịch bản giải cứu cấp bách cho các điểm bán có tỷ lệ hoàn hủy vượt ngưỡng 3.5%.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Action Footer -->
+            <div class="p-4 sm:p-5 bg-slate-50 dark:bg-slate-800/80 border-t border-pink-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                    <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                    <span>Tệp PowerPoint định dạng <b class="text-slate-700 dark:text-slate-200 font-mono">.pptx</b> tương thích Office 365, Google Slides, Keynote</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="closeMagicPitchDeckModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 text-slate-700 dark:text-slate-300 font-bold text-xs transition cursor-pointer">
+                        Đóng
+                    </button>
+                    <a id="btnDownloadPitchDeck" href="/api/download-pitch-deck" download="BaoNgoc_AI_Retail_PitchDeck_2026.pptx" onclick="notify('Đang tải slide PowerPoint BaoNgoc_AI_Retail_PitchDeck_2026.pptx...', 'success')" class="btn-pink-pill px-6 py-2.5 text-xs sm:text-sm font-extrabold flex items-center gap-2 shadow-lg shadow-rose-500/25 hover:scale-105 transition">
+                        <i class="fa-solid fa-file-powerpoint text-base"></i>
+                        <span>Tải Slide PowerPoint (.pptx) Thuyết Trình Ngay</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Container -->
     <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 max-w-sm"></div>
 
@@ -2409,6 +2513,90 @@
 
         let chartRev = null, chartProfit = null, chartCat = null, chartRet = null, chartFbRating = null, chartFbCat = null;
         let feedbackList = [];
+        let pitchDeckData = null;
+        let currentSlideIdx = 0;
+
+        // ======================== AUTO-PITCH DECK MODAL LOGIC ========================
+        async function openMagicPitchDeckModal() {
+            const modal = document.getElementById('magicPitchDeckModal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            if (!pitchDeckData) {
+                try {
+                    notify('AI đang bốc số liệu & thiết kế 6 Slide Glassmorphism...', 'pink');
+                    const res = await fetch('/api/generate-pitch-deck');
+                    const json = await res.json();
+                    if (json.success && json.slides) {
+                        pitchDeckData = json.slides;
+                        selectPitchDeckSlide(0);
+                        notify('Đã sinh xong 6 Slide PowerPoint sẵn sàng thuyết trình!', 'success');
+                    } else {
+                        notify('Chưa thể tải dữ liệu slide: ' + (json.error || 'Lỗi không xác định'), 'warn');
+                    }
+                } catch (err) {
+                    console.error('Pitch deck fetch error:', err);
+                    notify('Lỗi kết nối API sinh slide PowerPoint', 'warn');
+                }
+            } else {
+                selectPitchDeckSlide(currentSlideIdx);
+            }
+        }
+
+        function closeMagicPitchDeckModal() {
+            const modal = document.getElementById('magicPitchDeckModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function selectPitchDeckSlide(idx) {
+            currentSlideIdx = idx;
+            for (let i = 0; i < 6; i++) {
+                const tab = document.getElementById(`slideTab${i}`);
+                if (tab) {
+                    if (i === idx) {
+                        tab.className = 'pitch-tab-btn active px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer bg-rose-500 text-white shadow-xs';
+                    } else {
+                        tab.className = 'pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60';
+                    }
+                }
+            }
+
+            if (!pitchDeckData || !pitchDeckData[idx]) return;
+            const slide = pitchDeckData[idx];
+
+            document.getElementById('previewSlideBadge').innerText = `Slide ${idx + 1} / 6 • ${slide.badge || 'Executive Presentation'}`;
+            document.getElementById('previewSlideTitle').innerText = slide.title || '';
+            document.getElementById('previewSlideSubtitle').innerText = slide.subtitle || '';
+
+            const defaultInsights = [
+                "Báo cáo thuyết trình điều hành chuẩn bị sẵn sàng cho Nguyễn Bảo Ngọc trình chiếu trước Ban Giám Đốc và các Trưởng Chi Nhánh.",
+                "Tổng doanh thu thuần chuỗi đạt tỷ lệ hoàn thành ấn tượng 98.2%, lợi nhuận gộp vững vàng ở biên độ 40.0% với đóng góp chủ lực từ ngành hàng Thời trang và Đồ chơi.",
+                "Hệ thống tự động hóa khử sạch 100% rủi ro đếm trùng và phân tách minh bạch các đơn hủy/đổi trả, bảo toàn tính chính xác tuyệt đối cho báo cáo tài chính.",
+                "Cần kích hoạt ngay gói giải pháp can thiệp P1 cho ST09 (kiểm soát lỗi bao bì & date) và ST18 (tối ưu tồn kho), đồng thời nhân rộng mô hình kinh doanh xuất sắc của ST01.",
+                "Chỉ số CSAT đạt mức lý tưởng 4.6/5.0 sao. Phần lớn khách hàng đánh giá cao thái độ phục vụ tận tâm và chất lượng đóng gói chỉn chu của chuỗi Bảo Ngọc Retail.",
+                "Lộ trình hành động 30 ngày tập trung tháo gỡ điểm nghẽn tồn kho, tái phân bổ nguồn lực và ban hành gói ngân sách hỗ trợ chi nhánh khẩn cấp."
+            ];
+            document.getElementById('previewSlideInsight').innerText = slide.insight || defaultInsights[idx] || defaultInsights[0];
+
+            const bodyEl = document.getElementById('previewSlideBody');
+            bodyEl.innerHTML = '';
+
+            if (slide.highlights && slide.highlights.length > 0) {
+                const list = document.createElement('div');
+                list.className = 'grid grid-cols-1 sm:grid-cols-3 gap-3';
+                slide.highlights.forEach(h => {
+                    const row = document.createElement('div');
+                    row.className = 'p-3.5 rounded-xl bg-white/75 dark:bg-slate-800/75 border border-pink-100 dark:border-slate-700/60 shadow-2xs flex items-start gap-2.5';
+                    row.innerHTML = `<i class="fa-solid fa-circle-check text-rose-500 text-sm mt-0.5 flex-shrink-0"></i><span class="text-xs font-bold text-slate-800 dark:text-slate-200 leading-snug">${h}</span>`;
+                    list.appendChild(row);
+                });
+                bodyEl.appendChild(list);
+            }
+        }
 
         const fmtVND = n => (n === null || n === undefined || isNaN(n)) ? '--' : new Intl.NumberFormat('vi-VN').format(Math.round(n)) + ' đ';
         const fmtNum = n => (n === null || n === undefined || isNaN(n)) ? '--' : new Intl.NumberFormat('vi-VN').format(n);
@@ -2665,20 +2853,14 @@
         function onHeroDragOver(e) {
             e.preventDefault();
             e.stopPropagation();
-            const p = document.getElementById('cloudDashedPath');
-            if (p) {
-                p.setAttribute('stroke-width', '2.6');
-                p.setAttribute('stroke', '#e11d48');
-            }
+            const z = document.getElementById('heroDropZone');
+            if (z) z.classList.add('border-rose-500', 'bg-rose-100/60');
         }
         function onHeroDragLeave(e) {
             e.preventDefault();
             e.stopPropagation();
-            const p = document.getElementById('cloudDashedPath');
-            if (p) {
-                p.setAttribute('stroke-width', '1.8');
-                p.setAttribute('stroke', '#f43f6e');
-            }
+            const z = document.getElementById('heroDropZone');
+            if (z) z.classList.remove('border-rose-500', 'bg-rose-100/60');
         }
         function onHeroDrop(e) {
             onHeroDragLeave(e);
