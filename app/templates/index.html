@@ -511,7 +511,7 @@
                     </div>
                 </div>
 
-                <!-- Right: Status, Theme Toggle, Run Pipeline, Export & User Profile -->
+                <!-- Right: Status, Run Pipeline, Export, User Profile, Language, Contact & Theme Toggle -->
                 <div class="flex flex-wrap items-center gap-3 sm:gap-3.5 flex-shrink-0">
                     <!-- Localhost Live Indicator -->
                     <div class="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-xl">
@@ -521,6 +521,39 @@
                             <p id="topApiStatusText" class="text-[10px] font-bold text-rose-600 dark:text-rose-400">(REST API Live)</p>
                         </div>
                     </div>
+
+                    <!-- Quick Action: Feedback Khách Hàng (Always Visible on Top Header) -->
+                    <button onclick="switchTab('feedback')" class="btn-pink-pill px-3.5 py-2 text-xs flex items-center gap-2 bg-gradient-to-r from-amber-500 via-rose-500 to-pink-500 text-white font-extrabold shadow-md hover:scale-105 transition cursor-pointer" title="Xem Phản Hồi Khách Hàng & CSAT">
+                        <i class="fa-solid fa-star text-yellow-300 animate-pulse"></i>
+                        <span class="leading-tight text-left">Feedback KH<br><span class="text-[10px] text-yellow-200 font-bold">CSAT Live</span></span>
+                    </button>
+
+                    <!-- Primary Action: Chạy AI Pipeline -->
+                    <button onclick="runFullAiPipeline()" id="btnRunPipeline" class="btn-pink-pill px-4 py-2 text-xs flex items-center gap-2">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span data-i18n="btn_run_pipeline" class="leading-tight text-left">Chạy AI<br class="hidden sm:inline"> Pipeline</span>
+                    </button>
+
+                    <!-- Secondary Action: Xuất Báo Cáo -->
+                    <button onclick="switchTab('step4')" class="btn-outline-clean px-4 py-2 text-xs flex items-center gap-2">
+                        <i class="fa-solid fa-file-arrow-down text-emerald-600"></i>
+                        <span data-i18n="btn_export_report" class="leading-tight text-left">Xuất<br class="hidden sm:inline"> Báo Cáo</span>
+                    </button>
+
+                    <!-- User Profile Card -->
+                    <div class="flex items-center gap-2.5 pl-3 border-l border-pink-100 dark:border-slate-700">
+                        <img src="/static/avatar.jpg" alt="Nguyễn Bảo Ngọc" class="w-9 h-9 rounded-full object-cover border-2 border-rose-200 shadow-xs flex-shrink-0">
+                        <div class="hidden lg:block text-left leading-tight">
+                            <p class="font-bold text-xs text-slate-800 dark:text-slate-200 truncate max-w-[130px]">Nguyễn Bảo Ngọc</p>
+                            <p class="text-[10px] text-slate-400 font-medium">Bảo Ngọc Retail</p>
+                        </div>
+                        <button onclick="runFullAiPipeline()" title="Làm mới toàn bộ AI Pipeline" class="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-100/60 flex items-center justify-center transition">
+                            <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                        </button>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="h-6 w-[1px] bg-pink-100 dark:bg-slate-700"></div>
 
                     <!-- Language Selector Dropdown (Multi-Language: VI, EN, JA, ZH, KO) -->
                     <div class="relative" id="langDropdownContainer">
@@ -581,36 +614,6 @@
                         <i id="themeToggleIcon" class="fa-solid fa-moon text-rose-500"></i>
                         <span id="themeToggleText" data-i18n="theme_dark" class="hidden sm:inline">Chế độ Tối</span>
                     </button>
-
-                    <!-- Quick Action: Feedback Khách Hàng (Always Visible on Top Header) -->
-                    <button onclick="switchTab('feedback')" class="btn-pink-pill px-3.5 py-2 text-xs flex items-center gap-2 bg-gradient-to-r from-amber-500 via-rose-500 to-pink-500 text-white font-extrabold shadow-md hover:scale-105 transition cursor-pointer" title="Xem Phản Hồi Khách Hàng & CSAT">
-                        <i class="fa-solid fa-star text-yellow-300 animate-pulse"></i>
-                        <span class="leading-tight text-left">Feedback KH<br><span class="text-[10px] text-yellow-200 font-bold">CSAT Live</span></span>
-                    </button>
-
-                    <!-- Primary Action: Chạy AI Pipeline -->
-                    <button onclick="runFullAiPipeline()" id="btnRunPipeline" class="btn-pink-pill px-4 py-2 text-xs flex items-center gap-2">
-                        <i class="fa-solid fa-bolt"></i>
-                        <span data-i18n="btn_run_pipeline" class="leading-tight text-left">Chạy AI<br class="hidden sm:inline"> Pipeline</span>
-                    </button>
-
-                    <!-- Secondary Action: Xuất Báo Cáo -->
-                    <button onclick="switchTab('step4')" class="btn-outline-clean px-4 py-2 text-xs flex items-center gap-2">
-                        <i class="fa-solid fa-file-arrow-down text-emerald-600"></i>
-                        <span data-i18n="btn_export_report" class="leading-tight text-left">Xuất<br class="hidden sm:inline"> Báo Cáo</span>
-                    </button>
-
-                    <!-- User Profile Card -->
-                    <div class="flex items-center gap-2.5 pl-3 border-l border-pink-100 dark:border-slate-700">
-                        <img src="/static/avatar.jpg" alt="Nguyễn Bảo Ngọc" class="w-9 h-9 rounded-full object-cover border-2 border-rose-200 shadow-xs flex-shrink-0">
-                        <div class="hidden lg:block text-left leading-tight">
-                            <p class="font-bold text-xs text-slate-800 dark:text-slate-200 truncate max-w-[130px]">Nguyễn Bảo Ngọc</p>
-                            <p class="text-[10px] text-slate-400 font-medium">Bảo Ngọc Retail</p>
-                        </div>
-                        <button onclick="runFullAiPipeline()" title="Làm mới toàn bộ AI Pipeline" class="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-100/60 flex items-center justify-center transition">
-                            <i class="fa-solid fa-arrows-rotate text-xs"></i>
-                        </button>
-                    </div>
                 </div>
 
             </div>
@@ -918,7 +921,6 @@
                                 <i class="fa-solid fa-crown text-[9px] text-amber-500"></i>
                                 <span data-i18n="author_role">Trưởng Dự Án • AI Retail Lead</span>
                             </div>
-                            <p class="text-[11px] text-slate-400 font-semibold mt-0.5" data-i18n="author_project">Dự án: Thi Cuối Môn AI301</p>
                         </div>
 
                         <!-- Contact Details List (Compact Frosted Cards) -->
@@ -3578,7 +3580,7 @@
                 hero_btn_upload: '<i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> Tải Lên File Dữ Liệu (.xlsx, .csv)',
                 hero_btn_copilot: '<i class="fa-solid fa-comments text-amber-500"></i> Trợ Lý AI Co-Pilot',
                 author_role: 'Trưởng Dự Án • AI Retail Lead',
-                author_project: 'Dự án: Thi Cuối Môn AI301',
+                author_project: '',
                 author_phone_lbl: 'SĐT:',
                 author_email_lbl: 'Email:',
                 author_addr_lbl: 'Địa chỉ:',
@@ -3645,7 +3647,7 @@
                 hero_btn_upload: '<i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> Upload Data File (.xlsx, .csv)',
                 hero_btn_copilot: '<i class="fa-solid fa-comments text-amber-500"></i> AI Co-Pilot Assistant',
                 author_role: 'Project Lead • AI Retail Lead',
-                author_project: 'Course: AI301 Final Project',
+                author_project: '',
                 author_phone_lbl: 'Phone:',
                 author_email_lbl: 'Email:',
                 author_addr_lbl: 'Address:',
@@ -3712,7 +3714,7 @@
                 hero_btn_upload: '<i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> データファイルをアップロード (.xlsx, .csv)',
                 hero_btn_copilot: '<i class="fa-solid fa-comments text-amber-500"></i> AIコパイロットアシスタント',
                 author_role: 'プロジェクト統括 • AI Retail Lead',
-                author_project: '科目: AI301 期末課題',
+                author_project: '',
                 author_phone_lbl: '電話:',
                 author_email_lbl: 'メール:',
                 author_addr_lbl: '所在地:',
@@ -3779,7 +3781,7 @@
                 hero_btn_upload: '<i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> 上传数据文件 (.xlsx, .csv)',
                 hero_btn_copilot: '<i class="fa-solid fa-comments text-amber-500"></i> AI 智能副驾助理',
                 author_role: '项目主管 • AI Retail Lead',
-                author_project: '课程项目: AI301 期末结课',
+                author_project: '',
                 author_phone_lbl: '电话:',
                 author_email_lbl: '邮箱:',
                 author_addr_lbl: '地址:',
@@ -3846,7 +3848,7 @@
                 hero_btn_upload: '<i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> 데이터 파일 업로드 (.xlsx, .csv)',
                 hero_btn_copilot: '<i class="fa-solid fa-comments text-amber-500"></i> AI 코파일럿 어시스턴트',
                 author_role: '프로젝트 총괄 • AI Retail Lead',
-                author_project: '프로젝트: AI301 기말 과제',
+                author_project: '',
                 author_phone_lbl: '전화:',
                 author_email_lbl: '이메일:',
                 author_addr_lbl: '소재지:',
