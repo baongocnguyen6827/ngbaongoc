@@ -1081,7 +1081,7 @@
             <section id="step3View" class="view-section view-fade space-y-6">
 
                 <!-- ⭐ CSAT & CUSTOMER FEEDBACK SPOTLIGHT BANNER (Hiển thị trực tiếp ngay trên Dashboard chính Bước 3) -->
-                <div class="os-card p-5 bg-gradient-to-r from-white via-rose-50/40 to-amber-50/50 dark:from-slate-900 dark:via-slate-800/80 dark:to-slate-900 border-2 border-amber-300 dark:border-amber-600/70 shadow-md">
+                <div id="spotlightCsatBanner" class="os-card p-5 bg-gradient-to-r from-white via-rose-50/40 to-amber-50/50 dark:from-slate-900 dark:via-slate-800/80 dark:to-slate-900 border-2 border-amber-300 dark:border-amber-600/70 shadow-md">
                     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                         <!-- Left: CSAT Score & Store Highlights -->
                         <div class="flex items-start gap-4">
@@ -2884,14 +2884,29 @@
                 feedbackList = res.feedbacks || [];
                 const sum = res.summary || {};
 
-                // Update KPI Cards
-                if (document.getElementById('fbKpiCsat')) document.getElementById('fbKpiCsat').innerText = sum.average_csat || '4.6';
-                if (document.getElementById('fbKpiPosPct')) document.getElementById('fbKpiPosPct').innerText = `${sum.positive_pct || 85}%`;
-                if (document.getElementById('fbKpiTotal')) document.getElementById('fbKpiTotal').innerText = sum.total_reviews || feedbackList.length;
-                if (document.getElementById('fbKpiResolution')) document.getElementById('fbKpiResolution').innerText = `${sum.resolution_rate || 96.5}%`;
-                if (document.getElementById('fbKpiRiskCount')) document.getElementById('fbKpiRiskCount').innerText = sum.risk_count || 0;
-                if (document.getElementById('fbFilteredCount')) document.getElementById('fbFilteredCount').innerText = feedbackList.length;
-                if (document.getElementById('sbBadgeFeedback')) document.getElementById('sbBadgeFeedback').innerText = `${sum.average_csat || 4.6}★`;
+                // Update KPI Cards (Supports Empty Customer Data State)
+                const hasReviews = (sum.total_reviews !== undefined && sum.total_reviews > 0);
+                if (document.getElementById('fbKpiCsat')) {
+                    document.getElementById('fbKpiCsat').innerText = hasReviews ? `${sum.average_csat}★` : '--';
+                }
+                if (document.getElementById('fbKpiPosPct')) {
+                    document.getElementById('fbKpiPosPct').innerText = hasReviews ? `${sum.positive_pct}%` : '0%';
+                }
+                if (document.getElementById('fbKpiTotal')) {
+                    document.getElementById('fbKpiTotal').innerText = sum.total_reviews || 0;
+                }
+                if (document.getElementById('fbKpiResolution')) {
+                    document.getElementById('fbKpiResolution').innerText = hasReviews ? `${sum.resolution_rate}%` : '0%';
+                }
+                if (document.getElementById('fbKpiRiskCount')) {
+                    document.getElementById('fbKpiRiskCount').innerText = sum.risk_count || 0;
+                }
+                if (document.getElementById('fbFilteredCount')) {
+                    document.getElementById('fbFilteredCount').innerText = feedbackList.length;
+                }
+                if (document.getElementById('sbBadgeFeedback')) {
+                    document.getElementById('sbBadgeFeedback').innerText = hasReviews ? `${sum.average_csat}★` : '0★ Mới';
+                }
 
                 // Render Feedback Cards
                 renderFeedbackCards(feedbackList);
@@ -2912,7 +2927,28 @@
             if (!box) return;
 
             if (!list || list.length === 0) {
-                box.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400 font-bold text-xs"><i class="fa-solid fa-inbox text-3xl mb-2 block"></i>Không tìm thấy phản hồi nào phù hợp với bộ lọc đã chọn.</div>`;
+                box.innerHTML = `
+                    <div class="col-span-full os-card p-12 text-center flex flex-col items-center justify-center space-y-4">
+                        <div class="w-16 h-16 rounded-3xl bg-rose-50 text-rose-500 dark:bg-rose-950/40 flex items-center justify-center text-3xl shadow-inner">
+                            <i class="fa-regular fa-comments"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-black text-slate-800 dark:text-white text-base">Hệ Thống Chưa Có Dữ Liệu Khách Hàng</h4>
+                            <p class="text-xs text-slate-400 mt-1 max-w-md mx-auto">
+                                Trang web đang ở trạng thái sạch ban đầu, chưa ghi nhận phản hồi hay khiếu nại nào từ khách hàng. Bạn có thể gửi phản hồi mới ngay bây giờ hoặc nạp dữ liệu mẫu thử nghiệm!
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+                            <button onclick="openFeedbackModal()" class="btn-pink-pill px-4 py-2 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-md">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>+ Gửi Phản Hồi Đầu Tiên</span>
+                            </button>
+                            <button onclick="loadSampleCustomerFeedbacks()" class="btn-outline-clean px-4 py-2 text-xs font-bold flex items-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i>
+                                <span>Nạp Dữ Liệu Khách Hàng Mẫu</span>
+                            </button>
+                        </div>
+                    </div>`;
                 return;
             }
 
@@ -2985,9 +3021,10 @@
 
         function renderFeedbackCharts(sum) {
             const isDark = document.body.classList.contains('dark') || document.documentElement.classList.contains('dark');
+            const isEmpty = !sum || !sum.total_reviews || sum.total_reviews === 0;
 
             // 1. Ratings distribution
-            const rCounts = sum.rating_counts || { 5: 12, 4: 5, 3: 2, 2: 1, 1: 0 };
+            const rCounts = isEmpty ? {} : (sum.rating_counts || {});
             const ctx1 = document.getElementById('chartFeedbackRatings');
             if (ctx1) {
                 if (chartFbRating) chartFbRating.destroy();
@@ -3006,7 +3043,12 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            y: { beginAtZero: true, grid: { color: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(244,63,110,0.06)' }, ticks: { color: isDark ? '#94a3b8' : '#64748b' } },
+                            y: { 
+                                beginAtZero: true, 
+                                suggestedMax: isEmpty ? 5 : undefined,
+                                grid: { color: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(244,63,110,0.06)' }, 
+                                ticks: { color: isDark ? '#94a3b8' : '#64748b', precision: 0 } 
+                            },
                             x: { grid: { display: false }, ticks: { color: isDark ? '#94a3b8' : '#64748b' } }
                         },
                         plugins: { legend: { display: false } }
@@ -3015,17 +3057,26 @@
             }
 
             // 2. Categories breakdown
-            const cCounts = sum.category_counts || { 'Dịch vụ & Tư vấn': 8, 'Chất lượng sản phẩm': 6, 'Đóng gói & Vận chuyển': 3, 'Hạn sử dụng': 2, 'Giao hàng': 1 };
             const ctx2 = document.getElementById('chartFeedbackCategories');
             if (ctx2) {
                 if (chartFbCat) chartFbCat.destroy();
+                const catLabels = isEmpty || Object.keys(sum.category_counts || {}).length === 0 
+                    ? ['Chưa có đánh giá'] 
+                    : Object.keys(sum.category_counts);
+                const catData = isEmpty || Object.keys(sum.category_counts || {}).length === 0 
+                    ? [1] 
+                    : Object.values(sum.category_counts);
+                const catColors = isEmpty || Object.keys(sum.category_counts || {}).length === 0 
+                    ? [isDark ? '#334155' : '#e2e8f0'] 
+                    : ['#f43f6e', '#c084fc', '#fbbf24', '#34d399', '#60a5fa', '#f97316', '#a855f7'];
+
                 chartFbCat = new Chart(ctx2.getContext('2d'), {
                     type: 'doughnut',
                     data: {
-                        labels: Object.keys(cCounts),
+                        labels: catLabels,
                         datasets: [{
-                            data: Object.values(cCounts),
-                            backgroundColor: ['#f43f6e', '#c084fc', '#fbbf24', '#34d399', '#60a5fa', '#f97316', '#a855f7'],
+                            data: catData,
+                            backgroundColor: catColors,
                             borderWidth: 2,
                             borderColor: isDark ? '#1e293b' : '#ffffff'
                         }]
@@ -3038,6 +3089,9 @@
                             legend: {
                                 position: 'right',
                                 labels: { color: isDark ? '#cbd5e1' : '#475569', font: { size: 10 } }
+                            },
+                            tooltip: {
+                                enabled: !isEmpty
                             }
                         }
                     }
@@ -3425,6 +3479,35 @@
             }).catch(() => {
                 showToast('Email: baongocnguyen686827@gmail.com', 'info');
             });
+        }
+
+
+        // =====================================================================
+        // EMPTY / SAMPLE CUSTOMER DATA MANAGEMENT
+        // =====================================================================
+        async function clearCustomerFeedbacks() {
+            if (!confirm('Bạn có chắc muốn xóa toàn bộ dữ liệu phản hồi khách hàng để đưa hệ thống về trạng thái sạch ban đầu (chưa có dữ liệu)?')) return;
+            try {
+                const res = await (await fetch('/api/feedbacks/clear', { method: 'POST' })).json();
+                if (res.success) {
+                    showToast(res.message, 'success');
+                    loadFeedbacks();
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadSampleCustomerFeedbacks() {
+            try {
+                const res = await (await fetch('/api/feedbacks/load-sample', { method: 'POST' })).json();
+                if (res.success) {
+                    showToast(res.message, 'success');
+                    loadFeedbacks();
+                }
+            } catch (err) {
+                console.error(err);
+            }
         }
 
         function initLanguage() {

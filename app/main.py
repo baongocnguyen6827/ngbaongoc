@@ -289,6 +289,34 @@ def export_cleaned_csv():
             
     return send_file(cleaned_path, mimetype="text/csv", as_attachment=True, download_name="BaoNgoc_Cleaned_Transactions_Oct2026.csv")
 
+
+@app.route("/api/feedbacks/clear", methods=["POST"])
+def clear_customer_feedbacks():
+    """Xóa toàn bộ phản hồi khách hàng để đưa hệ thống về trạng thái ban đầu"""
+    engine.customer_feedbacks = []
+    fb_path = os.path.join(DATA_DIR, "customer_feedbacks.json")
+    try:
+        with open(fb_path, "w", encoding="utf-8") as f:
+            json.dump([], f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+    return jsonify({"success": True, "message": "Đã xóa toàn bộ phản hồi khách hàng thành công!", "summary": engine.get_feedback_summary()})
+
+@app.route("/api/feedbacks/load-sample", methods=["POST"])
+def load_sample_customer_feedbacks():
+    """Nạp dữ liệu phản hồi khách hàng mẫu khi cần thử nghiệm"""
+    sample_path = os.path.join(DATA_DIR, "sample_customer_feedbacks.json")
+    if os.path.exists(sample_path):
+        try:
+            with open(sample_path, "r", encoding="utf-8") as f:
+                engine.customer_feedbacks = json.load(f)
+            fb_path = os.path.join(DATA_DIR, "customer_feedbacks.json")
+            with open(fb_path, "w", encoding="utf-8") as f:
+                json.dump(engine.customer_feedbacks, f, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
+    return jsonify({"success": True, "message": "Đã nạp dữ liệu phản hồi khách hàng mẫu thành công!", "count": len(engine.customer_feedbacks), "summary": engine.get_feedback_summary()})
+
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5050, debug=False)
 

@@ -711,11 +711,11 @@ class PhucAnRetailEngine:
         if total == 0:
             return {
                 "total_reviews": 0,
-                "average_csat": 5.0,
-                "positive_pct": 100.0,
+                "average_csat": 0.0,
+                "positive_pct": 0.0,
                 "neutral_pct": 0.0,
                 "negative_pct": 0.0,
-                "resolution_rate": 100.0,
+                "resolution_rate": 0.0,
                 "rating_counts": {5: 0, 4: 0, 3: 0, 2: 0, 1: 0},
                 "category_counts": {},
                 "risk_count": 0
