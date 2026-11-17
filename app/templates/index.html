@@ -511,109 +511,115 @@
                     </div>
                 </div>
 
-                <!-- Right: Status, Run Pipeline, Export, User Profile, Language, Contact & Theme Toggle -->
-                <div class="flex flex-wrap items-center gap-3 sm:gap-3.5 flex-shrink-0">
-                    <!-- Localhost Live Indicator -->
-                    <div class="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-xl">
-                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500 live-dot"></span>
-                        <div class="leading-tight">
-                            <p class="text-xs font-extrabold text-rose-800 dark:text-rose-400">Localhost: 5050</p>
-                            <p id="topApiStatusText" class="text-[10px] font-bold text-rose-600 dark:text-rose-400">(REST API Live)</p>
+                <!-- Row 2: Status, Actions, User Profile, Language, Contact & Theme Toggle -->
+                <div class="w-full flex flex-wrap items-center justify-between gap-3 pt-0.5">
+                    <!-- Left Actions Group -->
+                    <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+                        <!-- Localhost Live Indicator -->
+                        <div class="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-xl">
+                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 live-dot"></span>
+                            <div class="leading-tight">
+                                <p class="text-xs font-extrabold text-rose-800 dark:text-rose-400">Localhost: 5050</p>
+                                <p id="topApiStatusText" class="text-[10px] font-bold text-rose-600 dark:text-rose-400">(REST API Live)</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Quick Action: Feedback Khách Hàng (Always Visible on Top Header) -->
-                    <button onclick="switchTab('feedback')" class="btn-pink-pill px-3.5 py-2 text-xs flex items-center gap-2 bg-gradient-to-r from-amber-500 via-rose-500 to-pink-500 text-white font-extrabold shadow-md hover:scale-105 transition cursor-pointer" title="Xem Phản Hồi Khách Hàng & CSAT">
-                        <i class="fa-solid fa-star text-yellow-300 animate-pulse"></i>
-                        <span class="leading-tight text-left">Feedback KH<br><span class="text-[10px] text-yellow-200 font-bold">CSAT Live</span></span>
-                    </button>
+                        <!-- Quick Action: Feedback Khách Hàng (Always Visible on Top Header) -->
+                        <button onclick="switchTab('feedback')" class="btn-pink-pill px-3.5 py-2 text-xs flex items-center gap-2 bg-gradient-to-r from-amber-500 via-rose-500 to-pink-500 text-white font-extrabold shadow-md hover:scale-105 transition cursor-pointer" title="Xem Phản Hồi Khách Hàng & CSAT">
+                            <i class="fa-solid fa-star text-yellow-300 animate-pulse"></i>
+                            <span class="leading-tight text-left">Feedback KH<br><span class="text-[10px] text-yellow-200 font-bold">CSAT Live</span></span>
+                        </button>
 
-                    <!-- Primary Action: Chạy AI Pipeline -->
-                    <button onclick="runFullAiPipeline()" id="btnRunPipeline" class="btn-pink-pill px-4 py-2 text-xs flex items-center gap-2">
-                        <i class="fa-solid fa-bolt"></i>
-                        <span data-i18n="btn_run_pipeline" class="leading-tight text-left">Chạy AI<br class="hidden sm:inline"> Pipeline</span>
-                    </button>
+                        <!-- Primary Action: Chạy AI Pipeline -->
+                        <button onclick="runFullAiPipeline()" id="btnRunPipeline" class="btn-pink-pill px-4 py-2 text-xs flex items-center gap-2">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span data-i18n="btn_run_pipeline" class="leading-tight text-left">Chạy AI<br class="hidden sm:inline"> Pipeline</span>
+                        </button>
 
-                    <!-- Secondary Action: Xuất Báo Cáo -->
-                    <button onclick="switchTab('step4')" class="btn-outline-clean px-4 py-2 text-xs flex items-center gap-2">
-                        <i class="fa-solid fa-file-arrow-down text-emerald-600"></i>
-                        <span data-i18n="btn_export_report" class="leading-tight text-left">Xuất<br class="hidden sm:inline"> Báo Cáo</span>
-                    </button>
-
-                    <!-- User Profile Card -->
-                    <div class="flex items-center gap-2.5 pl-3 border-l border-pink-100 dark:border-slate-700">
-                        <img src="/static/avatar.jpg" alt="Nguyễn Bảo Ngọc" class="w-9 h-9 rounded-full object-cover border-2 border-rose-200 shadow-xs flex-shrink-0">
-                        <div class="hidden lg:block text-left leading-tight">
-                            <p class="font-bold text-xs text-slate-800 dark:text-slate-200 truncate max-w-[130px]">Nguyễn Bảo Ngọc</p>
-                            <p class="text-[10px] text-slate-400 font-medium">Bảo Ngọc Retail</p>
-                        </div>
-                        <button onclick="runFullAiPipeline()" title="Làm mới toàn bộ AI Pipeline" class="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-100/60 flex items-center justify-center transition">
-                            <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                        <!-- Secondary Action: Xuất Báo Cáo -->
+                        <button onclick="switchTab('step4')" class="btn-outline-clean px-4 py-2 text-xs flex items-center gap-2">
+                            <i class="fa-solid fa-file-arrow-down text-emerald-600"></i>
+                            <span data-i18n="btn_export_report" class="leading-tight text-left">Xuất<br class="hidden sm:inline"> Báo Cáo</span>
                         </button>
                     </div>
 
-                    <!-- Divider -->
-                    <div class="h-6 w-[1px] bg-pink-100 dark:bg-slate-700"></div>
-
-                    <!-- Language Selector Dropdown (Multi-Language: VI, EN, JA, ZH, KO) -->
-                    <div class="relative" id="langDropdownContainer">
-                        <button id="langToggleBtn" onclick="toggleLangDropdown(event)" class="flex items-center gap-1.5 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs" title="Thay đổi ngôn ngữ / Change Language">
-                            <span id="currentLangFlag" class="text-sm">🇻🇳</span>
-                            <span id="currentLangText" class="hidden sm:inline font-bold">Tiếng Việt</span>
-                            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
-                        </button>
-
-                        <!-- Dropdown Menu (Glassmorphism) -->
-                        <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-48 rounded-2xl os-card p-1.5 shadow-2xl border border-white/90 dark:border-slate-700 z-50 view-fade">
-                            <button onclick="changeLanguage('vi')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
-                                <span class="text-base">🇻🇳</span>
-                                <div class="leading-tight">
-                                    <p class="font-bold">Tiếng Việt</p>
-                                    <span class="text-[10px] text-slate-400 font-medium">Mặc định</span>
-                                </div>
-                            </button>
-                            <button onclick="changeLanguage('en')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
-                                <span class="text-base">🇺🇸</span>
-                                <div class="leading-tight">
-                                    <p class="font-bold">English</p>
-                                    <span class="text-[10px] text-slate-400 font-medium">International</span>
-                                </div>
-                            </button>
-                            <button onclick="changeLanguage('ja')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
-                                <span class="text-base">🇯🇵</span>
-                                <div class="leading-tight">
-                                    <p class="font-bold">日本語</p>
-                                    <span class="text-[10px] text-slate-400 font-medium">Japanese</span>
-                                </div>
-                            </button>
-                            <button onclick="changeLanguage('zh')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
-                                <span class="text-base">🇨🇳</span>
-                                <div class="leading-tight">
-                                    <p class="font-bold">中文</p>
-                                    <span class="text-[10px] text-slate-400 font-medium">Simplified</span>
-                                </div>
-                            </button>
-                            <button onclick="changeLanguage('ko')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
-                                <span class="text-base">🇰🇷</span>
-                                <div class="leading-tight">
-                                    <p class="font-bold">한국어</p>
-                                    <span class="text-[10px] text-slate-400 font-medium">Korean</span>
-                                </div>
+                    <!-- Right Controls Group: User Profile & Utility Buttons (Pushed to the Right) -->
+                    <div class="flex items-center gap-2.5 sm:gap-3 ml-auto flex-shrink-0">
+                        <!-- User Profile Card -->
+                        <div class="flex items-center gap-2.5 pl-3 border-l border-pink-100 dark:border-slate-700">
+                            <img src="/static/avatar.jpg" alt="Nguyễn Bảo Ngọc" class="w-9 h-9 rounded-full object-cover border-2 border-rose-200 shadow-xs flex-shrink-0">
+                            <div class="hidden lg:block text-left leading-tight">
+                                <p class="font-bold text-xs text-slate-800 dark:text-slate-200 truncate max-w-[130px]">Nguyễn Bảo Ngọc</p>
+                                <p class="text-[10px] text-slate-400 font-medium">Bảo Ngọc Retail</p>
+                            </div>
+                            <button onclick="runFullAiPipeline()" title="Làm mới toàn bộ AI Pipeline" class="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-100/60 flex items-center justify-center transition">
+                                <i class="fa-solid fa-arrows-rotate text-xs"></i>
                             </button>
                         </div>
+
+                        <!-- Divider -->
+                        <div class="h-6 w-[1px] bg-pink-100 dark:bg-slate-700"></div>
+
+                        <!-- Language Selector Dropdown (Multi-Language: VI, EN, JA, ZH, KO) -->
+                        <div class="relative" id="langDropdownContainer">
+                            <button id="langToggleBtn" onclick="toggleLangDropdown(event)" class="flex items-center gap-1.5 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs" title="Thay đổi ngôn ngữ / Change Language">
+                                <span id="currentLangFlag" class="text-sm">🇻🇳</span>
+                                <span id="currentLangText" class="hidden sm:inline font-bold">Tiếng Việt</span>
+                                <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
+                            </button>
+
+                            <!-- Dropdown Menu (Glassmorphism) -->
+                            <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-48 rounded-2xl os-card p-1.5 shadow-2xl border border-white/90 dark:border-slate-700 z-50 view-fade">
+                                <button onclick="changeLanguage('vi')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
+                                    <span class="text-base">🇻🇳</span>
+                                    <div class="leading-tight">
+                                        <p class="font-bold">Tiếng Việt</p>
+                                        <span class="text-[10px] text-slate-400 font-medium">Mặc định</span>
+                                    </div>
+                                </button>
+                                <button onclick="changeLanguage('en')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
+                                    <span class="text-base">🇺🇸</span>
+                                    <div class="leading-tight">
+                                        <p class="font-bold">English</p>
+                                        <span class="text-[10px] text-slate-400 font-medium">International</span>
+                                    </div>
+                                </button>
+                                <button onclick="changeLanguage('ja')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
+                                    <span class="text-base">🇯🇵</span>
+                                    <div class="leading-tight">
+                                        <p class="font-bold">日本語</p>
+                                        <span class="text-[10px] text-slate-400 font-medium">Japanese</span>
+                                    </div>
+                                </button>
+                                <button onclick="changeLanguage('zh')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
+                                    <span class="text-base">🇨🇳</span>
+                                    <div class="leading-tight">
+                                        <p class="font-bold">中文</p>
+                                        <span class="text-[10px] text-slate-400 font-medium">Simplified</span>
+                                    </div>
+                                </button>
+                                <button onclick="changeLanguage('ko')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
+                                    <span class="text-base">🇰🇷</span>
+                                    <div class="leading-tight">
+                                        <p class="font-bold">한국어</p>
+                                        <span class="text-[10px] text-slate-400 font-medium">Korean</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Contact Quick Button -->
+                        <button onclick="openContactModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs" title="Thông tin liên hệ / Contact Info">
+                            <i class="fa-solid fa-headset text-rose-500"></i>
+                            <span class="hidden sm:inline" data-i18n="contact_btn">Liên Hệ</span>
+                        </button>
+
+                        <!-- Theme Switcher Button (Light / Dark) -->
+                        <button id="themeToggleBtn"  onclick="toggleTheme()" class="flex items-center gap-2 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs" title="Chuyển đổi giao diện Sáng / Tối">
+                            <i id="themeToggleIcon" class="fa-solid fa-moon text-rose-500"></i>
+                            <span id="themeToggleText" data-i18n="theme_dark" class="hidden sm:inline">Chế độ Tối</span>
+                        </button>
                     </div>
-
-                    <!-- Contact Quick Button -->
-                    <button onclick="openContactModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs" title="Thông tin liên hệ / Contact Info">
-                        <i class="fa-solid fa-headset text-rose-500"></i>
-                        <span class="hidden sm:inline" data-i18n="contact_btn">Liên Hệ</span>
-                    </button>
-
-                    <!-- Theme Switcher Button (Light / Dark) -->
-                    <button id="themeToggleBtn"  onclick="toggleTheme()" class="flex items-center gap-2 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs" title="Chuyển đổi giao diện Sáng / Tối">
-                        <i id="themeToggleIcon" class="fa-solid fa-moon text-rose-500"></i>
-                        <span id="themeToggleText" data-i18n="theme_dark" class="hidden sm:inline">Chế độ Tối</span>
-                    </button>
                 </div>
 
             </div>
