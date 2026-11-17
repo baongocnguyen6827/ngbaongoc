@@ -467,6 +467,15 @@
             100% { box-shadow: 0 0 0 0 rgba(244, 63, 110, 0); }
         }
 
+        .live-dot-green {
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulseGreen 1.8s infinite;
+        }
+        @keyframes pulseGreen {
+            70% { box-shadow: 0 0 0 7px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
         /* Custom Frosted Scrollbar */
         .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
@@ -618,14 +627,12 @@
 
                 <!-- Row 2: Status on left, Actions + User Profile + Language/Contact/Theme on right -->
                 <div class="w-full flex flex-wrap items-center justify-between gap-3 pt-0.5">
-                    <!-- Left: Localhost Live Indicator -->
-                    <div class="flex items-center gap-2">
-                        <div class="flex items-center gap-2 px-2.5 py-1 rounded-xl">
-                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 live-dot"></span>
-                            <div class="leading-tight">
-                                <p class="text-xs font-extrabold text-rose-800 dark:text-rose-400">Localhost: 5050</p>
-                                <p id="topApiStatusText" class="text-[10px] font-bold text-rose-600 dark:text-rose-400">(REST API Live)</p>
-                            </div>
+                    <!-- Left: Localhost Live Indicator (Mộc mạc, không viền, không nền) -->
+                    <div class="flex items-center gap-2 select-none py-1">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 live-dot-green flex-shrink-0"></span>
+                        <div class="leading-tight">
+                            <p class="text-xs font-bold text-slate-700 dark:text-slate-200">Localhost: 5050</p>
+                            <p id="topApiStatusText" class="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">(REST API Live)</p>
                         </div>
                     </div>
 
@@ -664,9 +671,9 @@
                         <!-- Divider -->
                         <div class="h-6 w-[1px] bg-pink-100 dark:bg-slate-700"></div>
 
-                        <!-- Language Selector Dropdown (Multi-Language: VI, EN, JA, ZH, KO) -->
+                        <!-- Language Selector Dropdown (Multi-Language: VI, EN, JA, ZH, KO - Mộc mạc, không viền, không nền) -->
                         <div class="relative" id="langDropdownContainer">
-                            <button id="langToggleBtn" onclick="toggleLangDropdown(event)" class="flex items-center gap-1.5 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs" title="Thay đổi ngôn ngữ / Change Language">
+                            <button id="langToggleBtn" onclick="toggleLangDropdown(event)" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-transparent border-0 hover:bg-rose-50/60 dark:hover:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:text-rose-600 font-semibold text-xs transition cursor-pointer" title="Thay đổi ngôn ngữ / Change Language">
                                 <span id="currentLangFlag" class="text-sm">🇻🇳</span>
                                 <span id="currentLangText" class="hidden sm:inline font-bold">Tiếng Việt</span>
                                 <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
