@@ -1621,22 +1621,20 @@
                                 <p class="text-xs text-slate-500">Hỏi đáp trực tiếp về số liệu 18 cửa hàng, nguyên nhân đổi trả, cơ cấu sản phẩm &amp; đề xuất hỗ trợ</p>
                             </div>
                         </div>
-                        <div class="flex flex-wrap gap-1.5">
-                            <button onclick="askCopilot('Cửa hàng nào cần hỗ trợ trước và lý do vì sao?')" class="px-3 py-1.5 rounded-xl bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-bold transition">Cửa hàng cần hỗ trợ?</button>
-                            <button onclick="askCopilot('Tại sao cửa hàng ST09 bị cảnh báo đỏ đổi trả?')" class="px-3 py-1.5 rounded-xl bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-bold transition">Nguyên nhân ST09?</button>
-                            <button onclick="askCopilot('Tại sao ST18 Cần Thơ sụt giảm mạnh MoM?')" class="px-3 py-1.5 rounded-xl bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-bold transition">Sụt giảm ST18?</button>
+                        <div id="copilotQuickQuestions" class="flex flex-wrap gap-1.5">
+                            <button onclick="askCopilot('Thông tin liên hệ của quản lý?')" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-rose-200 dark:border-slate-700 text-rose-600 dark:text-rose-400 hover:bg-rose-50 text-xs font-bold transition">Thông tin liên hệ?</button>
+                            <button onclick="askCopilot('Làm sao để tải tệp dữ liệu lên hệ thống?')" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-rose-200 dark:border-slate-700 text-rose-600 dark:text-rose-400 hover:bg-rose-50 text-xs font-bold transition">Cách tải dữ liệu?</button>
+                            <button onclick="askCopilot('Quy trình 4 bước gồm những giai đoạn nào?')" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-rose-200 dark:border-slate-700 text-rose-600 dark:text-rose-400 hover:bg-rose-50 text-xs font-bold transition">Quy trình 4 bước?</button>
                         </div>
                     </div>
 
                     <div id="copilotMessages" class="flex-1 p-5 overflow-y-auto custom-scroll space-y-4 text-xs">
-                        <div class="flex items-start gap-3">
-                            <div class="w-8 h-8 rounded-xl btn-pink-pill flex items-center justify-center flex-shrink-0 text-xs">
-                                <i class="fa-solid fa-robot"></i>
+                        <div id="copilotEmptyState" class="py-16 text-center text-slate-400 font-medium">
+                            <div class="w-14 h-14 mx-auto rounded-3xl bg-rose-50 dark:bg-slate-800 flex items-center justify-center text-rose-500 text-2xl shadow-xs mb-3">
+                                <i class="fa-solid fa-comments"></i>
                             </div>
-                            <div class="p-4 rounded-2xl rounded-tl-xs bg-blush-50 border border-pink-100 text-slate-700 max-w-2xl leading-relaxed space-y-1.5">
-                                <p class="font-extrabold text-rose-600">Xin chào Nguyễn Bảo Ngọc!</p>
-                                <p>Tôi là <b>Bảo Ngọc AI Co-Pilot</b>. Toàn bộ 1.006 dòng dữ liệu từ tệp <code>PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx</code> đã được chuẩn hóa và đối soát khớp 100%. Bạn muốn tra cứu sâu về cửa hàng nào?</p>
-                            </div>
+                            <p class="font-extrabold text-sm text-slate-700 dark:text-slate-200">Trợ Lý AI Co-Pilot Sẵn Sàng</p>
+                            <p class="text-xs text-slate-400 max-w-md mx-auto mt-1">Khi bạn tải lên tệp dữ liệu bán hàng tại Bước 1, AI Agent sẽ tự động phân tích và bắt đầu tư vấn, giải đáp số liệu cho bạn tại đây!</p>
                         </div>
                     </div>
 
@@ -2505,6 +2503,7 @@
                     renderMainAnalysisTable();
                     renderStep4AuditAndPriority();
                     loadDataPreview('raw', 1);
+                    initCopilotForLoadedData(json.data.file_name, json.data.total_rows);
                 } else {
                     notify('Lỗi tải tệp: ' + json.error, 'warn');
                 }
@@ -3458,6 +3457,9 @@
         }
         function appendChatBubble(role, text) {
             const box = document.getElementById('copilotMessages');
+            const emptyState = document.getElementById('copilotEmptyState');
+            if (emptyState) emptyState.remove();
+
             const div = document.createElement('div');
             div.className = `flex items-start gap-3 ${role === 'user' ? 'justify-end' : ''} view-fade`;
             if (role === 'user') {
@@ -3475,6 +3477,54 @@
             }
             box.appendChild(div);
             box.scrollTop = box.scrollHeight;
+        }
+
+        function initCopilotForLoadedData(fileName, totalRows) {
+            const box = document.getElementById('copilotMessages');
+            if (box) {
+                box.innerHTML = `
+                    <div class="flex items-start gap-3 view-fade">
+                        <div class="w-8 h-8 rounded-xl btn-pink-pill flex items-center justify-center flex-shrink-0 text-xs">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div class="p-4 rounded-2xl rounded-tl-xs bg-blush-50 border border-pink-100 text-slate-700 max-w-2xl leading-relaxed space-y-1.5 shadow-xs">
+                            <p class="font-extrabold text-rose-600">Xin chào Nguyễn Bảo Ngọc!</p>
+                            <p>Tôi là <b>Bảo Ngọc AI Co-Pilot</b>. Toàn bộ <b>${fmtNum(totalRows)} dòng</b> dữ liệu từ tệp <code>${fileName}</code> đã được nạp và phân tích hoàn tất. Bạn có thể hỏi tôi bất kỳ điều gì về doanh thu, cửa hàng cần hỗ trợ, đơn hủy hoặc chiến lược tăng trưởng!</p>
+                        </div>
+                    </div>
+                `;
+            }
+            const qBox = document.getElementById('copilotQuickQuestions');
+            if (qBox) {
+                qBox.innerHTML = `
+                    <button onclick="askCopilot('Cửa hàng nào cần hỗ trợ trước và lý do vì sao?')" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-rose-200 dark:border-slate-700 text-rose-600 dark:text-rose-400 hover:bg-rose-50 text-xs font-bold transition">Cửa hàng cần hỗ trợ?</button>
+                    <button onclick="askCopilot('Có những cửa hàng nào bị cảnh báo đơn hủy hoặc đổi trả cao?')" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-rose-200 dark:border-slate-700 text-rose-600 dark:text-rose-400 hover:bg-rose-50 text-xs font-bold transition">Cảnh báo đơn hủy & đổi trả?</button>
+                    <button onclick="askCopilot('Tổng quan doanh thu thuần và tiến độ mục tiêu toàn hệ thống?')" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-rose-200 dark:border-slate-700 text-rose-600 dark:text-rose-400 hover:bg-rose-50 text-xs font-bold transition">Tổng quan doanh thu?</button>
+                `;
+            }
+        }
+
+        function resetCopilotChat() {
+            const box = document.getElementById('copilotMessages');
+            if (box) {
+                box.innerHTML = `
+                    <div id="copilotEmptyState" class="py-16 text-center text-slate-400 font-medium">
+                        <div class="w-14 h-14 mx-auto rounded-3xl bg-rose-50 dark:bg-slate-800 flex items-center justify-center text-rose-500 text-2xl shadow-xs mb-3">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <p class="font-extrabold text-sm text-slate-700 dark:text-slate-200">Trợ Lý AI Co-Pilot Sẵn Sàng</p>
+                        <p class="text-xs text-slate-400 max-w-md mx-auto mt-1">Khi bạn tải lên tệp dữ liệu bán hàng tại Bước 1, AI Agent sẽ tự động phân tích và bắt đầu tư vấn, giải đáp số liệu cho bạn tại đây!</p>
+                    </div>
+                `;
+            }
+            const qBox = document.getElementById('copilotQuickQuestions');
+            if (qBox) {
+                qBox.innerHTML = `
+                    <button onclick="askCopilot('Thông tin liên hệ của quản lý?')" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-rose-200 dark:border-slate-700 text-rose-600 dark:text-rose-400 hover:bg-rose-50 text-xs font-bold transition">Thông tin liên hệ?</button>
+                    <button onclick="askCopilot('Làm sao để tải tệp dữ liệu lên hệ thống?')" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-rose-200 dark:border-slate-700 text-rose-600 dark:text-rose-400 hover:bg-rose-50 text-xs font-bold transition">Cách tải dữ liệu?</button>
+                    <button onclick="askCopilot('Quy trình 4 bước gồm những giai đoạn nào?')" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-rose-200 dark:border-slate-700 text-rose-600 dark:text-rose-400 hover:bg-rose-50 text-xs font-bold transition">Quy trình 4 bước?</button>
+                `;
+            }
         }
 
 
@@ -3970,6 +4020,9 @@
                             </tr>
                         `;
                     }
+
+                    // Reset Copilot chat to clean waiting state
+                    resetCopilotChat();
 
                     // Reload empty tables
                     loadDataPreview(appState.previewMode || 'cleaned', 1);
