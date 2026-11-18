@@ -115,10 +115,8 @@ def upload_raw_data():
                 "analysis_questions": questions
             })
         else:
-            return jsonify({
-                "success": False, 
-                "error": "Vui lòng hoàn thành Thông tin Doanh nghiệp & Câu hỏi phân tích trước khi tải file lên hệ thống!"
-            }), 400
+            # Tự động kích hoạt mẫu đề thi AI301 mặc định để người dùng luôn tải file thành công
+            engine.business_profile["is_confirmed"] = True
 
     if 'file' not in request.files:
         return jsonify({"success": False, "error": "Không tìm thấy tệp tải lên"}), 400

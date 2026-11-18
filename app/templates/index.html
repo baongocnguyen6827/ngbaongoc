@@ -506,8 +506,10 @@
     <!-- ===================================================================== -->
     <div class="flex-1 flex flex-col min-h-screen w-full relative z-10">
 
-        <!-- 1. TOP HEADER BAR: Brand, Search, Date, Status, Theme, Pipeline & User Profile -->
-        <header class="sticky top-0 z-30 bg-white/45 dark:bg-slate-900/45 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 px-4 sm:px-7 py-2.5 transition-colors shadow-xs">
+        <!-- TOP STICKY NAVIGATION WRAPPER (Header + Stepper Nav Stay Together Without Overlap) -->
+        <div class="sticky top-0 z-30 flex flex-col">
+            <!-- 1. TOP HEADER BAR: Brand, Search, Date, Status, Theme, Pipeline & User Profile -->
+            <header class="bg-white/45 dark:bg-slate-900/45 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 px-4 sm:px-7 py-2.5 transition-colors shadow-xs">
             <div class="max-w-[1700px] mx-auto flex flex-wrap items-center justify-between gap-4">
                 
                 <!-- Left: Brand Logo & Title -->
@@ -738,7 +740,7 @@
         </header>
 
         <!-- 2. HORIZONTAL WORKFLOW STEPPER BAR (ĐẦU MỤC NẰM THEO HÀNG NGANG Ở TRÊN CÙNG) -->
-        <nav id="horizontalNavBar" class="sticky top-[61px] z-20 bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 shadow-xs transition-colors">
+        <nav id="horizontalNavBar" class="bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 shadow-xs transition-colors">
             <div class="max-w-[1700px] mx-auto px-4 sm:px-7 py-2.5">
                 <div class="flex items-center justify-between gap-3 overflow-x-auto custom-scroll pb-1">
                     
@@ -838,6 +840,7 @@
                 </div>
             </div>
         </nav>
+        </div>
 
         <!-- MAIN WORKSPACE CONTENT (Full Width Container) -->
         <main class="flex-1 max-w-[1700px] w-full mx-auto px-4 sm:px-7 py-6 space-y-6">
@@ -1011,7 +1014,7 @@
                         <!-- CTA Actions: Bắt Đầu Khám Phá & Compact Cloud Drag/Drop Zone -->
                         <div class="pt-2 flex flex-col sm:flex-row items-start sm:items-center gap-3">
                             <button onclick="switchTab('step1')" class="btn-pink-pill px-5 py-3 text-xs sm:text-sm font-black flex items-center gap-2 shadow-lg shadow-rose-500/25 hover:scale-105 transition cursor-pointer flex-shrink-0">
-                                <span data-i18n="hero_btn_explore">Quy Trình 4 Bước <i class="fa-solid fa-arrow-right"></i></span>
+                                <span data-i18n="hero_btn_explore">Khám Phá Quy Trình 4 Bước <i class="fa-solid fa-arrow-right"></i></span>
                             </button>
 
                             <!-- Compact Cloud Drag & Drop Zone (Hình Đám Mây Chứa Chữ Bên Trong) -->
@@ -1071,8 +1074,8 @@
                         </div>
 
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 italic flex items-center gap-1.5 pt-1">
-                            <i class="fa-solid fa-circle-info text-rose-500"></i>
-                            <span>Vui lòng điền và bấm <b>Xác nhận hồ sơ</b> ở cột bên phải để mở khóa tải tệp dữ liệu!</span>
+                            <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                            <span>Hồ sơ đề thi AI301 đã sẵn sàng! Bạn có thể nhấn <b>Khám Phá Quy Trình 4 Bước</b> hoặc kéo thả tệp vào Đám mây để phân tích ngay.</span>
                         </p>
                     </div>
 
@@ -1191,10 +1194,6 @@
                                 Các trang sau bao gồm 4 bước khép kín từ nạp dữ liệu thô đến đề xuất quyết định điều hành
                             </p>
                         </div>
-                        <button onclick="switchTab('step1')" class="self-start sm:self-center text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1.5 cursor-pointer">
-                            <span>Khám phá lần lượt</span>
-                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </button>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
@@ -1214,7 +1213,7 @@
                                 </p>
                             </div>
                             <button onclick="switchTab('step1')" class="w-full py-2.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
-                                <span>Sang Bước 1</span>
+                                <span>Xem Chi Tiết Bước 1</span>
                                 <i class="fa-solid fa-arrow-right text-[10px]"></i>
                             </button>
                         </div>
@@ -1234,7 +1233,7 @@
                                 </p>
                             </div>
                             <button onclick="switchTab('step2')" class="w-full py-2.5 px-3 rounded-xl bg-purple-50 hover:bg-purple-100 dark:bg-purple-950/40 text-purple-600 dark:text-purple-300 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
-                                <span>Sang Bước 2</span>
+                                <span>Xem Chi Tiết Bước 2</span>
                                 <i class="fa-solid fa-arrow-right text-[10px]"></i>
                             </button>
                         </div>
@@ -1254,7 +1253,7 @@
                                 </p>
                             </div>
                             <button onclick="switchTab('step3')" class="w-full py-2.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
-                                <span>Sang Bước 3</span>
+                                <span>Xem Chi Tiết Bước 3</span>
                                 <i class="fa-solid fa-arrow-right text-[10px]"></i>
                             </button>
                         </div>
@@ -1274,7 +1273,7 @@
                                 </p>
                             </div>
                             <button onclick="switchTab('step4')" class="w-full py-2.5 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
-                                <span>Sang Bước 4</span>
+                                <span>Xem Chi Tiết Bước 4</span>
                                 <i class="fa-solid fa-arrow-right text-[10px]"></i>
                             </button>
                         </div>
@@ -1425,20 +1424,6 @@
                                   stroke-dasharray="5 5" 
                                   class="group-hover:stroke-rose-600 transition-colors duration-300"/>
                         </svg>
-
-                        <!-- Lớp phủ khóa tải file nếu chưa xác nhận thông tin doanh nghiệp -->
-                        <div id="uploadLockOverlay" class="hidden absolute inset-0 rounded-[45px] z-20 flex flex-col items-center justify-center p-4 text-center transition-all bg-white/85 dark:bg-slate-900/90 backdrop-blur-xs">
-                            <div class="w-10 h-10 rounded-2xl bg-rose-100 dark:bg-rose-950/70 text-rose-600 dark:text-rose-300 flex items-center justify-center text-lg mb-1 shadow-xs">
-                                <i class="fa-solid fa-lock"></i>
-                            </div>
-                            <h4 class="font-black text-xs sm:text-sm text-slate-800 dark:text-slate-100">Khu Vực Tải Tệp Đang Khóa</h4>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 max-w-sm mt-0.5 leading-tight">
-                                Vui lòng điền <b>Loại hình</b>, <b>Bối cảnh</b>, <b>Thông tin bổ sung</b> &amp; <b>10 câu hỏi</b> ở trên, rồi nhấn <b>"Xác Nhận Hồ Sơ Doanh Nghiệp"</b> để mở khóa!
-                            </p>
-                            <button type="button" onclick="event.stopPropagation(); scrollToProfileForm()" class="mt-2 px-3.5 py-1 rounded-xl btn-pink-pill text-[11px] font-black shadow-xs cursor-pointer">
-                                Điền Hồ Sơ Ngay ↑
-                            </button>
-                        </div>
 
                         <!-- Nội dung nằm trọn bên trong Đám mây (Đúng như ảnh mong muốn) -->
                         <div class="relative z-10 w-full h-full flex flex-col items-center justify-center pt-3 pb-2 px-6 text-center pointer-events-none">
@@ -2824,45 +2809,53 @@
 
         // Switch Navigation Tabs
         function switchTab(tab) {
-            appState.currentTab = tab;
-            const views = ['welcome', 'step1', 'step2', 'step3', 'step4', 'copilot', 'audit', 'feedback'];
-            views.forEach(v => {
-                const el = document.getElementById(v + 'View');
-                if (el) el.classList.add('hidden');
-            });
+            try {
+                appState.currentTab = tab;
+                const views = ['welcome', 'step1', 'step2', 'step3', 'step4', 'copilot', 'audit', 'feedback'];
+                views.forEach(v => {
+                    const el = document.getElementById(v + 'View');
+                    if (el) el.classList.add('hidden');
+                });
 
-            const target = document.getElementById(tab + 'View');
-            if (target) {
-                target.classList.remove('hidden');
-                target.classList.remove('view-fade');
-                void target.offsetWidth;
-                target.classList.add('view-fade');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-
-            // Top KPI Cards Section: Hidden on Welcome landing page, shown on workflow steps
-            const kpiSec = document.getElementById('topKpiSection');
-            if (kpiSec) {
-                if (tab === 'welcome') {
-                    kpiSec.classList.add('hidden');
-                } else {
-                    kpiSec.classList.remove('hidden');
+                const target = document.getElementById(tab + 'View');
+                if (target) {
+                    target.classList.remove('hidden');
+                    target.classList.remove('view-fade');
+                    void target.offsetWidth;
+                    target.classList.add('view-fade');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-            }
 
-            document.querySelectorAll('[data-nav]').forEach(link => {
-                link.classList.toggle('active', link.getAttribute('data-nav') === tab);
-            });
+                // Top KPI Cards Section: Hidden on Welcome landing page, shown on workflow steps
+                const kpiSec = document.getElementById('topKpiSection');
+                if (kpiSec) {
+                    if (tab === 'welcome') {
+                        kpiSec.classList.add('hidden');
+                    } else {
+                        kpiSec.classList.remove('hidden');
+                    }
+                }
 
-            if (tab === 'step1') {
-                loadDataPreview('raw', 1);
-            } else if (tab === 'step2') {
-                const sel = document.getElementById('step2ModeSelect');
-                loadDataPreview(sel ? sel.value : 'cleaned', 1);
-            } else if (tab === 'step3') {
-                setTimeout(() => renderAllCharts(), 80);
-            } else if (tab === 'feedback') {
-                loadFeedbacks();
+                document.querySelectorAll('[data-nav]').forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('data-nav') === tab);
+                });
+
+                if (tab === 'step1') {
+                    loadDataPreview('raw', 1);
+                } else if (tab === 'step2') {
+                    const sel = document.getElementById('step2ModeSelect');
+                    loadDataPreview(sel ? sel.value : 'cleaned', 1);
+                } else if (tab === 'step3') {
+                    setTimeout(() => {
+                        if (typeof renderAllCharts === 'function' && typeof Chart !== 'undefined') {
+                            renderAllCharts();
+                        }
+                    }, 80);
+                } else if (tab === 'feedback') {
+                    loadFeedbacks();
+                }
+            } catch (err) {
+                console.error("switchTab error:", err);
             }
         }
 
@@ -2982,7 +2975,7 @@
                 "Đề xuất chính sách giá và chiết khấu tối ưu để bảo toàn biên lợi nhuận gộp >= 18%?",
                 "Kế hoạch hành động cụ thể cho Sales Manager và Giám đốc điều hành trong 30 ngày tới?"
             ],
-            is_confirmed: false
+            is_confirmed: true
         };
 
         function escapeProfileHtml(str) {
@@ -3247,11 +3240,8 @@
         }
 
         function triggerFileInputWithGuardrail() {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
-            document.getElementById('fileInputElem').click();
+            const input = document.getElementById('fileInputElem');
+            if (input) input.click();
         }
 
         async function saveProfileToBackendAndStorage() {
@@ -3291,17 +3281,9 @@
         function onDragLeave(e) { e.preventDefault(); document.getElementById('uploadDropZone').classList.remove('border-rose-500', 'bg-rose-50'); }
         function onFileDrop(e) {
             onDragLeave(e);
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             if (e.dataTransfer.files && e.dataTransfer.files.length > 0) selectUploadFile(e.dataTransfer.files[0]);
         }
         function onFilePicked(e) {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             if (e.target.files && e.target.files.length > 0) selectUploadFile(e.target.files[0]);
         }
         function selectUploadFile(file) {
@@ -3326,10 +3308,6 @@
 
         // ======================== HERO DRAG & DROP ZONE ========================
         function triggerHeroUpload() {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             const input = document.getElementById('heroFileInput');
             if (input) input.click();
         }
@@ -3357,19 +3335,11 @@
         }
         function onHeroDrop(e) {
             onHeroDragLeave(e);
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                 processHeroPickedFile(e.dataTransfer.files[0]);
             }
         }
         function onHeroFileSelected(e) {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             if (e.target.files && e.target.files.length > 0) {
                 processHeroPickedFile(e.target.files[0]);
             }
@@ -4549,7 +4519,7 @@
                 hero_slogan_l1: 'Tối Ưu Hóa Vận Hành Bằng',
                 hero_slogan_l2: 'Trí Tuệ Nhân Tạo AI Agent',
                 hero_intro: 'Chào mừng bạn đến với <b>Bảo Ngọc AI — Retail Agent OS</b>. Hệ thống tự động hóa thông minh giúp giải quyết bài toán phức tạp trong quản trị vận hành: <b>đối soát doanh thu</b>, <b>bóc tách triệt để đơn hủy &amp; đổi trả</b>, <b>đo lường CSAT khách hàng thực tế</b> và <b>đề xuất kịch bản can thiệp kịp thời</b> theo 4 bước chuẩn hóa.',
-                hero_btn_explore: 'Bắt Đầu Khám Phá Quy Trình (4 Bước) <i class="fa-solid fa-arrow-right"></i>',
+                hero_btn_explore: 'Khám Phá Quy Trình 4 Bước <i class="fa-solid fa-arrow-right"></i>',
                 hero_btn_upload: '<i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> Tải Lên File Dữ Liệu (.xlsx, .csv)',
                 hero_btn_copilot: '<i class="fa-solid fa-comments text-amber-500"></i> Trợ Lý AI Co-Pilot',
                 author_role: 'Trưởng Dự Án • AI Retail Lead',
