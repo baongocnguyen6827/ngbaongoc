@@ -1126,6 +1126,7 @@
                                     <span>1. Loại hình doanh nghiệp <span class="text-rose-500">*</span></span>
                                 </label>
                                 <select id="inputBusinessType" onchange="onBusinessTypeChange()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:border-rose-400">
+                                    <option value="" disabled selected>-- Chọn loại hình doanh nghiệp --</option>
                                     <option value="Phân phối & B2B Thiết bị Công nghệ (Hạ tầng mạng & Viễn thông)">Phân phối &amp; B2B Thiết bị Công nghệ (Hạ tầng mạng &amp; Viễn thông)</option>
                                     <option value="Bán lẻ & Chuỗi cửa hàng đa chi nhánh">Bán lẻ &amp; Chuỗi cửa hàng đa chi nhánh</option>
                                     <option value="Đại lý phân phối Sữa & Thực phẩm tiêu dùng (FMCG)">Đại lý Sữa &amp; Hàng tiêu dùng (FMCG)</option>
@@ -2869,23 +2870,14 @@
         }
 
         // ======================== HỒ SƠ DOANH NGHIỆP & CÂU HỎI PHÂN TÍCH ========================
+        // MẶC ĐỊNH ĐỂ TRỐNG 100%: Chỉ nạp khi người dùng ấn vào nút 'Ví Dụ Thông Tin Mẫu' hoặc tự nhập
         let businessProfile = {
-            business_type: "Phân phối & B2B Thiết bị Công nghệ (Hạ tầng mạng & Viễn thông)",
-            context: "Doanh nghiệp phân phối thiết bị CNTT & viễn thông tham gia đấu thầu 200 dự án RFQ tại 5 tỉnh thành, cần kiểm soát chặt chẽ giá vốn, chính sách chiết khấu không vượt trần 5% và rà soát sự đáp ứng tiêu chuẩn kỹ thuật thiết bị.",
-            additional_info: "Mô hình 5 chi nhánh: Hà Nội, TP.HCM, Đà Nẵng, Bắc Ninh, Hải Phòng; 10 nhóm khách hàng trọng điểm; trần chiết khấu 5% (vượt 5% bắt buộc Sales Manager duyệt); kiểm tra thông lượng Firewall IPS >= 2Gbps.",
-            analysis_questions: [
-                "Tổng doanh thu thuần và lợi nhuận gộp toàn chuỗi đạt bao nhiêu so với kế hoạch?",
-                "Chi nhánh nào đóng góp doanh thu và lợi nhuận cao nhất trong 5 khu vực?",
-                "Có bao nhiêu hợp đồng/yêu cầu RFQ có tỷ lệ chiết khấu vượt trần 5% cần phê duyệt khẩn cấp?",
-                "Đánh giá biên lợi nhuận gộp theo từng dòng sản phẩm (Switch 24/48 port, Router, Wi-Fi 6, Firewall)?",
-                "Thiết bị Firewall Edge có đáp ứng yêu cầu kỹ thuật throughput IPS (>= 2Gbps) hay vi phạm?",
-                "Những khách hàng lớn nào (Top 5 khách hàng) có giá trị đơn hàng và công nợ cao nhất?",
-                "Đánh giá tiến độ triển khai theo cam kết hạn chót (Deployment Deadline) giữa các vùng miền?",
-                "Năng lực đội ngũ kỹ thuật (Deployment Capacity) tại các chi nhánh có bị quá tải không?",
-                "Đề xuất chính sách giá và chiết khấu tối ưu để bảo toàn biên lợi nhuận gộp >= 18%?",
-                "Kế hoạch hành động cụ thể cho Sales Manager và Giám đốc điều hành trong 30 ngày tới?"
-            ],
-            is_confirmed: true
+            business_type: "",
+            context: "",
+            additional_info: "",
+            analysis_questions: [""],
+            is_confirmed: false,
+            filledByUser: false
         };
 
         function escapeProfileHtml(str) {
@@ -2978,12 +2970,13 @@
                     "Đề xuất chính sách giá và chiết khấu tối ưu để bảo toàn biên lợi nhuận gộp >= 18%?",
                     "Kế hoạch hành động cụ thể cho Sales Manager và Giám đốc điều hành trong 30 ngày tới?"
                 ],
-                is_confirmed: true
+                is_confirmed: true,
+                filledByUser: true
             };
             populateProfileFormUI();
             saveProfileToBackendAndStorage();
             updateProfileLockUI(true);
-            notify("Đã nạp ví dụ thông tin mẫu và 10 câu hỏi phân tích! Khu vực tải file đã mở khóa.", "pink");
+            notify("✓ Đã nạp ví dụ thông tin mẫu và 10 câu hỏi phân tích! Khu vực tải file đã mở khóa.", "pink");
             confetti({ particleCount: 50, spread: 60, origin: { y: 0.4 } });
         }
 
@@ -2993,11 +2986,13 @@
                 context: "",
                 additional_info: "",
                 analysis_questions: [""],
-                is_confirmed: false
+                is_confirmed: false,
+                filledByUser: false
             };
+            localStorage.removeItem('ai301_biz_profile');
             populateProfileFormUI();
             updateProfileLockUI(false);
-            notify("Đã làm trống thông tin. Vui lòng nhập hồ sơ và câu hỏi mới để mở khóa tải file!", "info");
+            notify("Đã làm trống thông tin. Vui lòng nhập hồ sơ và câu hỏi mới hoặc bấm 'Ví Dụ Thông Tin Mẫu'!", "info");
         }
 
         function populateProfileFormUI() {
@@ -3007,22 +3002,27 @@
             const add = document.getElementById('inputAdditionalInfo');
 
             if (sel) {
-                let matched = false;
-                for (let opt of sel.options) {
-                    if (opt.value === businessProfile.business_type) {
-                        sel.value = opt.value;
-                        matched = true;
-                        break;
-                    }
-                }
-                if (!matched && businessProfile.business_type) {
-                    sel.value = 'OTHER';
-                    if (custom) {
-                        custom.classList.remove('hidden');
-                        custom.value = businessProfile.business_type;
-                    }
-                } else {
+                if (!businessProfile.business_type) {
+                    sel.value = '';
                     if (custom) custom.classList.add('hidden');
+                } else {
+                    let matched = false;
+                    for (let opt of sel.options) {
+                        if (opt.value === businessProfile.business_type) {
+                            sel.value = opt.value;
+                            matched = true;
+                            break;
+                        }
+                    }
+                    if (!matched) {
+                        sel.value = 'OTHER';
+                        if (custom) {
+                            custom.classList.remove('hidden');
+                            custom.value = businessProfile.business_type;
+                        }
+                    } else {
+                        if (custom) custom.classList.add('hidden');
+                    }
                 }
             }
 
@@ -3150,6 +3150,10 @@
         }
 
         function triggerFileInputWithGuardrail() {
+            if (!isBusinessProfileConfirmed()) {
+                showProfileLockWarning();
+                return;
+            }
             const input = document.getElementById('fileInputElem');
             if (input) input.click();
         }
@@ -3168,19 +3172,19 @@
         }
 
         async function loadSavedBusinessProfile() {
+            // MẶC ĐỊNH BẮT ĐẦU TRỐNG 100%: Chỉ nạp khi người dùng chủ động bấm 'Ví Dụ Thông Tin Mẫu' hoặc tự lưu
             const local = localStorage.getItem('ai301_biz_profile');
             if (local) {
                 try {
                     const p = JSON.parse(local);
-                    if (p) businessProfile = p;
-                } catch (e) {}
-            } else {
-                try {
-                    const res = await (await fetch('/api/business-profile')).json();
-                    if (res.success && res.data) {
-                        businessProfile = res.data;
+                    if (p && p.filledByUser && p.business_type) {
+                        businessProfile = p;
+                    } else {
+                        localStorage.removeItem('ai301_biz_profile');
                     }
-                } catch (e) {}
+                } catch (e) {
+                    localStorage.removeItem('ai301_biz_profile');
+                }
             }
             populateProfileFormUI();
             updateProfileLockUI(isBusinessProfileConfirmed());
@@ -3191,9 +3195,18 @@
         function onDragLeave(e) { e.preventDefault(); document.getElementById('uploadDropZone').classList.remove('border-rose-500', 'bg-rose-50'); }
         function onFileDrop(e) {
             onDragLeave(e);
+            if (!isBusinessProfileConfirmed()) {
+                showProfileLockWarning();
+                return;
+            }
             if (e.dataTransfer.files && e.dataTransfer.files.length > 0) selectUploadFile(e.dataTransfer.files[0]);
         }
         function onFilePicked(e) {
+            if (!isBusinessProfileConfirmed()) {
+                showProfileLockWarning();
+                e.target.value = '';
+                return;
+            }
             if (e.target.files && e.target.files.length > 0) selectUploadFile(e.target.files[0]);
         }
         function selectUploadFile(file) {
@@ -3218,6 +3231,10 @@
 
         // ======================== HERO DRAG & DROP ZONE ========================
         function triggerHeroUpload() {
+            if (!isBusinessProfileConfirmed()) {
+                showProfileLockWarning();
+                return;
+            }
             const input = document.getElementById('heroFileInput');
             if (input) input.click();
         }
@@ -3245,11 +3262,20 @@
         }
         function onHeroDrop(e) {
             onHeroDragLeave(e);
+            if (!isBusinessProfileConfirmed()) {
+                showProfileLockWarning();
+                return;
+            }
             if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                 processHeroPickedFile(e.dataTransfer.files[0]);
             }
         }
         function onHeroFileSelected(e) {
+            if (!isBusinessProfileConfirmed()) {
+                showProfileLockWarning();
+                e.target.value = '';
+                return;
+            }
             if (e.target.files && e.target.files.length > 0) {
                 processHeroPickedFile(e.target.files[0]);
             }

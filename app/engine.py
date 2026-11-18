@@ -43,24 +43,13 @@ class PhucAnRetailEngine:
         self.executive_decisions = []
         self.customer_feedbacks = []
         
-        # Hồ sơ Doanh nghiệp & Vấn đề phân tích định hướng cho AI Agent
+        # Hồ sơ Doanh nghiệp & Vấn đề phân tích định hướng cho AI Agent (Mặc định để trống, chỉ nạp khi bấm 'Ví Dụ Thông Tin Mẫu' hoặc do người dùng nhập)
         self.business_profile = {
-            "business_type": "Phân phối & B2B Thiết bị Công nghệ (Hạ tầng mạng & Viễn thông)",
-            "context": "Doanh nghiệp phân phối thiết bị CNTT & viễn thông tham gia đấu thầu 200 dự án RFQ tại 5 tỉnh thành, cần kiểm soát chặt chẽ giá vốn, chính sách chiết khấu không vượt trần 5% và rà soát sự đáp ứng tiêu chuẩn kỹ thuật thiết bị.",
-            "additional_info": "Mô hình 5 chi nhánh: Hà Nội, TP.HCM, Đà Nẵng, Bắc Ninh, Hải Phòng; 10 nhóm khách hàng trọng điểm; trần chiết khấu 5% (vượt 5% bắt buộc Sales Manager duyệt); kiểm tra thông lượng Firewall IPS >= 2Gbps.",
-            "analysis_questions": [
-                "Tổng doanh thu thuần và lợi nhuận gộp toàn chuỗi đạt bao nhiêu so với kế hoạch?",
-                "Chi nhánh nào đóng góp doanh thu và lợi nhuận cao nhất trong 5 khu vực?",
-                "Có bao nhiêu hợp đồng/yêu cầu RFQ có tỷ lệ chiết khấu vượt trần 5% cần phê duyệt khẩn cấp?",
-                "Đánh giá biên lợi nhuận gộp theo từng dòng sản phẩm (Switch 24/48 port, Router, Wi-Fi 6, Firewall)?",
-                "Thiết bị Firewall Edge có đáp ứng yêu cầu kỹ thuật throughput IPS (>= 2Gbps) hay vi phạm?",
-                "Những khách hàng lớn nào (Top 5 khách hàng) có giá trị đơn hàng và công nợ cao nhất?",
-                "Đánh giá tiến độ triển khai theo cam kết hạn chót (Deployment Deadline) giữa các vùng miền?",
-                "Năng lực đội ngũ kỹ thuật (Deployment Capacity) tại các chi nhánh có bị quá tải không?",
-                "Đề xuất chính sách giá và chiết khấu tối ưu để bảo toàn biên lợi nhuận gộp >= 18%?",
-                "Kế hoạch hành động cụ thể cho Sales Manager và Giám đốc điều hành trong 30 ngày tới?"
-            ],
-            "is_confirmed": True
+            "business_type": "",
+            "context": "",
+            "additional_info": "",
+            "analysis_questions": [],
+            "is_confirmed": False
         }
         
         self.load_metadata()
@@ -491,6 +480,19 @@ class PhucAnRetailEngine:
         self.audit_results = None
         self.executive_decisions = []
         self.customer_feedbacks = []
+        self.business_profile = {
+            "business_type": "",
+            "context": "",
+            "additional_info": "",
+            "analysis_questions": [],
+            "is_confirmed": False
+        }
+        profile_path = os.path.join(DATA_DIR, "business_profile.json")
+        if os.path.exists(profile_path):
+            try:
+                os.remove(profile_path)
+            except Exception:
+                pass
         return {"status": "CLEAN", "message": "Đã xóa toàn bộ dữ liệu, hệ thống sẵn sàng tiếp nhận tệp mới."}
 
     # ==========================================
