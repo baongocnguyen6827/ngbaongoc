@@ -1161,7 +1161,7 @@
                                 </div>
                                 <h3 class="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">Bước 1: Kết Nối Dữ Liệu</h3>
                                 <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                                    Tiếp nhận tệp giao dịch bán hàng thô (.xlsx, .csv) đa kênh. Tự động đồng bộ danh mục 18 cửa hàng, 20 sản phẩm và chỉ tiêu kỳ.
+                                    Tiếp nhận tệp giao dịch bán hàng thô (.xlsx, .csv) đa kênh. Tự động chuẩn hóa dữ liệu, bóc tách chỉ số và kiểm toán đối soát.
                                 </p>
                             </div>
                             <button onclick="switchTab('step1')" class="w-full py-2.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
@@ -1201,7 +1201,7 @@
                                 </div>
                                 <h3 class="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">Bước 3: Báo Cáo &amp; CSAT</h3>
                                 <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                                    Báo cáo quản trị đa chiều: so sánh doanh thu thuần, biên lợi nhuận giữa 18 chi nhánh và đo lường chỉ số hài lòng khách hàng (CSAT).
+                                    Báo cáo quản trị đa chiều: so sánh doanh thu thuần, biên lợi nhuận giữa các chi nhánh và đo lường chỉ số hài lòng khách hàng (CSAT).
                                 </p>
                             </div>
                             <button onclick="switchTab('step3')" class="w-full py-2.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
@@ -1327,9 +1327,6 @@
                         </div>
                         <p class="text-xs font-bold text-slate-700 mt-1">
                             Kéo &amp; thả tệp dữ liệu (<span class="text-rose-600">.xlsx, .xls, .csv</span>) vào đây hoặc <span class="text-rose-600 underline">nhấp để chọn tệp từ máy tính</span>
-                        </p>
-                        <p class="text-[11px] text-slate-400">
-                            Tự động đồng bộ danh mục 18 cửa hàng (ST01–ST18), 20 sản phẩm giá vốn (PRD01–PRD20) và chỉ tiêu kỳ Tháng 10/2026 vs Tháng 09/2026
                         </p>
 
                         <div id="pickedFileBadge" class="hidden mt-2 px-4 py-2 rounded-xl bg-white border border-rose-200 shadow-xs flex items-center gap-3 text-xs">
@@ -1581,9 +1578,9 @@
                                 <i class="fa-solid fa-microchip"></i>
                             </span>
                             <div>
-                                <h2 data-i18n="step3_h2" class="text-base sm:text-lg font-extrabold text-slate-900">Bước 3: AI Phân Tích Chuyên Sâu &amp; So Sánh Hiệu Quả 18 Cửa Hàng</h2>
+                                <h2 data-i18n="step3_h2" class="text-base sm:text-lg font-extrabold text-slate-900">Bước 3: AI Phân Tích Chuyên Sâu &amp; So Sánh Hiệu Quả Các Chi Nhánh / Điểm Bán</h2>
                                 <p class="text-xs text-slate-500 mt-0.5">
-                                    Khắc phục triệt để lỗi logic: Đồng bộ kỳ so sánh (31 vs 30 ngày), khấu trừ đổi trả theo cửa hàng, phân tích cơ cấu sản phẩm &amp; biên lợi nhuận gộp.
+                                    Khắc phục triệt để lỗi logic: Đồng bộ kỳ so sánh, khấu trừ đổi trả theo chi nhánh, phân tích cơ cấu sản phẩm &amp; biên lợi nhuận gộp.
                                 </p>
                             </div>
                         </div>
@@ -1591,7 +1588,7 @@
                         <!-- Filter Dropdown matching top-right of screenshot table card -->
                         <div class="flex items-center gap-2.5 self-start md:self-center">
                             <select id="storeStatusFilter" onchange="filterAnalysisTable()" class="px-4 py-2.5 rounded-2xl border border-slate-200 bg-white text-xs font-bold text-slate-700 focus:outline-none focus:border-rose-400 shadow-2xs cursor-pointer">
-                                <option value="ALL">Tất cả tình trạng (18 cửa hàng)</option>
+                                <option value="ALL">Tất cả tình trạng chi nhánh</option>
                                 <option value="P1_URGENT">Khẩn cấp P1 — Cần hỗ trợ ngay</option>
                                 <option value="P2_SUPPORT">Cần hỗ trợ P2 — Theo dõi sát</option>
                                 <option value="HIGH_RETURN">Vi phạm ngưỡng đổi trả (&ge; 8%)</option>
@@ -1605,7 +1602,7 @@
                         <table class="w-full text-left text-xs table-blush rounded-2xl overflow-hidden">
                             <thead>
                                 <tr>
-                                    <th class="rounded-tl-2xl">CỬA HÀNG<br>&amp; QUẢN LÝ</th>
+                                    <th class="rounded-tl-2xl">CHI NHÁNH<br>&amp; QUẢN LÝ</th>
                                     <th>KỲ ĐỐI CHIẾU<br>&amp; TĂNG TRƯỞNG MOM</th>
                                     <th>MỨC ĐẠT MỤC TIÊU<br>(THỰC TẾ / TARGET)</th>
                                     <th>TỒN ĐỌNG ĐỔI TRẢ<br>&amp; NGUYÊN NHÂN</th>
@@ -1632,7 +1629,7 @@
                         <div class="flex items-center justify-between">
                             <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
                                 <i class="fa-solid fa-chart-column text-rose-500"></i>
-                                <span>Doanh Thu Thuần Thực Tế vs Mục Tiêu (18 Cửa Hàng)</span>
+                                <span>Doanh Thu Thuần Thực Tế vs Mục Tiêu Theo Điểm Bán</span>
                             </h3>
                             <span class="text-[11px] text-slate-400 font-semibold">Đơn vị: Triệu đ</span>
                         </div>
@@ -1643,7 +1640,7 @@
                         <div class="flex items-center justify-between">
                             <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
                                 <i class="fa-solid fa-chart-line text-emerald-500"></i>
-                                <span>Lợi Nhuận Gộp Thực Tế vs Mục Tiêu (18 Cửa Hàng)</span>
+                                <span>Lợi Nhuận Gộp Thực Tế vs Mục Tiêu Theo Điểm Bán</span>
                             </h3>
                             <span class="text-[11px] text-slate-400 font-semibold">Đơn vị: Triệu đ</span>
                         </div>
@@ -1654,7 +1651,7 @@
                         <div class="flex items-center justify-between">
                             <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
                                 <i class="fa-solid fa-chart-pie text-purple-500"></i>
-                                <span>Cơ Cấu Doanh Thu Theo Ngành Hàng Mẹ &amp; Bé</span>
+                                <span>Cơ Cấu Doanh Thu Theo Danh Mục Sản Phẩm</span>
                             </h3>
                             <span class="text-[11px] text-slate-400 font-semibold">Tỷ trọng %</span>
                         </div>
@@ -1665,7 +1662,7 @@
                         <div class="flex items-center justify-between">
                             <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-2">
                                 <i class="fa-solid fa-rotate-left text-amber-500"></i>
-                                <span>Tỷ Lệ Đổi Trả (%) Giữa 18 Cửa Hàng (Ngưỡng 8% &amp; 12%)</span>
+                                <span>Tỷ Lệ Đổi Trả (%) Giữa Các Điểm Bán (Ngưỡng 8% &amp; 12%)</span>
                             </h3>
                             <span class="text-[11px] text-slate-400 font-semibold">Ngưỡng cảnh báo</span>
                         </div>
@@ -2000,7 +1997,7 @@
                         <div class="flex items-center gap-2 text-xs">
                             <span class="font-bold text-slate-500">Cửa hàng:</span>
                             <select id="fbFilterStore" onchange="filterFeedbacks()" class="px-3 py-1.5 rounded-xl border border-slate-200 bg-white font-bold text-slate-700 text-xs focus:outline-none focus:border-rose-400">
-                                <option value="ALL">Tất cả 18 cửa hàng</option>
+                                <option value="ALL">Tất cả chi nhánh / cửa hàng</option>
                                 <option value="ST01">ST01: Bảo Ngọc Ba Đình</option>
                                 <option value="ST02">ST02: Bảo Ngọc Cầu Giấy</option>
                                 <option value="ST03">ST03: Bảo Ngọc Đống Đa</option>
@@ -4082,7 +4079,7 @@
                 spotlight_csat_title: 'Phản Hồi Khách Hàng & Đo Lường CSAT Thực Tế',
                 spotlight_btn_view: 'Xem Bảng CSAT & Biểu Đồ →',
                 spotlight_btn_new: '+ Gửi Phản Hồi Mới',
-                step3_h2: 'Bước 3: AI Phân Tích Chuyên Sâu & So Sánh Hiệu Quả 18 Cửa Hàng',
+                step3_h2: 'Bước 3: AI Phân Tích Chuyên Sâu & So Sánh Hiệu Quả Các Chi Nhánh',
                 fb_view_title: 'Phản Hồi & Trải Nghiệm Khách Hàng (Customer Feedback & CSAT)',
                 toast_switched: 'Đã chuyển đổi sang Tiếng Việt!',
                 contact_btn: 'Liên Hệ',
@@ -4216,7 +4213,7 @@
                 spotlight_csat_title: '顧客フィードバック＆リアルタイムCSAT分析',
                 spotlight_btn_view: 'CSATダッシュボードを表示 →',
                 spotlight_btn_new: '+ 新規評価を投稿',
-                step3_h2: 'ステップ3: 18店舗詳細分析＆成長戦略試算',
+                step3_h2: 'ステップ3: 各店舗詳細分析＆成長戦略試算',
                 fb_view_title: '顧客体験・フィードバックダッシュボード (CSAT)',
                 toast_switched: '日本語に切り替えました！',
                 contact_btn: 'お問い合わせ',
@@ -4283,7 +4280,7 @@
                 spotlight_csat_title: '客户真实反馈与实时 CSAT 满意度洞察',
                 spotlight_btn_view: '查看 CSAT 看板与图表 →',
                 spotlight_btn_new: '+ 提交客户新评价',
-                step3_h2: '步骤 3: AI 18家零售门店多维经营深度对账',
+                step3_h2: '步骤 3: AI 门店多维经营深度对账与效能分析',
                 fb_view_title: '客户体验与满意度评价大盘 (CSAT Dashboard)',
                 toast_switched: '已成功切换至中文！',
                 contact_btn: '联系方式',
@@ -4350,7 +4347,7 @@
                 spotlight_csat_title: '고객 피드백 및 실시간 CSAT 만족도 인텔리전스',
                 spotlight_btn_view: 'CSAT 대시보드 및 차트 보기 →',
                 spotlight_btn_new: '+ 신규 평가 작성',
-                step3_h2: '3단계: 18개 매장 다차원 심층 분석 및 성과 비교',
+                step3_h2: '3단계: 매장 다차원 심층 분석 및 성과 비교',
                 fb_view_title: '고객 경험 및 만족도 피드백 (CSAT 대시보드)',
                 toast_switched: '한국어로 전환되었습니다!',
                 contact_btn: '문의하기',
