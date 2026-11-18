@@ -24,6 +24,14 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.jinja_env.auto_reload = True
 
+# Tự động nạp tệp dữ liệu người dùng đã tải lên gần nhất (nếu có)
+uploaded_file = os.path.join(DATA_DIR, "uploaded_raw.xlsx")
+if os.path.exists(uploaded_file):
+    try:
+        engine.load_raw_data(uploaded_file)
+    except Exception as e:
+        print(f"Lỗi nạp uploaded_raw.xlsx: {e}")
+
 @app.route("/")
 def index():
     """Trang chủ hiển thị toàn bộ quy trình 3 giai đoạn theo BPMN"""

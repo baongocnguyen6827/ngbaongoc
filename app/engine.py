@@ -84,34 +84,123 @@ class PhucAnRetailEngine:
         
         if file_path.endswith(".xlsx") or file_path.endswith(".xls"):
             # Đọc file Excel người dùng tải lên
-            excel_sheets = pd.ExcelFile(file_path).sheet_names
+            excel_obj = pd.ExcelFile(file_path)
+            excel_sheets = excel_obj.sheet_names
             
-            # Tự động tìm sheet chứa dữ liệu giao dịch chính
-            sheet_to_read = None
-            if "Du_lieu_1000_dong" in excel_sheets:
-                sheet_to_read = "Du_lieu_1000_dong"
-            elif "Fact_Sales_Raw" in excel_sheets:
-                sheet_to_read = "Fact_Sales_Raw"
-            else:
-                for s in excel_sheets:
-                    s_low = s.lower()
-                    if any(k in s_low for k in ['du_lieu', 'sales', 'trans', 'fact', 'data', 'hoa_don', 'ban_hang', 'quotation']):
-                        sheet_to_read = s
-                        break
-            if not sheet_to_read:
-                max_cols = 0
-                for s in excel_sheets:
-                    try:
-                        df_check = pd.read_excel(file_path, sheet_name=s, nrows=3)
-                        if df_check.shape[1] > max_cols:
-                            max_cols = df_check.shape[1]
-                            sheet_to_read = s
-                    except Exception:
-                        pass
-            if not sheet_to_read:
-                sheet_to_read = 0
+            # ==============================================================
+            # TRƯỜNG HỢP 1: ĐỀ THI AI301 - BÁO GIÁ RFQ ĐA SHEET
+            # (Sheets: Quotation_Data + RFQ_Requirements + Product_Catalog)
+            # ==============================================================
+            if "Quotation_Data" in excel_sheets and ("RFQ_Requirements" in excel_sheets or "Product_Catalog" in excel_sheets):
+                df_quote = pd.read_excel(file_path, sheet_name="Quotation_Data")
+                df_rfq = pd.read_excel(file_path, sheet_name="RFQ_Requirements") if "RFQ_Requirements" in excel_sheets else None
+                df_prod = pd.read_excel(file_path, sheet_name="Product_Catalog") if "Product_Catalog" in excel_sheets else None
+                
+                df = df_quote.copy()
+                
+                # Gộp thông tin RFQ
+                if df_rfq is not None:
+                    for col in ['Customer', 'Location', 'Deployment_Deadline', 'Item_Name', 'Requirement_Line_ID', 'Maintenance_Requirement']:
+                        if col in df_rfq.columns:
+                            df[col] = df_rfq[col].values
+                
+                # Gộp thông tin Danh mục sản phẩm
+                if df_prod is not None and 'Product_ID' in df_prod.columns:
+                    p_map = df_prod.set_index('Product_ID').to_dict('index')
+                    df['product_name'] = df['Product_ID'].map(lambda x: p_map.get(x, {}).get('Product_Name', x))
+                    df['category'] = df['Product_ID'].map(lambda x: p_map.get(x, {}).get('Product_Type', 'Thiết bị công nghệ'))
+                else:
+                    df['product_name'] = df.get('Item_Name', df.get('Product_ID', 'Sản phẩm công nghệ'))
+                    df['category'] = 'Thiết bị công nghệ'
+                    
+                df['transaction_id'] = df.get('Requirement_Line_ID', df.get('RFQ_ID', [f"REQ-{i+1:05d}" for i in range(len(df))]))
+                df['transaction_date'] = pd.to_datetime(df.get('Deployment_Deadline', '2026-03-19'), errors='coerce').dt.strftime('%Y-%m-%d').fillna('2026-03-19')
+                
+                raw_loc = df.get('Location', 'Hà Nội')
+                df['store_name'] = raw_loc.apply(lambda x: f"Chi nhánh {x}" if not str(x).startswith("Chi nhánh") and not str(x).startswith("Đại lý") else str(x))
+                loc_list = df['store_name'].dropna().unique().tolist()
+                loc_id_map = {name: f"ST{i+1:02d}" for i, name in enumerate(loc_list)}
+                df['store_id'] = df['store_name'].map(loc_id_map)
+                
+                df['product_id'] = df.get('Product_ID', [f"SP{i+1:03d}" for i in range(len(df))])
+                df['quantity'] = pd.to_numeric(df.get('Quantity', 1), errors='coerce').fillna(1).astype(int)
+                df['unit_price'] = pd.to_numeric(df.get('Unit_Selling_Price_VND', 0), errors='coerce').fillna(0).astype(int)
+                df['unit_cost'] = pd.to_numeric(df.get('Unit_Cost_VND', 0), errors='coerce').fillna(0).astype(int)
+                df['total_amount'] = pd.to_numeric(df.get('Net_Amount_VND', df['quantity'] * df['unit_price']), errors='coerce').fillna(0).astype(int)
+                df['cogs'] = pd.to_numeric(df.get('Total_Cost_VND', df['quantity'] * df['unit_cost']), errors='coerce').fillna(0).astype(int)
+                df['gross_profit'] = pd.to_numeric(df.get('Gross_Profit_VND', df['total_amount'] - df['cogs']), errors='coerce').fillna(0).astype(int)
+                df['discount_rate'] = pd.to_numeric(df.get('Discount_Rate', 0), errors='coerce').fillna(0)
+                df['refund_amount'] = pd.to_numeric(df.get('Discount_Amount_VND', 0), errors='coerce').fillna(0).astype(int)
+                
+                def determine_ai301_note(row):
+                    disc = row.get('discount_rate', 0)
+                    cust = row.get('Customer', '')
+                    prod_id = str(row.get('product_id', ''))
+                    status = 'COMPLETED'
+                    notes = []
+                    if cust:
+                        notes.append(f"KH: {cust}")
+                    if disc > 0.05:
+                        notes.append(f"CK {disc*100:.1f}% (Cần duyệt >5%)")
+                    elif disc > 0:
+                        notes.append(f"CK {disc*100:.1f}%")
+                    if 'FW' in prod_id:
+                        notes.append("Lưu ý throughput IPS")
+                    note_str = ' • '.join(notes) if notes else 'Giao dịch hợp lệ'
+                    return status, note_str
 
-            df = pd.read_excel(file_path, sheet_name=sheet_to_read)
+                res = df.apply(determine_ai301_note, axis=1)
+                df['status'] = [r[0] for r in res]
+                df['note'] = [r[1] for r in res]
+
+                # Loại bỏ các cột trùng lặp nếu có
+                df = df.loc[:, ~df.columns.duplicated()].copy()
+                self.raw_df = df
+                self.cleaned_df = None
+                self.cleaning_audit_log = {}
+                self.human_verification["status"] = "PENDING"
+                self.human_verification["verified_at"] = None
+                self.management_report = None
+                self.audit_results = None
+
+                return {
+                    "total_rows": len(self.raw_df),
+                    "raw_gross_sales": int(self.raw_df["total_amount"].sum()),
+                    "status_distribution": self.raw_df["status"].value_counts().to_dict(),
+                    "stores_count": int(self.raw_df["store_id"].nunique()),
+                    "date_range": [str(self.raw_df["transaction_date"].min()), str(self.raw_df["transaction_date"].max())],
+                    "file_name": self.active_file_name
+                }
+
+            # ==============================================================
+            # TRƯỜNG HỢP 2: ĐỀ THI ĐẠI LÝ SỮA HOẶC TỆP EXCEL ĐƠN SHEET
+            # ==============================================================
+            else:
+                sheet_to_read = None
+                if "Du_lieu_1000_dong" in excel_sheets:
+                    sheet_to_read = "Du_lieu_1000_dong"
+                elif "Fact_Sales_Raw" in excel_sheets:
+                    sheet_to_read = "Fact_Sales_Raw"
+                else:
+                    for s in excel_sheets:
+                        s_low = s.lower()
+                        if any(k in s_low for k in ['du_lieu', 'sales', 'trans', 'fact', 'data', 'hoa_don', 'ban_hang', 'quotation']):
+                            sheet_to_read = s
+                            break
+                if not sheet_to_read:
+                    max_cols = 0
+                    for s in excel_sheets:
+                        try:
+                            df_check = pd.read_excel(file_path, sheet_name=s, nrows=3)
+                            if df_check.shape[1] > max_cols:
+                                max_cols = df_check.shape[1]
+                                sheet_to_read = s
+                        except Exception:
+                            pass
+                if not sheet_to_read:
+                    sheet_to_read = 0
+
+                df = pd.read_excel(file_path, sheet_name=sheet_to_read)
         else:
             # Đọc file CSV
             try:
@@ -124,6 +213,27 @@ class PhucAnRetailEngine:
 
         # Chuẩn hóa tên cột linh hoạt cho mọi bộ dữ liệu
         col_map = {
+            # Format Đề thi AI301 (RFQ, Quotation, Báo giá)
+            'Requirement_Line_ID': 'transaction_id',
+            'RFQ_ID': 'transaction_id',
+            'Deployment_Deadline': 'transaction_date',
+            'Location': 'store_name',
+            'Customer': 'customer_name',
+            'Item_Name': 'product_name',
+            'Product_ID': 'product_id',
+            'Product_Name': 'product_name',
+            'Product_Type': 'category',
+            'Quantity': 'quantity',
+            'Unit_Selling_Price_VND': 'unit_price',
+            'Unit_Cost_VND': 'unit_cost',
+            'Discount_Rate': 'discount_rate',
+            'Gross_Amount_VND': 'gross_amount',
+            'Discount_Amount_VND': 'refund_amount',
+            'Net_Amount_VND': 'total_amount',
+            'Total_Cost_VND': 'cogs',
+            'Gross_Profit_VND': 'gross_profit',
+            'Gross_Margin': 'gross_margin_pct',
+            'Note': 'note',
             # Format Đề thi AI301 (Đại lý sữa Hà Nội - Du_lieu_1000_dong)
             'Mã hóa đơn': 'transaction_id',
             'Ngày bán': 'transaction_date',
@@ -180,12 +290,12 @@ class PhucAnRetailEngine:
             unique_stores = df['store_name'].dropna().unique().tolist()
             store_id_map = {name: f"ST{i+1:02d}" for i, name in enumerate(unique_stores)}
             df['store_id'] = df['store_name'].map(store_id_map).fillna('ST01')
-            df['store_name'] = df['store_name'].apply(lambda x: f"Đại lý {x}" if not str(x).startswith("Đại lý") and not str(x).startswith("Bảo Ngọc") else str(x))
+            df['store_name'] = df['store_name'].apply(lambda x: f"Chi nhánh {x}" if not str(x).startswith("Chi nhánh") and not str(x).startswith("Đại lý") and not str(x).startswith("Bảo Ngọc") else str(x))
         elif 'store_id' in df.columns and 'store_name' not in df.columns:
-            df['store_name'] = df['store_id'].apply(lambda x: f"Bảo Ngọc {x}")
+            df['store_name'] = df['store_id'].apply(lambda x: f"Chi nhánh {x}")
         elif 'store_id' not in df.columns and 'store_name' not in df.columns:
             df['store_id'] = 'ST01'
-            df['store_name'] = 'Bảo Ngọc Ba Đình'
+            df['store_name'] = 'Chi nhánh Hà Nội'
 
         # Đổi tên thương hiệu sang Bảo Ngọc nếu có Phúc An
         if 'store_name' in df.columns:
@@ -230,9 +340,9 @@ class PhucAnRetailEngine:
 
         # Xử lý transaction_date
         if 'transaction_date' not in df.columns:
-            df['transaction_date'] = '2025-06-15'
+            df['transaction_date'] = '2026-03-19'
         else:
-            df['transaction_date'] = pd.to_datetime(df['transaction_date'], errors='coerce').dt.strftime('%Y-%m-%d').fillna('2025-01-01')
+            df['transaction_date'] = pd.to_datetime(df['transaction_date'], errors='coerce').dt.strftime('%Y-%m-%d').fillna('2026-01-01')
 
         # Xử lý transaction_id
         if 'transaction_id' not in df.columns:
@@ -244,7 +354,7 @@ class PhucAnRetailEngine:
         if 'product_name' not in df.columns:
             df['product_name'] = df['product_id']
         if 'category' not in df.columns:
-            df['category'] = 'Sản phẩm tiêu dùng'
+            df['category'] = 'Thiết bị công nghệ'
 
         # Xử lý unit_cost
         if 'unit_cost' not in df.columns:
@@ -260,6 +370,7 @@ class PhucAnRetailEngine:
         else:
             df['unit_cost'] = pd.to_numeric(df['unit_cost'], errors='coerce').fillna(df['unit_price'] * 0.75).astype(int)
 
+        df = df.loc[:, ~df.columns.duplicated()].copy()
         self.raw_df = df
         
         # Reset state khi nạp dữ liệu mới
