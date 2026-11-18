@@ -1007,41 +1007,63 @@
                             Chào mừng bạn đến với <b>Bảo Ngọc AI — Retail Agent OS</b>. Hệ thống tự động hóa thông minh giúp giải quyết bài toán phức tạp trong quản trị vận hành: <b>đối soát doanh thu</b>, <b>bóc tách triệt để đơn hủy &amp; đổi trả</b>, <b>đo lường CSAT khách hàng thực tế</b> và <b>đề xuất kịch bản can thiệp kịp thời</b> theo 4 bước chuẩn hóa.
                         </p>
 
-                        <!-- CTA Actions: Bắt Đầu Khám Phá & Enterprise Rectangular Drag & Drop Zone -->
-                        <div class="pt-3 space-y-3.5">
-                            <div class="flex items-center gap-3">
-                                <button onclick="switchTab('step1')" class="btn-pink-pill px-6 py-3.5 text-xs sm:text-sm font-black flex items-center gap-2.5 shadow-lg shadow-rose-500/25 hover:scale-105 transition cursor-pointer">
-                                    <span data-i18n="hero_btn_explore">Bắt Đầu Khám Phá Quy Trình (4 Bước) <i class="fa-solid fa-arrow-right"></i></span>
-                                </button>
-                                <span class="text-xs text-slate-400 font-semibold hidden sm:inline">hoặc nạp dữ liệu trực tiếp:</span>
-                            </div>
+                        <!-- CTA Actions: Bắt Đầu Khám Phá & Compact Cloud Drag/Drop Zone nằm sát cạnh nhau -->
+                        <div class="pt-3 flex flex-wrap items-center gap-4">
+                            <button onclick="switchTab('step1')" class="btn-pink-pill px-6 py-3.5 text-xs sm:text-sm font-black flex items-center gap-2.5 shadow-lg shadow-rose-500/25 hover:scale-105 transition cursor-pointer flex-shrink-0">
+                                <span data-i18n="hero_btn_explore">Bắt Đầu Khám Phá Quy Trình (4 Bước) <i class="fa-solid fa-arrow-right"></i></span>
+                            </button>
 
-                            <!-- Enterprise Rectangular Dashed Drag & Drop Zone (Khung Chữ Nhật Nét Đứt Chuẩn B2B Enterprise) -->
+                            <!-- Compact Cloud Drag & Drop Zone (Hình Đám Mây Chứa Chữ Bên Trong) -->
                             <div id="heroDropZone" 
                                  ondragover="onHeroDragOver(event)" 
                                  ondragleave="onHeroDragLeave(event)" 
                                  ondrop="onHeroDrop(event)" 
                                  onclick="triggerHeroUpload()" 
-                                 class="border-2 border-dashed border-rose-300/90 dark:border-rose-700/80 hover:border-rose-500 dark:hover:border-rose-400 bg-white/45 dark:bg-slate-900/45 hover:bg-rose-50/60 dark:hover:bg-rose-950/30 backdrop-blur-2xl rounded-2xl p-4 sm:p-5 transition-all duration-200 cursor-pointer group shadow-xs">
+                                 class="relative w-[300px] sm:w-[340px] h-[100px] sm:h-[108px] cursor-pointer group select-none transition-all duration-300 hover:scale-105 flex-shrink-0 overflow-visible"
+                                 title="Kéo thả tệp dữ liệu vào đám mây hoặc nhấp để chọn tệp">
                                 <input type="file" id="heroFileInput" accept=".xlsx,.xls,.csv" onchange="onHeroFileSelected(event)" class="hidden">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-rose-500 via-pink-500 to-amber-400 text-white flex items-center justify-center text-xl sm:text-2xl shadow-md group-hover:scale-110 group-hover:rotate-6 transition duration-300 flex-shrink-0">
-                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                                <!-- SVG Cloud Shape with Dashed Border and Generous Headroom (Không Bị Mất Đầu Trên) -->
+                                <svg viewBox="-15 -20 350 140" class="w-full h-full absolute inset-0 pointer-events-none filter drop-shadow-[0_6px_16px_rgba(244,63,110,0.2)] overflow-visible" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="cloudBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="rgba(255, 255, 255, 0.88)"/>
+                                            <stop offset="100%" stop-color="rgba(255, 241, 245, 0.72)"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <path id="cloudDashedPath" 
+                                          d="M 45,95 
+                                             L 275,95 
+                                             A 24,24 0 0,0 298,72 
+                                             A 20,20 0 0,0 290,48 
+                                             A 28,28 0 0,0 260,32 
+                                             A 36,36 0 0,0 210,16 
+                                             A 40,40 0 0,0 145,10 
+                                             A 34,34 0 0,0 92,22 
+                                             A 28,28 0 0,0 52,38 
+                                             A 22,22 0 0,0 22,60 
+                                             A 24,24 0 0,0 45,95 Z" 
+                                          fill="url(#cloudBgGrad)" 
+                                          stroke="#f43f6e" 
+                                          stroke-width="2" 
+                                          stroke-dasharray="4 4" 
+                                          class="group-hover:stroke-rose-600 transition-colors duration-300"/>
+                                </svg>
+
+                                <!-- Text & Icon Nested Centered INSIDE the Cloud -->
+                                <div class="relative z-10 w-full h-full flex flex-col items-center justify-center pt-3.5 sm:pt-4 px-6 text-center pointer-events-none">
+                                    <div class="flex items-center gap-1.5 text-rose-500 mb-0.5">
+                                        <i class="fa-solid fa-cloud-arrow-up text-xs sm:text-sm animate-bounce"></i>
+                                        <span class="font-extrabold text-xs sm:text-[13px] text-slate-800 dark:text-white group-hover:text-rose-600 transition tracking-tight">
+                                            Khu Vực Kéo &amp; Thả Dữ Liệu
+                                        </span>
                                     </div>
-                                    <div class="flex-1 min-w-0 text-left">
-                                        <div class="flex items-center gap-2 flex-wrap">
-                                            <p class="font-black text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition">
-                                                Khu Vực Kéo &amp; Thả Dữ Liệu Bán Lẻ (Data Upload Zone)
-                                            </p>
-                                            <span class="px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 text-[10px] font-black border border-rose-200 dark:border-rose-900">Kéo Thả Nhanh</span>
-                                        </div>
-                                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">
-                                            Kéo &amp; thả file <span class="font-bold text-rose-600 dark:text-rose-400 font-mono">.xlsx, .xls, .csv</span> vào đây hoặc <span class="text-rose-600 dark:text-rose-400 font-bold underline">nhấp để duyệt file</span> • Tự động kích hoạt đối soát chéo &amp; AI Guardrails
-                                        </p>
-                                    </div>
-                                    <div class="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#e11d5a] hover:bg-rose-600 text-white font-bold text-xs flex-shrink-0 transition shadow-sm group-hover:scale-105">
-                                        <i class="fa-solid fa-folder-open text-xs"></i>
-                                        <span>Chọn File</span>
+                                    <p class="text-[10px] sm:text-[10.5px] text-slate-500 dark:text-slate-400 leading-tight">
+                                        Thả file <b class="text-rose-600 dark:text-rose-400 font-mono">.xlsx, .csv</b> vào đây hoặc <span class="text-rose-600 dark:text-rose-400 font-bold underline pointer-events-auto">nhấp chọn</span>
+                                    </p>
+                                    <div class="mt-1.5 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-500/10 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 text-[9.5px] font-black border border-rose-200/80 dark:border-rose-900 shadow-2xs">
+                                        <i class="fa-solid fa-bolt text-[8px]"></i>
+                                        <span>Tự động đối soát</span>
                                     </div>
                                 </div>
                             </div>
@@ -2853,14 +2875,24 @@
         function onHeroDragOver(e) {
             e.preventDefault();
             e.stopPropagation();
+            const p = document.getElementById('cloudDashedPath');
+            if (p) {
+                p.setAttribute('stroke-width', '2.8');
+                p.setAttribute('stroke', '#e11d48');
+            }
             const z = document.getElementById('heroDropZone');
-            if (z) z.classList.add('border-rose-500', 'bg-rose-100/60');
+            if (z) z.classList.add('scale-105');
         }
         function onHeroDragLeave(e) {
             e.preventDefault();
             e.stopPropagation();
+            const p = document.getElementById('cloudDashedPath');
+            if (p) {
+                p.setAttribute('stroke-width', '2');
+                p.setAttribute('stroke', '#f43f6e');
+            }
             const z = document.getElementById('heroDropZone');
-            if (z) z.classList.remove('border-rose-500', 'bg-rose-100/60');
+            if (z) z.classList.remove('scale-105');
         }
         function onHeroDrop(e) {
             onHeroDragLeave(e);
