@@ -994,7 +994,7 @@
                     <div class="absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-gradient-to-tl from-amber-300/10 to-rose-300/10 blur-3xl pointer-events-none"></div>
 
                     <!-- Left: Slogan & Intro Text & Cloud Upload Zone -->
-                    <div class="relative z-10 w-full lg:w-[55%] xl:w-[57%] space-y-4 text-left">
+                    <div class="relative z-10 w-full lg:w-[53%] xl:w-[55%] space-y-4 text-left">
                         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-100/80 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 border border-rose-200/80 text-xs font-black uppercase tracking-wider shadow-2xs">
                             <i class="fa-solid fa-sparkles text-amber-500 animate-pulse"></i>
                             <span data-i18n="hero_badge">Hệ Điều Hành Thông Minh Thế Hệ Mới • Bảo Ngọc AI</span>
@@ -1080,34 +1080,39 @@
                     </div>
 
                     <!-- Right: Business Profile & 10 Analysis Questions Form (Thế chỗ thẻ liên hệ cạnh Slogan) -->
-                    <div id="businessProfileCard" class="relative z-10 w-full lg:w-[45%] xl:w-[43%] flex-shrink-0 p-4 sm:p-5 rounded-3xl bg-white/30 dark:bg-slate-900/35 border-2 border-white/70 dark:border-rose-900/40 shadow-xl backdrop-blur-2xl space-y-3 transition-all">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-rose-100 dark:border-rose-950/70 pb-3">
-                            <div class="flex items-center gap-2.5">
-                                <span class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center text-sm shadow-xs flex-shrink-0">
-                                    <i class="fa-solid fa-building-circle-check"></i>
-                                </span>
-                                <div>
-                                    <div class="flex flex-wrap items-center gap-2">
-                                        <h3 class="font-black text-sm sm:text-base text-slate-900 dark:text-white">Hồ Sơ Doanh Nghiệp &amp; Định Hướng Phân Tích</h3>
-                                        <span id="profileStatusBadge" class="px-2 py-0.5 rounded-full text-[9.5px] font-black bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-300/80">
-                                            <i class="fa-solid fa-lock text-[8px] mr-1"></i>BẮT BUỘC ĐỂ MỞ KHÓA TẢI FILE
-                                        </span>
-                                    </div>
-                                    <p class="text-[10.5px] text-slate-500 dark:text-slate-400">
-                                        Điền thông tin &amp; tối đa 10 câu hỏi để AI định hướng phân tích chuyên sâu
-                                    </p>
+                    <div id="businessProfileCard" class="relative z-10 w-full lg:w-[47%] xl:w-[45%] flex-shrink-0 p-4 sm:p-5 rounded-3xl bg-white/30 dark:bg-slate-900/35 border-2 border-white/70 dark:border-rose-900/40 shadow-xl backdrop-blur-2xl space-y-3 transition-all">
+                        <div class="flex flex-col gap-2 border-b border-rose-100/80 dark:border-rose-950/70 pb-3">
+                            <!-- Hàng 1: Icon + Tiêu đề CÙNG 1 DÒNG DUY NHẤT + Nút Mẫu / Xóa -->
+                            <div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center text-xs shadow-xs flex-shrink-0">
+                                        <i class="fa-solid fa-building-circle-check"></i>
+                                    </span>
+                                    <h3 class="font-black text-xs sm:text-sm lg:text-[13px] xl:text-sm text-slate-900 dark:text-white whitespace-nowrap tracking-tight">
+                                        Hồ Sơ Doanh Nghiệp &amp; Định Hướng Phân Tích
+                                    </h3>
+                                </div>
+
+                                <!-- Fast Presets & Clear Buttons -->
+                                <div class="flex items-center gap-1.5 flex-shrink-0">
+                                    <button type="button" onclick="quickFillAI301Profile()" class="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-extrabold text-[10.5px] transition shadow-xs flex items-center gap-1 cursor-pointer" title="Nạp nhanh ví dụ thông tin mẫu và 10 câu hỏi">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-[8.5px]"></i>
+                                        <span>Ví Dụ Thông Tin Mẫu</span>
+                                    </button>
+                                    <button type="button" onclick="clearBusinessProfileForm()" class="px-2 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10.5px] font-bold transition cursor-pointer" title="Xóa trắng để nhập lại">
+                                        <i class="fa-solid fa-rotate-left mr-0.5"></i><span>Xóa</span>
+                                    </button>
                                 </div>
                             </div>
 
-                            <!-- Fast Presets & Clear Buttons -->
-                            <div class="flex items-center gap-1.5 self-start sm:self-center">
-                                <button type="button" onclick="quickFillAI301Profile()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-extrabold text-[11px] transition shadow-xs flex items-center gap-1 cursor-pointer" title="Nạp nhanh ví dụ thông tin mẫu và 10 câu hỏi">
-                                    <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i>
-                                    <span>Ví Dụ Thông Tin Mẫu</span>
-                                </button>
-                                <button type="button" onclick="clearBusinessProfileForm()" class="px-2 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-bold transition cursor-pointer" title="Xóa trắng để nhập lại">
-                                    <i class="fa-solid fa-rotate-left mr-0.5"></i><span>Xóa</span>
-                                </button>
+                            <!-- Hàng 2: Trạng thái Khóa + Phụ đề hướng dẫn -->
+                            <div class="flex flex-wrap items-center gap-2 text-[10.5px] text-slate-500 dark:text-slate-400">
+                                <span id="profileStatusBadge" class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-300/80 inline-flex items-center flex-shrink-0">
+                                    <i class="fa-solid fa-lock text-[8px] mr-1"></i>BẮT BUỘC ĐỂ MỞ KHÓA TẢI FILE
+                                </span>
+                                <span class="leading-tight">
+                                    Điền thông tin &amp; tối đa 10 câu hỏi để AI định hướng phân tích chuyên sâu
+                                </span>
                             </div>
                         </div>
 
