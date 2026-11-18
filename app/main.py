@@ -87,9 +87,39 @@ def load_uploaded_data():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+@app.route("/api/business-profile", methods=["GET", "POST"])
+def business_profile_api():
+    """Lấy hoặc cập nhật thông tin hồ sơ doanh nghiệp & câu hỏi phân tích định hướng cho AI"""
+    if request.method == "POST":
+        data = request.json or request.form.to_dict() or {}
+        res = engine.update_business_profile(data)
+        return jsonify({"success": True, "data": res, "message": "Đã lưu thông tin hồ sơ doanh nghiệp và câu hỏi phân tích thành công!"})
+    return jsonify({"success": True, "data": engine.get_business_profile()})
+
 @app.route("/api/upload-raw", methods=["POST"])
 def upload_raw_data():
-    """Upload tệp dữ liệu thô mới (.xlsx, .xls, .csv)"""
+    """Upload tệp dữ liệu thô mới (.xlsx, .xls, .csv) - Yêu cầu hoàn tất hồ sơ doanh nghiệp trước"""
+    # Kiểm tra điều kiện tiên quyết: Cần có thông tin doanh nghiệp trước khi tải file
+    profile = engine.get_business_profile()
+    if not profile or not profile.get("is_confirmed"):
+        if request.form.get("business_type") and request.form.get("context"):
+            questions = []
+            try:
+                questions = json.loads(request.form.get("analysis_questions", "[]"))
+            except Exception:
+                pass
+            engine.update_business_profile({
+                "business_type": request.form.get("business_type"),
+                "context": request.form.get("context"),
+                "additional_info": request.form.get("additional_info", ""),
+                "analysis_questions": questions
+            })
+        else:
+            return jsonify({
+                "success": False, 
+                "error": "Vui lòng hoàn thành Thông tin Doanh nghiệp & Câu hỏi phân tích trước khi tải file lên hệ thống!"
+            }), 400
+
     if 'file' not in request.files:
         return jsonify({"success": False, "error": "Không tìm thấy tệp tải lên"}), 400
     file = request.files['file']

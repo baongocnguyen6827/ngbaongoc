@@ -43,6 +43,26 @@ class PhucAnRetailEngine:
         self.executive_decisions = []
         self.customer_feedbacks = []
         
+        # Hồ sơ Doanh nghiệp & Vấn đề phân tích định hướng cho AI Agent
+        self.business_profile = {
+            "business_type": "Phân phối & B2B Thiết bị Công nghệ (Hạ tầng mạng & Viễn thông)",
+            "context": "Doanh nghiệp phân phối thiết bị CNTT & viễn thông tham gia đấu thầu 200 dự án RFQ tại 5 tỉnh thành, cần kiểm soát chặt chẽ giá vốn, chính sách chiết khấu không vượt trần 5% và rà soát sự đáp ứng tiêu chuẩn kỹ thuật thiết bị.",
+            "additional_info": "Mô hình 5 chi nhánh: Hà Nội, TP.HCM, Đà Nẵng, Bắc Ninh, Hải Phòng; 10 nhóm khách hàng trọng điểm; trần chiết khấu 5% (vượt 5% bắt buộc Sales Manager duyệt); kiểm tra thông lượng Firewall IPS >= 2Gbps.",
+            "analysis_questions": [
+                "Tổng doanh thu thuần và lợi nhuận gộp toàn chuỗi đạt bao nhiêu so với kế hoạch?",
+                "Chi nhánh nào đóng góp doanh thu và lợi nhuận cao nhất trong 5 khu vực?",
+                "Có bao nhiêu hợp đồng/yêu cầu RFQ có tỷ lệ chiết khấu vượt trần 5% cần phê duyệt khẩn cấp?",
+                "Đánh giá biên lợi nhuận gộp theo từng dòng sản phẩm (Switch 24/48 port, Router, Wi-Fi 6, Firewall)?",
+                "Thiết bị Firewall Edge có đáp ứng yêu cầu kỹ thuật throughput IPS (>= 2Gbps) hay vi phạm?",
+                "Những khách hàng lớn nào (Top 5 khách hàng) có giá trị đơn hàng và công nợ cao nhất?",
+                "Đánh giá tiến độ triển khai theo cam kết hạn chót (Deployment Deadline) giữa các vùng miền?",
+                "Năng lực đội ngũ kỹ thuật (Deployment Capacity) tại các chi nhánh có bị quá tải không?",
+                "Đề xuất chính sách giá và chiết khấu tối ưu để bảo toàn biên lợi nhuận gộp >= 18%?",
+                "Kế hoạch hành động cụ thể cho Sales Manager và Giám đốc điều hành trong 30 ngày tới?"
+            ],
+            "is_confirmed": True
+        }
+        
         self.load_metadata()
 
     def load_metadata(self):
@@ -70,17 +90,78 @@ class PhucAnRetailEngine:
                 self.customer_feedbacks = json.load(f)
         else:
             self.customer_feedbacks = []
+            
+        profile_path = os.path.join(DATA_DIR, "business_profile.json")
+        if os.path.exists(profile_path):
+            try:
+                with open(profile_path, "r", encoding="utf-8") as f:
+                    saved_prof = json.load(f)
+                    if saved_prof and isinstance(saved_prof, dict):
+                        self.business_profile.update(saved_prof)
+            except Exception:
+                pass
+
+    def get_business_profile(self):
+        """Lấy thông tin hồ sơ doanh nghiệp và danh sách câu hỏi phân tích"""
+        return self.business_profile
+
+    def update_business_profile(self, data):
+        """Cập nhật thông tin hồ sơ doanh nghiệp & tối đa 10 câu hỏi phân tích trọng tâm"""
+        if not data or not isinstance(data, dict):
+            return self.business_profile
+
+        b_type = str(data.get("business_type", "")).strip()
+        b_ctx = str(data.get("context", "")).strip()
+        b_add = str(data.get("additional_info", "")).strip()
+        raw_questions = data.get("analysis_questions", [])
+        
+        if isinstance(raw_questions, str):
+            try:
+                raw_questions = json.loads(raw_questions)
+            except Exception:
+                raw_questions = [q.strip() for q in raw_questions.split("\n") if q.strip()]
+
+        clean_questions = [str(q).strip() for q in raw_questions if str(q).strip()][:10]
+        is_confirmed = bool(b_type and b_ctx and len(clean_questions) > 0)
+
+        self.business_profile = {
+            "business_type": b_type,
+            "context": b_ctx,
+            "additional_info": b_add,
+            "analysis_questions": clean_questions,
+            "is_confirmed": is_confirmed,
+            "updated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+
+        try:
+            profile_path = os.path.join(DATA_DIR, "business_profile.json")
+            with open(profile_path, "w", encoding="utf-8") as f:
+                json.dump(self.business_profile, f, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
+
+        return self.business_profile
 
     def load_raw_data(self, file_path=None):
         """Tải dữ liệu thô linh hoạt (Hỗ trợ cả file Đề thi đại lý sữa AI301, file Phúc An và file tùy biến)"""
         if file_path is None:
+            uploaded_raw_xlsx = os.path.join(DATA_DIR, "uploaded_raw.xlsx")
+            uploaded_raw_csv = os.path.join(DATA_DIR, "uploaded_raw.csv")
             uploaded_excel = os.path.join(WORKSPACE_DIR, "PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx")
-            if os.path.exists(uploaded_excel):
+            if os.path.exists(uploaded_raw_xlsx):
+                file_path = uploaded_raw_xlsx
+            elif os.path.exists(uploaded_raw_csv):
+                file_path = uploaded_raw_csv
+            elif os.path.exists(uploaded_excel):
                 file_path = uploaded_excel
             else:
                 file_path = os.path.join(DATA_DIR, "raw_transactions_oct2026.csv")
         
-        self.active_file_name = os.path.basename(file_path)
+        base_name = os.path.basename(file_path)
+        if base_name.startswith("uploaded_raw"):
+            self.active_file_name = "Data mẫu 1000 dòng_AI301.xlsx"
+        else:
+            self.active_file_name = base_name
         
         if file_path.endswith(".xlsx") or file_path.endswith(".xls"):
             # Đọc file Excel người dùng tải lên
