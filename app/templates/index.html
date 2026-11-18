@@ -983,35 +983,35 @@
             <!-- ===================================================================== -->
             <section id="welcomeView" class="view-section view-fade space-y-8">
 
-                <!-- 1. HERO BANNER: SLOGAN & LỜI CHÀO NỒNG NHIỆT -->
-                <div class="os-card p-8 sm:p-12 relative overflow-hidden text-center sm:text-left flex flex-col lg:flex-row items-center justify-between gap-8 border-2 border-rose-200/60 dark:border-rose-900/40 shadow-xl">
+                <!-- 1. HERO BANNER: SLOGAN & HỒ SƠ DOANH NGHIỆP CẠNH NHAU -->
+                <div class="os-card p-6 sm:p-10 relative overflow-hidden text-center sm:text-left flex flex-col lg:flex-row items-start justify-between gap-8 border-2 border-rose-200/60 dark:border-rose-900/40 shadow-xl">
                     
                     <!-- Ambient Glow Behind Hero -->
                     <div class="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-gradient-to-br from-rose-400/25 to-pink-500/20 blur-3xl pointer-events-none"></div>
                     <div class="absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-gradient-to-tl from-amber-400/20 to-rose-400/20 blur-3xl pointer-events-none"></div>
 
-                    <!-- Left: Slogan & Intro Text -->
-                    <div class="relative z-10 max-w-3xl space-y-4">
+                    <!-- Left: Slogan & Intro Text & Cloud Upload Zone -->
+                    <div class="relative z-10 w-full lg:w-[48%] xl:w-[46%] space-y-4 text-left">
                         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-100/80 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 border border-rose-200/80 text-xs font-black uppercase tracking-wider shadow-2xs">
                             <i class="fa-solid fa-sparkles text-amber-500 animate-pulse"></i>
                             <span data-i18n="hero_badge">Hệ Điều Hành Thông Minh Thế Hệ Mới • Bảo Ngọc AI</span>
                         </div>
 
-                        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-normal">
+                        <h1 class="text-2xl sm:text-3xl xl:text-4xl font-black tracking-tight leading-normal">
                             <span class="block text-slate-900 dark:text-white" data-i18n="hero_slogan_l1">Tối Ưu Hóa Vận Hành Bằng</span>
-                            <span data-i18n="hero_slogan_l2" class="inline-block bg-gradient-to-r from-rose-600 via-pink-600 to-amber-600 bg-clip-text text-transparent mt-1.5 sm:mt-2.5 pb-2.5 sm:pb-3.5 pr-1 leading-snug tracking-normal filter drop-shadow-[0_1px_2px_rgba(244,63,110,0.25)]">
+                            <span data-i18n="hero_slogan_l2" class="inline-block bg-gradient-to-r from-rose-600 via-pink-600 to-amber-600 bg-clip-text text-transparent mt-1.5 sm:mt-2 pb-2 pr-1 leading-snug tracking-normal filter drop-shadow-[0_1px_2px_rgba(244,63,110,0.25)]">
                                 Trí Tuệ Nhân Tạo AI Agent
                             </span>
                         </h1>
 
-                        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal" data-i18n="hero_intro">
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal" data-i18n="hero_intro">
                             Chào mừng bạn đến với <b>Bảo Ngọc AI — Retail Agent OS</b>. Hệ thống tự động hóa thông minh giúp giải quyết bài toán phức tạp trong quản trị vận hành: <b>đối soát doanh thu</b>, <b>bóc tách triệt để đơn hủy &amp; đổi trả</b>, <b>đo lường CSAT khách hàng thực tế</b> và <b>đề xuất kịch bản can thiệp kịp thời</b> theo 4 bước chuẩn hóa.
                         </p>
 
-                        <!-- CTA Actions: Bắt Đầu Khám Phá & Compact Cloud Drag/Drop Zone nằm sát cạnh nhau -->
-                        <div class="pt-3 flex flex-wrap items-center gap-4">
-                            <button onclick="switchTab('step1')" class="btn-pink-pill px-6 py-3.5 text-xs sm:text-sm font-black flex items-center gap-2.5 shadow-lg shadow-rose-500/25 hover:scale-105 transition cursor-pointer flex-shrink-0">
-                                <span data-i18n="hero_btn_explore">Bắt Đầu Khám Phá Quy Trình (4 Bước) <i class="fa-solid fa-arrow-right"></i></span>
+                        <!-- CTA Actions: Bắt Đầu Khám Phá & Compact Cloud Drag/Drop Zone -->
+                        <div class="pt-2 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                            <button onclick="switchTab('step1')" class="btn-pink-pill px-5 py-3 text-xs sm:text-sm font-black flex items-center gap-2 shadow-lg shadow-rose-500/25 hover:scale-105 transition cursor-pointer flex-shrink-0">
+                                <span data-i18n="hero_btn_explore">Quy Trình 4 Bước <i class="fa-solid fa-arrow-right"></i></span>
                             </button>
 
                             <!-- Compact Cloud Drag & Drop Zone (Hình Đám Mây Chứa Chữ Bên Trong) -->
@@ -1020,7 +1020,7 @@
                                  ondragleave="onHeroDragLeave(event)" 
                                  ondrop="onHeroDrop(event)" 
                                  onclick="triggerHeroUpload()" 
-                                 class="relative w-[300px] sm:w-[340px] h-[100px] sm:h-[108px] cursor-pointer group select-none transition-all duration-300 hover:scale-105 flex-shrink-0 overflow-visible"
+                                 class="relative w-[280px] sm:w-[310px] h-[95px] sm:h-[102px] cursor-pointer group select-none transition-all duration-300 hover:scale-105 flex-shrink-0 overflow-visible"
                                  title="Kéo thả tệp dữ liệu vào đám mây hoặc nhấp để chọn tệp">
                                 <input type="file" id="heroFileInput" accept=".xlsx,.xls,.csv" onchange="onHeroFileSelected(event)" class="hidden">
 
@@ -1052,75 +1052,128 @@
                                 </svg>
 
                                 <!-- Text & Icon Nested Centered INSIDE the Cloud -->
-                                <div class="relative z-10 w-full h-full flex flex-col items-center justify-center pt-3.5 sm:pt-4 px-6 text-center pointer-events-none">
+                                <div class="relative z-10 w-full h-full flex flex-col items-center justify-center pt-3 px-5 text-center pointer-events-none">
                                     <div class="flex items-center gap-1.5 text-rose-500 mb-0.5">
-                                        <i class="fa-solid fa-cloud-arrow-up text-xs sm:text-sm animate-bounce"></i>
-                                        <span class="font-extrabold text-xs sm:text-[13px] text-slate-800 dark:text-white group-hover:text-rose-600 transition tracking-tight">
+                                        <i class="fa-solid fa-cloud-arrow-up text-xs animate-bounce"></i>
+                                        <span class="font-extrabold text-xs text-slate-800 dark:text-white group-hover:text-rose-600 transition tracking-tight">
                                             Khu Vực Kéo &amp; Thả Dữ Liệu
                                         </span>
                                     </div>
-                                    <p class="text-[10px] sm:text-[10.5px] text-slate-500 dark:text-slate-400 leading-tight">
+                                    <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">
                                         Thả file <b class="text-rose-600 dark:text-rose-400 font-mono">.xlsx, .csv</b> vào đây hoặc <span class="text-rose-600 dark:text-rose-400 font-bold underline pointer-events-auto">nhấp chọn</span>
                                     </p>
-                                    <div class="mt-1.5 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-500/10 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 text-[9.5px] font-black border border-rose-200/80 dark:border-rose-900 shadow-2xs">
+                                    <div class="mt-1 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-500/10 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 text-[9px] font-black border border-rose-200/80 dark:border-rose-900 shadow-2xs">
                                         <i class="fa-solid fa-bolt text-[8px]"></i>
-                                        <span>Tự động đối soát</span>
+                                        <span id="heroLockStatusText">Tự động đối soát</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 italic flex items-center gap-1.5 pt-1">
+                            <i class="fa-solid fa-circle-info text-rose-500"></i>
+                            <span>Vui lòng điền và bấm <b>Xác nhận hồ sơ</b> ở cột bên phải để mở khóa tải tệp dữ liệu!</span>
+                        </p>
                     </div>
 
-                    <!-- Right: Author Profile Card (Balanced & Elegant Size) -->
-                    <div class="relative z-10 w-full lg:w-[360px] xl:w-[370px] flex-shrink-0 p-6 rounded-3xl os-card os-card-hover text-center space-y-4 backdrop-blur-2xl transition hover:shadow-rose-500/10 hover:border-rose-200">
-                        <!-- Avatar -->
-                        <div class="relative mx-auto w-20 h-20 rounded-2xl bg-gradient-to-tr from-rose-500 via-pink-500 to-amber-400 p-1 shadow-md hover:rotate-2 transition duration-300">
-                            <img src="/static/avatar.jpg" alt="Nguyễn Bảo Ngọc" class="w-full h-full rounded-[14px] object-cover bg-white dark:bg-slate-900 shadow-inner">
-                            <span class="absolute bottom-0.5 right-0.5 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 shadow-sm flex items-center justify-center">
-                                <span class="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400 opacity-75"></span>
-                            </span>
+                    <!-- Right: Business Profile & 10 Analysis Questions Form (Thế chỗ thẻ liên hệ cạnh Slogan) -->
+                    <div id="businessProfileCard" class="relative z-10 w-full lg:w-[52%] xl:w-[54%] flex-shrink-0 p-5 sm:p-6 rounded-3xl bg-white/90 dark:bg-slate-900/90 border-2 border-rose-300/80 dark:border-rose-900/80 shadow-2xl backdrop-blur-2xl space-y-3.5 transition-all">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-rose-100 dark:border-rose-950/70 pb-3">
+                            <div class="flex items-center gap-2.5">
+                                <span class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center text-sm shadow-xs flex-shrink-0">
+                                    <i class="fa-solid fa-building-circle-check"></i>
+                                </span>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <h3 class="font-black text-sm sm:text-base text-slate-900 dark:text-white">Hồ Sơ Doanh Nghiệp &amp; Định Hướng Phân Tích</h3>
+                                        <span id="profileStatusBadge" class="px-2 py-0.5 rounded-full text-[9.5px] font-black bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-300/80">
+                                            <i class="fa-solid fa-lock text-[8px] mr-1"></i>BẮT BUỘC ĐỂ MỞ KHÓA TẢI FILE
+                                        </span>
+                                    </div>
+                                    <p class="text-[10.5px] text-slate-500 dark:text-slate-400">
+                                        Điền thông tin &amp; tối đa 10 câu hỏi để AI định hướng phân tích chuyên sâu
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Fast Presets & Clear Buttons -->
+                            <div class="flex items-center gap-1.5 self-start sm:self-center">
+                                <button type="button" onclick="quickFillAI301Profile()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-extrabold text-[11px] transition shadow-xs flex items-center gap-1 cursor-pointer" title="Nạp nhanh toàn bộ thông tin chuẩn đề thi AI301 và 10 câu hỏi">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i>
+                                    <span>Nạp Mẫu Đề Thi AI301</span>
+                                </button>
+                                <button type="button" onclick="clearBusinessProfileForm()" class="px-2 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-bold transition cursor-pointer" title="Xóa trắng để nhập lại">
+                                    <i class="fa-solid fa-rotate-left mr-0.5"></i><span>Xóa</span>
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- Identity Info -->
-                        <div class="space-y-0.5">
-                            <h3 class="font-black text-lg text-slate-900 dark:text-white tracking-tight">Nguyễn Bảo Ngọc</h3>
-                            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-300 text-[11px] font-black border border-rose-100">
-                                <i class="fa-solid fa-crown text-[9px] text-amber-500"></i>
-                                <span data-i18n="author_role">Trưởng Dự Án • AI Retail Lead</span>
+                        <!-- 1. Loại hình & Thông tin bổ sung (2 cột gọn gàng) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <!-- Loại hình doanh nghiệp -->
+                            <div class="space-y-1">
+                                <label class="block text-[11px] font-black text-slate-800 dark:text-slate-200 flex items-center justify-between">
+                                    <span>1. Loại hình doanh nghiệp <span class="text-rose-500">*</span></span>
+                                </label>
+                                <select id="inputBusinessType" onchange="onBusinessTypeChange()" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:border-rose-400">
+                                    <option value="Phân phối & B2B Thiết bị Công nghệ (Hạ tầng mạng & Viễn thông)">Phân phối &amp; B2B Thiết bị Công nghệ [Mẫu AI301]</option>
+                                    <option value="Bán lẻ & Chuỗi cửa hàng đa chi nhánh">Bán lẻ &amp; Chuỗi cửa hàng đa chi nhánh</option>
+                                    <option value="Đại lý phân phối Sữa & Thực phẩm tiêu dùng (FMCG)">Đại lý Sữa &amp; Hàng tiêu dùng (FMCG)</option>
+                                    <option value="Doanh nghiệp Sản xuất & Thương mại Dịch vụ">Sản xuất &amp; Thương mại Dịch vụ</option>
+                                    <option value="Thương mại điện tử & Bán hàng đa kênh (Omnichannel)">Thương mại điện tử &amp; Đa kênh</option>
+                                    <option value="OTHER">Tự nhập loại hình khác...</option>
+                                </select>
+                                <input type="text" id="inputBusinessTypeCustom" placeholder="Nhập loại hình cụ thể..." class="hidden w-full px-3 py-1.5 rounded-xl border border-rose-300 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none mt-1">
+                            </div>
+
+                            <!-- Thông tin bổ sung (Chi nhánh, trần chiết khấu) -->
+                            <div class="space-y-1">
+                                <label class="block text-[11px] font-black text-slate-800 dark:text-slate-200 flex items-center justify-between">
+                                    <span>2. Thông tin bổ sung (Chi nhánh) <span class="text-rose-500">*</span></span>
+                                </label>
+                                <input type="text" id="inputAdditionalInfo" placeholder="VD: 5 chi nhánh (Hà Nội, TP.HCM, Đà Nẵng, Bắc Ninh, Hải Phòng), trần chiết khấu 5%..." class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none focus:border-rose-400">
                             </div>
                         </div>
 
-                        <!-- Contact Details List (Compact Frosted Cards) -->
-                        <div class="space-y-2 pt-1 text-left text-xs">
-                            <div class="px-3 py-2 rounded-xl bg-white/40 dark:bg-slate-900/40 border border-white/70 dark:border-slate-700/60 backdrop-blur-md flex items-center justify-between shadow-2xs hover:border-rose-200 transition">
+                        <!-- 2. Bối cảnh doanh nghiệp -->
+                        <div class="space-y-1">
+                            <label class="block text-[11px] font-black text-slate-800 dark:text-slate-200 flex items-center justify-between">
+                                <span>3. Bối cảnh doanh nghiệp (Mục tiêu &amp; Thách thức) <span class="text-rose-500">*</span></span>
+                            </label>
+                            <textarea id="inputBusinessContext" rows="2" placeholder="Mô tả bối cảnh kinh doanh, quy mô thị trường, các thách thức đối soát và chỉ tiêu kế toán cần giám sát..." class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-normal text-slate-800 dark:text-slate-200 focus:outline-none focus:border-rose-400 leading-relaxed"></textarea>
+                        </div>
+
+                        <!-- 3. Vấn đề cần phân tích (Tối đa 10 câu hỏi) -->
+                        <div class="space-y-2 pt-1 border-t border-rose-100 dark:border-rose-950/60">
+                            <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-6 h-6 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-[10px] font-black flex-shrink-0">
-                                        <i class="fa-solid fa-phone"></i>
+                                    <label class="text-[11px] font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-circle-question text-rose-500"></i>
+                                        <span>4. Vấn đề cần phân tích (Tối đa 10 câu hỏi)</span>
+                                        <span class="text-rose-500">*</span>
+                                    </label>
+                                    <span id="questionCountBadge" class="px-2 py-0.5 rounded-full text-[9.5px] font-black bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300">
+                                        0 / 10 câu hỏi
                                     </span>
-                                    <span class="font-bold text-slate-500 dark:text-slate-400 text-[11px]" data-i18n="author_phone_lbl">SĐT:</span>
                                 </div>
-                                <a href="tel:0362848956" class="font-mono font-black text-rose-600 text-xs hover:underline">0362848956</a>
+                                <button type="button" id="btnAddQuestion" onclick="addAnalysisQuestionInput()" class="text-[11px] font-bold text-rose-600 hover:text-rose-700 dark:text-rose-400 flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-solid fa-plus text-[9px]"></i>
+                                    <span>+ Thêm câu hỏi</span>
+                                </button>
                             </div>
 
-                            <div class="px-3 py-2 rounded-xl bg-white/40 dark:bg-slate-900/40 border border-white/70 dark:border-slate-700/60 backdrop-blur-md flex items-center justify-between shadow-2xs hover:border-pink-200 transition">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-6 h-6 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center text-[10px] font-black flex-shrink-0">
-                                        <i class="fa-solid fa-envelope"></i>
-                                    </span>
-                                    <span class="font-bold text-slate-500 dark:text-slate-400 text-[11px]" data-i18n="author_email_lbl">Email:</span>
-                                </div>
-                                <a href="mailto:baongocnguyen686827@gmail.com" class="font-bold text-slate-800 dark:text-slate-200 text-[11px] hover:text-rose-600 transition truncate max-w-[190px]" title="baongocnguyen686827@gmail.com">baongocnguyen686827@gmail.com</a>
+                            <!-- Danh sách câu hỏi động (1 - 10) cuộn gọn gàng -->
+                            <div id="questionsContainer" class="max-h-[190px] overflow-y-auto custom-scroll space-y-1.5 pr-1">
+                                <!-- Populated by JS -->
                             </div>
+                        </div>
 
-                            <div class="px-3 py-2 rounded-xl bg-white/40 dark:bg-slate-900/40 border border-white/70 dark:border-slate-700/60 backdrop-blur-md flex items-center justify-between shadow-2xs hover:border-amber-200 transition">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-6 h-6 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-[10px] font-black flex-shrink-0">
-                                        <i class="fa-solid fa-location-dot"></i>
-                                    </span>
-                                    <span class="font-bold text-slate-500 dark:text-slate-400 text-[11px]" data-i18n="author_addr_lbl">Địa chỉ:</span>
-                                </div>
-                                <span class="font-bold text-slate-800 dark:text-slate-200 text-[11px]" data-i18n="contact_address_val">Hà Nội, Việt Nam</span>
-                            </div>
+                        <!-- Nút xác nhận hồ sơ để mở khóa tải tệp -->
+                        <div class="pt-1">
+                            <button type="button" id="btnConfirmProfile" onclick="confirmAndSaveBusinessProfile()" class="w-full py-2.5 rounded-xl btn-pink-pill font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-rose-500/20 hover:scale-[1.01] transition cursor-pointer">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                <span id="btnConfirmProfileText">Xác Nhận Hồ Sơ Doanh Nghiệp &amp; Mở Khóa Tải Tệp</span>
+                            </button>
                         </div>
                     </div>
 
@@ -1308,109 +1361,32 @@
                     </div>
 
                     <!-- ===================================================================== -->
-                    <!-- MỤC TIÊN QUYẾT: HỒ SƠ DOANH NGHIỆP & CÂU HỎI PHÂN TÍCH (BẮT BUỘC)     -->
+                    <!-- BANNER TÓM TẮT HỒ SƠ DOANH NGHIỆP ĐANG ÁP DỤNG TRONG BƯỚC 1            -->
                     <!-- ===================================================================== -->
-                    <div id="businessProfileCard" class="p-5 sm:p-6 rounded-3xl bg-white/80 dark:bg-slate-900/80 border-2 border-rose-200/90 dark:border-rose-900/70 shadow-sm backdrop-blur-xl space-y-4 transition-all">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-rose-100 dark:border-rose-950/70 pb-3">
-                            <div class="flex items-start sm:items-center gap-2.5">
-                                <span class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center text-sm shadow-xs flex-shrink-0">
-                                    <i class="fa-solid fa-building-circle-check"></i>
-                                </span>
-                                <div>
-                                    <div class="flex flex-wrap items-center gap-2">
-                                        <h3 class="font-black text-sm sm:text-base text-slate-900 dark:text-white">Hồ Sơ Doanh Nghiệp &amp; Định Hướng Phân Tích</h3>
-                                        <span id="profileStatusBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-300/80">
-                                            <i class="fa-solid fa-lock text-[9px] mr-1"></i>BẮT BUỘC ĐỂ MỞ KHÓA TẢI FILE
-                                        </span>
-                                    </div>
-                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                                        Cung cấp loại hình, bối cảnh, thông tin bổ sung và tối đa 10 vấn đề phân tích trọng tâm để AI định hướng bóc tách dữ liệu
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Nút thao tác nhanh -->
-                            <div class="flex items-center gap-2 self-start sm:self-center">
-                                <button type="button" onclick="quickFillAI301Profile()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-extrabold text-xs transition shadow-xs flex items-center gap-1.5 cursor-pointer" title="Nạp nhanh toàn bộ thông tin chuẩn đề thi AI301 và 10 câu hỏi">
-                                    <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
-                                    <span>Nạp Mẫu Đề Thi AI301</span>
-                                </button>
-                                <button type="button" onclick="clearBusinessProfileForm()" class="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold transition cursor-pointer" title="Xóa trắng để nhập lại">
-                                    <i class="fa-solid fa-rotate-left mr-1"></i><span>Xóa</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- 3 Ô nhập liệu chính -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- 1. Loại hình doanh nghiệp -->
-                            <div class="space-y-1.5">
-                                <label class="block text-xs font-black text-slate-800 dark:text-slate-200 flex items-center justify-between">
-                                    <span>1. Loại hình doanh nghiệp <span class="text-rose-500">*</span></span>
-                                    <span class="text-[10px] text-slate-400 font-normal">Chọn hoặc nhập tự do</span>
-                                </label>
-                                <select id="inputBusinessType" onchange="onBusinessTypeChange()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:border-rose-400">
-                                    <option value="Phân phối & B2B Thiết bị Công nghệ (Hạ tầng mạng & Viễn thông)">Phân phối &amp; B2B Thiết bị Công nghệ (Hạ tầng mạng &amp; Viễn thông) [Mẫu AI301]</option>
-                                    <option value="Bán lẻ & Chuỗi cửa hàng đa chi nhánh">Bán lẻ &amp; Chuỗi cửa hàng đa chi nhánh</option>
-                                    <option value="Đại lý phân phối Sữa & Thực phẩm tiêu dùng (FMCG)">Đại lý phân phối Sữa &amp; Thực phẩm tiêu dùng (FMCG)</option>
-                                    <option value="Doanh nghiệp Sản xuất & Thương mại Dịch vụ">Doanh nghiệp Sản xuất &amp; Thương mại Dịch vụ</option>
-                                    <option value="Thương mại điện tử & Bán hàng đa kênh (Omnichannel)">Thương mại điện tử &amp; Bán hàng đa kênh</option>
-                                    <option value="OTHER">Tự nhập loại hình khác...</option>
-                                </select>
-                                <input type="text" id="inputBusinessTypeCustom" placeholder="Nhập loại hình doanh nghiệp cụ thể..." class="hidden w-full px-3.5 py-2 rounded-xl border border-rose-300 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none">
-                            </div>
-
-                            <!-- 2. Thông tin bổ sung (VD: Nhiều chi nhánh) -->
-                            <div class="space-y-1.5">
-                                <label class="block text-xs font-black text-slate-800 dark:text-slate-200 flex items-center justify-between">
-                                    <span>2. Thông tin bổ sung (VD: Chi nhánh, chính sách) <span class="text-rose-500">*</span></span>
-                                    <span class="text-[10px] text-slate-400 font-normal">Quy mô &amp; Chi nhánh</span>
-                                </label>
-                                <input type="text" id="inputAdditionalInfo" placeholder="VD: 5 chi nhánh (Hà Nội, TP.HCM, Đà Nẵng, Bắc Ninh, Hải Phòng), trần chiết khấu 5%..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none focus:border-rose-400">
-                            </div>
-                        </div>
-
-                        <!-- 3. Bối cảnh doanh nghiệp -->
-                        <div class="space-y-1.5">
-                            <label class="block text-xs font-black text-slate-800 dark:text-slate-200 flex items-center justify-between">
-                                <span>3. Bối cảnh doanh nghiệp (Mục tiêu, thách thức, quy trình vận hành) <span class="text-rose-500">*</span></span>
-                                <span class="text-[10px] text-slate-400 font-normal">Thách thức &amp; Mục tiêu cốt lõi</span>
-                            </label>
-                            <textarea id="inputBusinessContext" rows="2" placeholder="Mô tả bối cảnh kinh doanh, quy mô thị trường, các thách thức đối soát và chỉ tiêu kế toán cần giám sát..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-normal text-slate-800 dark:text-slate-200 focus:outline-none focus:border-rose-400 leading-relaxed"></textarea>
-                        </div>
-
-                        <!-- 4. Vấn đề cần phân tích (Tối đa 10 câu hỏi) -->
-                        <div class="space-y-2.5 pt-2 border-t border-rose-100 dark:border-rose-950/60">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <label class="text-xs font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-                                        <i class="fa-solid fa-circle-question text-rose-500"></i>
-                                        <span>4. Vấn đề doanh nghiệp cần phân tích (Tối đa 10 câu hỏi)</span>
-                                        <span class="text-rose-500">*</span>
-                                    </label>
-                                    <span id="questionCountBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300">
-                                        0 / 10 câu hỏi
+                    <div id="step1ProfileSummaryBanner" class="p-4 sm:p-5 rounded-3xl bg-white/80 dark:bg-slate-900/80 border-2 border-rose-200/90 dark:border-rose-900/70 shadow-sm backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
+                        <div class="flex items-start sm:items-center gap-3">
+                            <span class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center text-sm shadow-xs flex-shrink-0">
+                                <i class="fa-solid fa-building-circle-check"></i>
+                            </span>
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h4 id="step1ActiveBizType" class="font-black text-sm text-slate-800 dark:text-slate-100">
+                                        Phân phối &amp; B2B Thiết bị Công nghệ (Hạ tầng mạng &amp; Viễn thông)
+                                    </h4>
+                                    <span id="step1ProfileConfirmedBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-300/80">
+                                        <i class="fa-solid fa-circle-check text-[9px] mr-1"></i>HỒ SƠ ĐÃ XÁC THỰC
                                     </span>
                                 </div>
-                                <button type="button" id="btnAddQuestion" onclick="addAnalysisQuestionInput()" class="text-xs font-bold text-rose-600 hover:text-rose-700 dark:text-rose-400 flex items-center gap-1 cursor-pointer">
-                                    <i class="fa-solid fa-plus text-[10px]"></i>
-                                    <span>+ Thêm câu hỏi</span>
-                                </button>
-                            </div>
-
-                            <!-- Danh sách câu hỏi động (1 - 10) -->
-                            <div id="questionsContainer" class="space-y-2">
-                                <!-- Populated by JS -->
+                                <p id="step1ActiveBizSubtitle" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                    Mô hình 5 chi nhánh (Hà Nội, TP.HCM, Đà Nẵng, Bắc Ninh, Hải Phòng) • 10 câu hỏi phân tích trọng tâm
+                                </p>
                             </div>
                         </div>
 
-                        <!-- Nút xác nhận hồ sơ để mở khóa tải tệp -->
-                        <div class="pt-2">
-                            <button type="button" id="btnConfirmProfile" onclick="confirmAndSaveBusinessProfile()" class="w-full py-3 rounded-2xl btn-pink-pill font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-rose-500/20 hover:scale-[1.01] transition cursor-pointer">
-                                <i class="fa-solid fa-shield-halved"></i>
-                                <span id="btnConfirmProfileText">Xác Nhận Hồ Sơ Doanh Nghiệp &amp; Mở Khóa Tải Tệp</span>
-                            </button>
-                        </div>
+                        <button type="button" onclick="switchTab('welcome'); scrollToProfileForm();" class="px-3.5 py-2 rounded-xl border border-rose-300 dark:border-rose-800 bg-rose-50/70 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-300 font-bold text-xs transition cursor-pointer flex items-center gap-1.5 flex-shrink-0 self-start sm:self-center shadow-2xs">
+                            <i class="fa-solid fa-pen-to-square text-[11px]"></i>
+                            <span>Chỉnh Sửa Hồ Sơ (Về Trang Chủ)</span>
+                        </button>
                     </div>
 
                     <!-- Drag & Drop Upload Box in Step 1: Shaped like an elegant fluffy cloud with dashed border (Khớp 100% hình đám mây) -->
@@ -3198,25 +3174,52 @@
         function updateProfileLockUI(isUnlocked) {
             const overlay = document.getElementById('uploadLockOverlay');
             const dropZone = document.getElementById('uploadDropZone');
+            const heroDropZone = document.getElementById('heroDropZone');
+            const heroLockText = document.getElementById('heroLockStatusText');
             const statusBadge = document.getElementById('profileStatusBadge');
             const btnText = document.getElementById('btnConfirmProfileText');
+            
+            const step1BizType = document.getElementById('step1ActiveBizType');
+            const step1BizSub = document.getElementById('step1ActiveBizSubtitle');
+            const step1Badge = document.getElementById('step1ProfileConfirmedBadge');
 
             if (isUnlocked) {
                 if (overlay) overlay.classList.add('hidden');
                 if (dropZone) dropZone.classList.remove('opacity-40', 'cursor-not-allowed');
+                if (heroDropZone) heroDropZone.classList.remove('opacity-60');
+                if (heroLockText) heroLockText.innerHTML = '<i class="fa-solid fa-lock-open text-[8px] mr-1"></i>Đã mở khóa tải tệp';
+
                 if (statusBadge) {
-                    statusBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-300/80';
-                    statusBadge.innerHTML = '<i class="fa-solid fa-circle-check text-[9px] mr-1"></i>ĐÃ XÁC THỰC • ĐÃ MỞ KHÓA TẢI FILE';
+                    statusBadge.className = 'px-2 py-0.5 rounded-full text-[9.5px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-300/80';
+                    statusBadge.innerHTML = '<i class="fa-solid fa-circle-check text-[8px] mr-1"></i>ĐÃ XÁC THỰC • ĐÃ MỞ KHÓA TẢI FILE';
                 }
                 if (btnText) btnText.innerHTML = '<i class="fa-solid fa-check mr-1"></i>Đã Lưu Hồ Sơ (Nhấn để cập nhật lại)';
+
+                if (step1BizType && businessProfile.business_type) step1BizType.innerText = businessProfile.business_type;
+                if (step1BizSub) {
+                    const qCount = (businessProfile.analysis_questions || []).length;
+                    step1BizSub.innerText = `${businessProfile.additional_info || 'Đa chi nhánh'} • ${qCount} câu hỏi phân tích trọng tâm`;
+                }
+                if (step1Badge) {
+                    step1Badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-300/80';
+                    step1Badge.innerHTML = '<i class="fa-solid fa-circle-check text-[9px] mr-1"></i>HỒ SƠ ĐÃ XÁC THỰC';
+                }
             } else {
                 if (overlay) overlay.classList.remove('hidden');
                 if (dropZone) dropZone.classList.add('opacity-40', 'cursor-not-allowed');
+                if (heroDropZone) heroDropZone.classList.add('opacity-60');
+                if (heroLockText) heroLockText.innerHTML = '<i class="fa-solid fa-lock text-[8px] mr-1"></i>Khóa tải tệp (Cần hồ sơ)';
+
                 if (statusBadge) {
-                    statusBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-300/80';
-                    statusBadge.innerHTML = '<i class="fa-solid fa-lock text-[9px] mr-1"></i>BẮT BUỘC ĐỂ MỞ KHÓA TẢI FILE';
+                    statusBadge.className = 'px-2 py-0.5 rounded-full text-[9.5px] font-black bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-300/80';
+                    statusBadge.innerHTML = '<i class="fa-solid fa-lock text-[8px] mr-1"></i>BẮT BUỘC ĐỂ MỞ KHÓA TẢI FILE';
                 }
                 if (btnText) btnText.innerHTML = 'Xác Nhận Hồ Sơ Doanh Nghiệp &amp; Mở Khóa Tải Tệp';
+
+                if (step1Badge) {
+                    step1Badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-800 border border-amber-300/80';
+                    step1Badge.innerHTML = '<i class="fa-solid fa-lock text-[9px] mr-1"></i>CHƯA XÁC THỰC';
+                }
             }
         }
 
@@ -3230,12 +3233,17 @@
         }
 
         function scrollToProfileForm() {
-            const card = document.getElementById('businessProfileCard');
-            if (card) {
-                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                card.classList.add('ring-4', 'ring-rose-400');
-                setTimeout(() => { card.classList.remove('ring-4', 'ring-rose-400'); }, 1800);
+            if (appState.currentTab !== 'welcome') {
+                switchTab('welcome');
             }
+            setTimeout(() => {
+                const card = document.getElementById('businessProfileCard');
+                if (card) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    card.classList.add('ring-4', 'ring-rose-400');
+                    setTimeout(() => { card.classList.remove('ring-4', 'ring-rose-400'); }, 1800);
+                }
+            }, 120);
         }
 
         function triggerFileInputWithGuardrail() {
@@ -3319,7 +3327,6 @@
         // ======================== HERO DRAG & DROP ZONE ========================
         function triggerHeroUpload() {
             if (!isBusinessProfileConfirmed()) {
-                switchTab('step1');
                 showProfileLockWarning();
                 return;
             }
@@ -3351,7 +3358,6 @@
         function onHeroDrop(e) {
             onHeroDragLeave(e);
             if (!isBusinessProfileConfirmed()) {
-                switchTab('step1');
                 showProfileLockWarning();
                 return;
             }
@@ -3361,14 +3367,9 @@
         }
         function onHeroFileSelected(e) {
             if (!isBusinessProfileConfirmed()) {
-                switchTab('step1');
                 showProfileLockWarning();
                 return;
             }
-            if (e.target.files && e.target.files.length > 0) {
-                processHeroPickedFile(e.target.files[0]);
-            }
-        }
             if (e.target.files && e.target.files.length > 0) {
                 processHeroPickedFile(e.target.files[0]);
             }
