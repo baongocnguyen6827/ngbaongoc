@@ -3222,14 +3222,31 @@
         const fmtVND = n => (n === null || n === undefined || isNaN(n)) ? '--' : new Intl.NumberFormat('vi-VN').format(Math.round(n)) + ' đ';
         const fmtNum = n => (n === null || n === undefined || isNaN(n)) ? '--' : new Intl.NumberFormat('vi-VN').format(n);
 
-        function notify(msg, type = 'pink') {
+        function notify(msg, type = 'normal') {
             const box = document.getElementById('toastContainer');
+            if (!box) return;
             const el = document.createElement('div');
-            const bg = type === 'success' ? 'bg-emerald-600' : (type === 'warn' ? 'bg-amber-500' : 'bg-rose-600');
-            el.className = `${bg} text-white px-4 py-3 rounded-2xl shadow-lg text-xs font-bold flex items-center gap-2.5 view-fade`;
-            el.innerHTML = `<i class="fa-solid fa-sparkles"></i><span>${msg}</span>`;
+            
+            // Phân biệt chính xác: Cảnh báo / Lỗi là màu đỏ, Thông báo bình thường là màu xanh lá
+            const isWarning = ['warn', 'warning', 'error', 'danger', 'alert'].includes(String(type || '').toLowerCase());
+            
+            const bgClass = isWarning 
+                ? 'bg-rose-600 border border-rose-500/80 shadow-xl shadow-rose-950/30' 
+                : 'bg-emerald-600 border border-emerald-500/80 shadow-xl shadow-emerald-950/25';
+                
+            const iconHtml = isWarning 
+                ? '<i class="fa-solid fa-triangle-exclamation text-rose-200 text-sm flex-shrink-0 animate-pulse"></i>' 
+                : '<i class="fa-solid fa-circle-check text-emerald-200 text-sm flex-shrink-0"></i>';
+
+            el.className = `${bgClass} text-white px-4 py-3 rounded-2xl text-xs font-bold flex items-center gap-2.5 view-fade transition-all duration-300`;
+            el.innerHTML = `${iconHtml}<span class="leading-snug">${msg}</span>`;
             box.appendChild(el);
-            setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 300); }, 3200);
+            setTimeout(() => { 
+                el.style.opacity = '0'; 
+                el.style.transform = 'translateY(-6px)';
+                el.style.transition = 'opacity 0.3s, transform 0.3s';
+                setTimeout(() => el.remove(), 300); 
+            }, 3200);
         }
 
         // ======================== THEME TOGGLE (LIGHT / DARK) ========================
