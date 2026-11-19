@@ -1023,24 +1023,26 @@
                 });
 
                 const sparkles = [];
+                const MAX_SPARKLES = 22; // Giới hạn tối đa hạt để slide luôn sáng sủa, dễ đọc
                 const palette = ['#f43f5e', '#fb7185', '#fda4af', '#f59e0b', '#fbbf24', '#ffffff', '#e879f9'];
                 let lastX = -100;
                 let lastY = -100;
                 let animId = null;
 
                 function addSparkle(x, y, vx, vy) {
-                    const isStar = Math.random() > 0.25;
-                    const size = isStar ? (Math.random() * 7 + 5) : (Math.random() * 3.5 + 2);
+                    if (sparkles.length >= MAX_SPARKLES) return;
+                    const isStar = Math.random() < 0.4; // 40% sao nhỏ, 60% hạt bụi li ti dịu nhẹ
+                    const size = isStar ? (Math.random() * 3.2 + 2.4) : (Math.random() * 1.8 + 1.0);
                     sparkles.push({
                         x, y,
-                        vx: vx + (Math.random() - 0.5) * 1.5,
-                        vy: vy + (Math.random() - 0.5) * 1.5 - Math.random() * 0.7,
+                        vx: vx * 0.5 + (Math.random() - 0.5) * 0.8,
+                        vy: vy * 0.5 + (Math.random() - 0.5) * 0.8 - Math.random() * 0.4,
                         size,
                         color: palette[Math.floor(Math.random() * palette.length)],
                         rotation: Math.random() * Math.PI * 2,
-                        rotationSpeed: (Math.random() - 0.5) * 0.18,
-                        alpha: 1.0,
-                        decay: Math.random() * 0.022 + 0.024,
+                        rotationSpeed: (Math.random() - 0.5) * 0.15,
+                        alpha: 0.8,
+                        decay: Math.random() * 0.028 + 0.032,
                         isStar
                     });
                 }
@@ -1048,11 +1050,11 @@
                 document.addEventListener('pointermove', (e) => {
                     const x = e.clientX, y = e.clientY;
                     const dist = Math.hypot(x - lastX, y - lastY);
-                    if (dist > 5) {
-                        const count = Math.min(Math.floor(dist / 9) + 1, 4);
-                        const vx = (x - lastX) * 0.05, vy = (y - lastY) * 0.05;
-                        for (let i = 0; i < count; i++) {
-                            addSparkle(lastX + (x - lastX) * (i / count), lastY + (y - lastY) * (i / count), vx, vy);
+                    if (dist > 18) {
+                        const vx = (x - lastX) * 0.03, vy = (y - lastY) * 0.03;
+                        addSparkle(x, y, vx, vy);
+                        if (dist > 45 && Math.random() > 0.5) {
+                            addSparkle((x + lastX) / 2, (y + lastY) / 2, vx, vy);
                         }
                         lastX = x; lastY = y;
                         if (!animId) animId = requestAnimationFrame(animateSparkles);
@@ -1060,9 +1062,9 @@
                 }, { passive: true });
 
                 document.addEventListener('pointerdown', (e) => {
-                    for (let i = 0; i < 7; i++) {
-                        const angle = (Math.PI * 2 / 7) * i + (Math.random() - 0.5) * 0.4;
-                        const speed = Math.random() * 2.2 + 1.2;
+                    for (let i = 0; i < 4; i++) {
+                        const angle = (Math.PI * 2 / 4) * i + (Math.random() - 0.5) * 0.3;
+                        const speed = Math.random() * 1.4 + 0.7;
                         addSparkle(e.clientX, e.clientY, Math.cos(angle) * speed, Math.sin(angle) * speed);
                     }
                     if (!animId) animId = requestAnimationFrame(animateSparkles);
@@ -1075,7 +1077,7 @@
                     c.globalAlpha = Math.max(0, alpha);
                     c.fillStyle = color;
                     c.shadowColor = color;
-                    c.shadowBlur = 8;
+                    c.shadowBlur = 4;
                     c.beginPath();
                     c.moveTo(0, -r);
                     c.quadraticCurveTo(0, 0, r, 0);
@@ -1087,7 +1089,7 @@
                     c.beginPath();
                     c.arc(0, 0, r * 0.22, 0, Math.PI * 2);
                     c.fillStyle = '#ffffff';
-                    c.shadowBlur = 5;
+                    c.shadowBlur = 3;
                     c.shadowColor = '#ffffff';
                     c.fill();
                     c.restore();
@@ -1098,7 +1100,7 @@
                     c.globalAlpha = Math.max(0, alpha);
                     c.fillStyle = color;
                     c.shadowColor = color;
-                    c.shadowBlur = 6;
+                    c.shadowBlur = 3;
                     c.beginPath();
                     c.arc(x, y, r, 0, Math.PI * 2);
                     c.fill();
