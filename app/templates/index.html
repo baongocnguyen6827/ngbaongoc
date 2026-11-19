@@ -2571,6 +2571,93 @@
 
                 </div>
 
+                <!-- ============================================================== -->
+                <!-- HUMAN VERIFICATION & CLEANED PREVIEW (Chốt chặn duyệt dữ liệu) -->
+                <!-- ============================================================== -->
+                <div id="pipelineVerificationSection" class="hidden space-y-3.5 pt-1 view-fade">
+                    
+                    <!-- Gate Announcement Banner -->
+                    <div class="p-3.5 rounded-2xl bg-amber-500/10 dark:bg-amber-950/30 border-2 border-amber-400/80 dark:border-amber-600/60 flex items-center justify-between gap-3 shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg shadow-md flex-shrink-0 animate-pulse">
+                                <i class="fa-solid fa-user-check"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-black text-slate-900 dark:text-white text-xs sm:text-sm">Bản Xem Trước Dữ Liệu Sạch (Chốt Chặn Kiểm Duyệt BPMN)</h4>
+                                <p class="text-[11px] text-slate-600 dark:text-slate-300">AI đã làm sạch xong. Vui lòng xem trước các dòng đối soát bên dưới và bấm xác nhận để tiếp tục.</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 uppercase tracking-wider flex-shrink-0">
+                            Chờ Xác Nhận
+                        </span>
+                    </div>
+
+                    <!-- 4 Filtered Categories Summary Badges -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                        <div class="p-2.5 rounded-xl bg-emerald-50 dark:bg-slate-800 border border-emerald-200 dark:border-slate-700">
+                            <span class="text-[10px] text-slate-500 font-bold block">Dòng Sạch Giữ Lại</span>
+                            <span id="pvCleanRows" class="font-extrabold font-mono text-xs sm:text-sm text-emerald-600 dark:text-emerald-400">--</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-rose-50 dark:bg-slate-800 border border-rose-200 dark:border-slate-700">
+                            <span class="text-[10px] text-slate-500 font-bold block">Trùng Lặp Đã Lọc</span>
+                            <span id="pvDedupRows" class="font-extrabold font-mono text-xs sm:text-sm text-rose-600 dark:text-rose-400">0 dòng</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-amber-50 dark:bg-slate-800 border border-amber-200 dark:border-slate-700">
+                            <span class="text-[10px] text-slate-500 font-bold block">Lệch Kỳ T09 Tách Riêng</span>
+                            <span id="pvSyncRows" class="font-extrabold font-mono text-xs sm:text-sm text-amber-600 dark:text-amber-400">0 dòng</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-purple-50 dark:bg-slate-800 border border-purple-200 dark:border-slate-700">
+                            <span class="text-[10px] text-slate-500 font-bold block">Đơn Hủy &amp; Đổi Trả</span>
+                            <span id="pvCancRetRows" class="font-extrabold font-mono text-xs sm:text-sm text-purple-600 dark:text-purple-400">0 đơn</span>
+                        </div>
+                    </div>
+
+                    <!-- Cleaned Preview Mini Table -->
+                    <div class="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 overflow-hidden shadow-xs">
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs">
+                            <span class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
+                                <i class="fa-solid fa-table-cells text-rose-500"></i> Bản xem trước mẫu các dòng giao dịch sạch chuẩn:
+                            </span>
+                            <span id="pvTotalCleanBadge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">100% Hợp lệ</span>
+                        </div>
+                        <div class="overflow-x-auto max-h-48 custom-scroll">
+                            <table class="w-full text-[11px] text-left">
+                                <thead class="bg-slate-100/70 dark:bg-slate-700/50 text-[10px] text-slate-600 dark:text-slate-300 font-bold uppercase sticky top-0">
+                                    <tr>
+                                        <th class="py-1.5 px-3">Mã Đơn</th>
+                                        <th class="py-1.5 px-3">Ngày</th>
+                                        <th class="py-1.5 px-3">Cửa Hàng</th>
+                                        <th class="py-1.5 px-3">Sản Phẩm</th>
+                                        <th class="py-1.5 px-3 text-right">SL</th>
+                                        <th class="py-1.5 px-3 text-right">Doanh Thu Thuần</th>
+                                        <th class="py-1.5 px-3 text-right">Lợi Nhuận Gộp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pvTableBody" class="divide-y divide-slate-100 dark:divide-slate-700/60 font-mono text-slate-700 dark:text-slate-200">
+                                    <tr>
+                                        <td colspan="7" class="py-4 text-center text-slate-400 text-xs font-sans">
+                                            <i class="fa-solid fa-spinner fa-spin mr-1 text-rose-500"></i> Đang nạp các dòng dữ liệu sạch...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Action Confirmation Buttons (Human-in-the-loop Gate) -->
+                    <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+                        <button type="button" onclick="closePipelineModal(); switchTab('step2');" class="w-full sm:w-auto px-4 py-2.5 rounded-xl btn-outline-clean text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+                            <span>Xem Toàn Bộ Bảng Ở Bước 2</span>
+                        </button>
+
+                        <button type="button" id="btnConfirmCleanData" onclick="proceedToNextSteps()" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold text-xs shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2 cursor-pointer transition hover:scale-105 active:scale-95 animate-pulse">
+                            <i class="fa-solid fa-circle-check text-sm text-white"></i>
+                            <span>Xác Nhận Dữ Liệu Sạch &amp; Tiến Hành Bước Tiếp Theo &rarr;</span>
+                        </button>
+                    </div>
+                </div>
+
                 <!-- PIPELINE CELEBRATION & 4 DELIVERABLES LAUNCHER (Hidden while running, shows when 100%) -->
                 <div id="pipelineCompletedSection" class="hidden space-y-4 pt-2">
                     
@@ -2863,6 +2950,8 @@
             }
             const comp = document.getElementById('pipelineCompletedSection');
             if (comp) comp.classList.add('hidden');
+            const verif = document.getElementById('pipelineVerificationSection');
+            if (verif) verif.classList.add('hidden');
             
             // Reset Progress Bar
             setPipelineProgress(10, 'Bước 1: Tiếp nhận & Phân tích cấu trúc tệp...');
@@ -3042,15 +3131,146 @@
                 const totalEx = dedup + sync + canc + ret;
                 updatePipelineStepUI(2, 'done', `Giữ lại <b>${fmtNum(cleanRows)} dòng sạch</b> (Bóc tách ${fmtNum(totalEx)} dòng vi phạm quy tắc).`);
 
-                // Auto-confirm Human Verification (BPMN Gate)
-                try {
-                    await submitHumanVerification(true);
-                } catch (eHv) {
-                    console.warn('Auto HV note:', eHv);
+                // ================= BƯỚC 2 HOÀN TẤT: HIỂN THỊ BẢN XEM TRƯỚC & CHỜ XÁC NHẬN =================
+                setPipelineProgress(50, 'Bước 2 hoàn tất: Bản xem trước dữ liệu sạch • Chờ bạn xác nhận để tiếp tục');
+                
+                const badge = document.getElementById('pipelineGlobalBadge');
+                if (badge) {
+                    badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-amber-950 uppercase tracking-wider animate-pulse';
+                    badge.innerText = 'Chờ Xác Nhận';
+                }
+                const icon = document.getElementById('pipelineHeaderIcon');
+                if (icon) {
+                    icon.className = 'fa-solid fa-user-check text-amber-200';
+                }
+                const sub = document.getElementById('pipelineSubTitle');
+                if (sub) {
+                    sub.innerText = 'Dữ liệu đã được làm sạch qua 4 chốt chặn. Vui lòng kiểm tra bản xem trước và bấm xác nhận để tiến hành Bước 3 & Bước 4.';
                 }
 
+                // Nạp bản xem trước dữ liệu sạch vào Modal
+                await populateCleanedPreviewInModal(r2.data, cleanRows, dedup, sync, canc + ret);
+
+                // Hiển thị khung xem trước và nút xác nhận
+                const pvSection = document.getElementById('pipelineVerificationSection');
+                if (pvSection) pvSection.classList.remove('hidden');
+
+                // Cập nhật giao diện nền Bước 2
+                loadDataPreview('cleaned', 1);
+                updateTopKpiCards();
+
+                notify(`Đã làm sạch thành công ${fmtNum(cleanRows)} dòng! Vui lòng xem trước và nhấn nút "Xác Nhận" để tiếp tục sang Bước 3 & Bước 4.`, 'green');
+
+            } catch (err) {
+                console.error('runAutomated4StepPipeline error:', err);
+                notify('Lỗi thực thi quy trình: ' + err.message, 'warn');
+                setPipelineProgress(100, 'Quy trình gặp lỗi: ' + err.message);
+            }
+        }
+
+        // ======================== POPULATE CLEANED PREVIEW IN MODAL ========================
+        async function populateCleanedPreviewInModal(cleanData, cleanRows, dedup, sync, cancRet) {
+            const cleanRowsEl = document.getElementById('pvCleanRows');
+            const dedupEl = document.getElementById('pvDedupRows');
+            const syncEl = document.getElementById('pvSyncRows');
+            const cancRetEl = document.getElementById('pvCancRetRows');
+            const totalBadge = document.getElementById('pvTotalCleanBadge');
+            const tbody = document.getElementById('pvTableBody');
+
+            if (cleanRowsEl) cleanRowsEl.innerText = `${fmtNum(cleanRows)} dòng`;
+            if (dedupEl) dedupEl.innerText = `${fmtNum(dedup)} dòng`;
+            if (syncEl) syncEl.innerText = `${fmtNum(sync)} dòng`;
+            if (cancRetEl) cancRetEl.innerText = `${fmtNum(cancRet)} đơn`;
+            if (totalBadge) totalBadge.innerText = `${fmtNum(cleanRows)} dòng hợp lệ`;
+
+            if (!tbody) return;
+
+            try {
+                const res = await (await fetch('/api/cleaned-data-preview?mode=cleaned&page=1&limit=5')).json();
+                if (res.success && res.records && res.records.length > 0) {
+                    tbody.innerHTML = res.records.map(r => {
+                        const id = r.transaction_id || r.Quote_ID || r.Invoice_ID || r.order_id || '--';
+                        const date = r.transaction_date || r.Quote_Date || r.Date || '--';
+                        const store = r.store_name || r.Location || r.Store || '--';
+                        const item = r.product_name || r.Item_Name || r.Product || '--';
+                        const qty = r.quantity || r.Quantity || r.Qty || 1;
+                        const amount = r.total_amount || r.Net_Amount_VND || r.Gross_Amount_VND || r.amount || 0;
+                        const profit = r.gross_profit || r.Gross_Profit_VND || r.profit || 0;
+
+                        return `
+                            <tr class="hover:bg-rose-50/50 dark:hover:bg-slate-700/40 transition">
+                                <td class="py-2 px-3 font-bold text-rose-600 dark:text-rose-400">${id}</td>
+                                <td class="py-2 px-3 text-slate-500">${date}</td>
+                                <td class="py-2 px-3 font-semibold text-slate-800 dark:text-slate-200 truncate max-w-[120px]">${store}</td>
+                                <td class="py-2 px-3 text-slate-700 dark:text-slate-300 truncate max-w-[140px]">${item}</td>
+                                <td class="py-2 px-3 text-right font-bold">${fmtNum(qty)}</td>
+                                <td class="py-2 px-3 text-right font-bold text-emerald-600 dark:text-emerald-400">${fmtVND(amount)}</td>
+                                <td class="py-2 px-3 text-right font-bold text-indigo-600 dark:text-indigo-400">${fmtVND(profit)}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                } else {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="py-4 text-center text-slate-400 font-sans">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i> Dữ liệu sạch đã sẵn sàng (${fmtNum(cleanRows)} dòng).
+                            </td>
+                        </tr>
+                    `;
+                }
+            } catch (err) {
+                console.warn('Error loading cleaned preview:', err);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="py-4 text-center text-slate-400 font-sans">
+                            <i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i> Dữ liệu sạch đã sẵn sàng (${fmtNum(cleanRows)} dòng).
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // ======================== PROCEED TO NEXT STEPS (STEP 3 & STEP 4) ========================
+        async function proceedToNextSteps() {
+            const btn = document.getElementById('btnConfirmCleanData');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Đang tiến hành Bước 3 &amp; Bước 4...</span>`;
+            }
+
+            // Ẩn khung xem trước kiểm duyệt
+            const pvSection = document.getElementById('pipelineVerificationSection');
+            if (pvSection) pvSection.classList.add('hidden');
+
+            const badge = document.getElementById('pipelineGlobalBadge');
+            if (badge) {
+                badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-white/25 text-white uppercase tracking-wider';
+                badge.innerText = 'Đang Xử Lý';
+            }
+            const icon = document.getElementById('pipelineHeaderIcon');
+            if (icon) {
+                icon.className = 'fa-solid fa-bolt-lightning text-amber-200 animate-pulse';
+            }
+            const sub = document.getElementById('pipelineSubTitle');
+            if (sub) {
+                sub.innerText = 'AI Agent đang phân tích chỉ số, lập dashboard, đối soát 3 chiều & sinh slide...';
+            }
+
+            try {
+                // Xác nhận phê duyệt con người (Human Verification BPMN Gate)
+                try {
+                    await submitHumanVerification(true, false);
+                } catch (eHv) {
+                    console.warn('HV confirmation note:', eHv);
+                }
+
+                const totalRows = appState.rawInfo ? (appState.rawInfo.total_rows || 0) : 0;
+                const cleanRows = appState.cleanInfo ? (appState.cleanInfo.clean_rows || totalRows) : totalRows;
+                const activeName = (appState.rawInfo && appState.rawInfo.file_name) 
+                    || (appState.pickedFile ? appState.pickedFile.name : 'Dữ liệu giao dịch Bảo Ngọc Retail');
+
                 // ================= BƯỚC 3: PHÂN TÍCH ĐA CHIỀU & DASHBOARD CHỈ SỐ =================
-                setPipelineProgress(68, 'Bước 3: Đang tính toán 4 Golden KPIs & phân tích chỉ số kinh doanh...');
+                setPipelineProgress(70, 'Bước 3: Đang tính toán 4 Golden KPIs & phân tích chỉ số kinh doanh...');
                 updatePipelineStepUI(3, 'running', 'Đang tổng hợp Doanh thu thuần, Lợi nhuận gộp, Xếp hạng chi nhánh & CSAT...');
 
                 const r3 = await (await fetch('/api/generate-report', { method: 'POST' })).json();
@@ -3107,12 +3327,16 @@
                     gross_margin: margin
                 });
 
-                notify(`Đã hoàn tất chu trình 4 bước cho tệp ${activeName}! 4 kết quả đầu ra đã sẵn sàng.`, 'success');
+                notify(`Đã xác nhận và hoàn tất chu trình 4 bước! Bảng dữ liệu, Dashboard, Báo cáo & Slide đã sẵn sàng.`, 'success');
 
             } catch (err) {
-                console.error('runAutomated4StepPipeline error:', err);
-                notify('Lỗi thực thi quy trình: ' + err.message, 'warn');
-                setPipelineProgress(100, 'Quy trình gặp lỗi: ' + err.message);
+                console.error('proceedToNextSteps error:', err);
+                notify('Có lỗi xảy ra: ' + err.message, 'warn');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-circle-check text-sm text-white"></i><span>Xác Nhận Dữ Liệu Sạch &amp; Tiến Hành Bước Tiếp Theo &rarr;</span>`;
+                }
             }
         }
 
@@ -4131,7 +4355,7 @@
             }
         }
 
-        async function submitHumanVerification(approved) {
+        async function submitHumanVerification(approved, triggerNext = true) {
             const notes = document.getElementById('hvNotesInput') ? document.getElementById('hvNotesInput').value : 'Đã xác nhận dữ liệu sạch.';
             const res = await (await fetch('/api/human-verify', {
                 method: 'POST',
@@ -4141,11 +4365,21 @@
 
             if (res.success) {
                 if (approved) {
-                    document.getElementById('hvBadgeStatus').className = 'px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-700';
-                    document.getElementById('hvBadgeStatus').innerText = 'ĐÃ DUYỆT OK';
-                    document.getElementById('btnOneClickVerify').innerHTML = `<i class="fa-solid fa-circle-check"></i><span>Đã Duyệt Chuẩn 100%</span>`;
+                    const badge = document.getElementById('hvBadgeStatus');
+                    if (badge) {
+                        badge.className = 'px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-700';
+                        badge.innerText = 'ĐÃ DUYỆT OK';
+                    }
+                    const btn = document.getElementById('btnOneClickVerify');
+                    if (btn) {
+                        btn.innerHTML = `<i class="fa-solid fa-circle-check"></i><span>Đã Duyệt Chuẩn 100%</span>`;
+                    }
                     confetti({ particleCount: 70, spread: 70, origin: { y: 0.5 } });
-                    notify('Đã phê duyệt dữ liệu sạch 1-Chạm thành công!', 'success');
+                    notify('Đã phê duyệt dữ liệu sạch thành công!', 'green');
+
+                    if (triggerNext && (!appState.reportData || !appState.auditData)) {
+                        await proceedToNextSteps();
+                    }
                 } else {
                     notify('Đã gửi yêu cầu chạy làm sạch lại!', 'warn');
                     executeCleaning();
