@@ -526,11 +526,11 @@
                     </div>
                 </div>
 
-                <!-- Center: Search Input + Date Picker + Governance Alerts -->
-                <div class="flex items-center gap-3 flex-1 min-w-[340px] sm:min-w-[380px] max-w-2xl">
-                    <div class="relative flex-1 min-w-[300px] sm:min-w-[350px]">
+                <!-- Center/Right: Search Input (Matched width to action group) + Date Picker + Governance Alerts -->
+                <div class="flex items-center gap-2.5 sm:gap-3 ml-auto flex-wrap sm:flex-nowrap">
+                    <div id="topSearchWrapper" class="relative transition-all duration-200" style="width: 780px; max-width: 100%;">
                         <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                        <input id="topSearchInput" oninput="handleGlobalSearch(this.value)" type="text" placeholder="Tìm kiếm cửa hàng, mã đơn, sản phẩm, quản lý..." data-i18n-ph="search_ph" class="w-full min-w-[300px] sm:min-w-[350px] pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:bg-white dark:focus:bg-slate-800 focus:border-rose-300 focus:ring-2 focus:ring-rose-100 transition">
+                        <input id="topSearchInput" oninput="handleGlobalSearch(this.value)" type="text" placeholder="Tìm kiếm cửa hàng, mã đơn, sản phẩm, quản lý..." data-i18n-ph="search_ph" class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:bg-white dark:focus:bg-slate-800 focus:border-rose-300 focus:ring-2 focus:ring-rose-100 transition shadow-xs" style="width: 780px; max-width: 100%;">
                     </div>
 
                     <!-- Date Picker -->
@@ -641,40 +641,43 @@
 
                     <!-- Right Group: 3 Actions Shifted Close to Nguyễn Bảo Ngọc + Profile + Utility Controls -->
                     <div class="flex items-center gap-2.5 sm:gap-3 ml-auto flex-wrap sm:flex-nowrap">
-                        <!-- Quick Action 1: Feedback Khách Hàng (CSAT Live) -->
-                        <button onclick="switchTab('feedback')" class="btn-pink-pill px-3.5 py-2 text-xs flex items-center gap-2 bg-gradient-to-r from-amber-500 via-rose-500 to-pink-500 text-white font-extrabold shadow-md hover:scale-105 transition cursor-pointer" title="Xem Phản Hồi Khách Hàng & CSAT">
-                            <i class="fa-solid fa-star text-yellow-300 animate-pulse"></i>
-                            <span class="leading-tight text-left">Feedback KH<br><span class="text-[10px] text-yellow-200 font-bold">CSAT Live</span></span>
-                        </button>
-
-                        <!-- Primary Action 2: Chạy AI Pipeline -->
-                        <button onclick="runFullAiPipeline()" id="btnRunPipeline" class="btn-pink-pill px-4 py-2 text-xs flex items-center gap-2">
-                            <i class="fa-solid fa-bolt"></i>
-                            <span data-i18n="btn_run_pipeline" class="leading-tight text-left">Chạy AI<br class="hidden sm:inline"> Pipeline</span>
-                        </button>
-
-                        <!-- Secondary Action 3: Sinh Slide Auto-Pitch Deck (Ma Thuật) -->
-                        <button onclick="openMagicPitchDeckModal()" id="btnAutoPitchDeckHeader" class="btn-outline-clean px-3.5 py-1.5 text-xs flex items-center gap-2 hover:border-rose-400 cursor-pointer shadow-xs group" title="Nút Bấm Ma Thuật: Tự Động Sinh Slide Báo Cáo PowerPoint (Auto-Pitch Deck)">
-                            <i class="fa-solid fa-wand-magic-sparkles text-rose-500 group-hover:rotate-12 transition-transform duration-300"></i>
-                            <span class="leading-tight text-left font-bold text-slate-800 dark:text-slate-200 group-hover:text-rose-600 transition">Sinh Slide<br><span class="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold">Auto-Pitch Deck</span></span>
-                        </button>
-
-                        <!-- Direct Link: Xem Slide HTML Trình Chiếu -->
-                        <a href="/slides" target="_blank" id="btnOpenHtmlSlidesHeader" class="btn-outline-clean px-3 py-1.5 text-xs flex items-center gap-2 hover:border-rose-400 cursor-pointer shadow-xs group" title="Mở Slide HTML Trình Chiếu Toàn Màn Hình Trong Tab Mới">
-                            <i class="fa-solid fa-desktop text-rose-500 group-hover:scale-110 transition-transform duration-300"></i>
-                            <span class="leading-tight text-left font-bold text-slate-800 dark:text-slate-200 group-hover:text-rose-600 transition">Slide HTML<br><span class="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold">Trình Chiếu &rarr;</span></span>
-                        </a>
-
-                        <!-- User Profile Card: Nguyễn Bảo Ngọc -->
-                        <div class="flex items-center gap-2.5 pl-3 border-l border-pink-100 dark:border-slate-700">
-                            <img src="/static/avatar.jpg" alt="Nguyễn Bảo Ngọc" class="w-9 h-9 rounded-full object-cover border-2 border-rose-200 shadow-xs flex-shrink-0">
-                            <div class="hidden lg:block text-left leading-tight">
-                                <p class="font-bold text-xs text-slate-800 dark:text-slate-200 truncate max-w-[130px]">Nguyễn Bảo Ngọc</p>
-                                <p class="text-[10px] text-slate-400 font-medium">Bảo Ngọc Retail</p>
-                            </div>
-                            <button onclick="runFullAiPipeline()" title="Làm mới toàn bộ AI Pipeline" class="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-100/60 flex items-center justify-center transition">
-                                <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                        <!-- Group spanning from Feedback KH to Nguyễn Bảo Ngọc (Synced width with Top Search Bar) -->
+                        <div id="headerActionsProfileGroup" class="flex items-center gap-2.5 sm:gap-3 flex-wrap sm:flex-nowrap">
+                            <!-- Quick Action 1: Feedback Khách Hàng (CSAT Live) -->
+                            <button onclick="switchTab('feedback')" class="btn-pink-pill px-3.5 py-2 text-xs flex items-center gap-2 bg-gradient-to-r from-amber-500 via-rose-500 to-pink-500 text-white font-extrabold shadow-md hover:scale-105 transition cursor-pointer" title="Xem Phản Hồi Khách Hàng & CSAT">
+                                <i class="fa-solid fa-star text-yellow-300 animate-pulse"></i>
+                                <span class="leading-tight text-left">Feedback KH<br><span class="text-[10px] text-yellow-200 font-bold">CSAT Live</span></span>
                             </button>
+
+                            <!-- Primary Action 2: Chạy AI Pipeline -->
+                            <button onclick="runFullAiPipeline()" id="btnRunPipeline" class="btn-pink-pill px-4 py-2 text-xs flex items-center gap-2">
+                                <i class="fa-solid fa-bolt"></i>
+                                <span data-i18n="btn_run_pipeline" class="leading-tight text-left">Chạy AI<br class="hidden sm:inline"> Pipeline</span>
+                            </button>
+
+                            <!-- Secondary Action 3: Sinh Slide Auto-Pitch Deck (Ma Thuật) -->
+                            <button onclick="openMagicPitchDeckModal()" id="btnAutoPitchDeckHeader" class="btn-outline-clean px-3.5 py-1.5 text-xs flex items-center gap-2 hover:border-rose-400 cursor-pointer shadow-xs group" title="Nút Bấm Ma Thuật: Tự Động Sinh Slide Báo Cáo PowerPoint (Auto-Pitch Deck)">
+                                <i class="fa-solid fa-wand-magic-sparkles text-rose-500 group-hover:rotate-12 transition-transform duration-300"></i>
+                                <span class="leading-tight text-left font-bold text-slate-800 dark:text-slate-200 group-hover:text-rose-600 transition">Sinh Slide<br><span class="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold">Auto-Pitch Deck</span></span>
+                            </button>
+
+                            <!-- Direct Link: Xem Slide HTML Trình Chiếu -->
+                            <a href="/slides" target="_blank" id="btnOpenHtmlSlidesHeader" class="btn-outline-clean px-3 py-1.5 text-xs flex items-center gap-2 hover:border-rose-400 cursor-pointer shadow-xs group" title="Mở Slide HTML Trình Chiếu Toàn Màn Hình Trong Tab Mới">
+                                <i class="fa-solid fa-desktop text-rose-500 group-hover:scale-110 transition-transform duration-300"></i>
+                                <span class="leading-tight text-left font-bold text-slate-800 dark:text-slate-200 group-hover:text-rose-600 transition">Slide HTML<br><span class="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold">Trình Chiếu &rarr;</span></span>
+                            </a>
+
+                            <!-- User Profile Card: Nguyễn Bảo Ngọc -->
+                            <div class="flex items-center gap-2.5 pl-3 border-l border-pink-100 dark:border-slate-700">
+                                <img src="/static/avatar.jpg" alt="Nguyễn Bảo Ngọc" class="w-9 h-9 rounded-full object-cover border-2 border-rose-200 shadow-xs flex-shrink-0">
+                                <div class="hidden lg:block text-left leading-tight">
+                                    <p class="font-bold text-xs text-slate-800 dark:text-slate-200 truncate max-w-[130px]">Nguyễn Bảo Ngọc</p>
+                                    <p class="text-[10px] text-slate-400 font-medium">Bảo Ngọc Retail</p>
+                                </div>
+                                <button onclick="runFullAiPipeline()" title="Làm mới toàn bộ AI Pipeline" class="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-100/60 flex items-center justify-center transition">
+                                    <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Divider -->
@@ -5476,6 +5479,25 @@
             changeLanguage(savedLang, true);
         }
 
+        // Đồng bộ độ dài thanh tìm kiếm bằng chính xác cụm 'Feedback KH' đến 'Nguyễn Bảo Ngọc (Bảo Ngọc retail)'
+        function syncSearchInputWidth() {
+            const actionGroup = document.getElementById('headerActionsProfileGroup');
+            const searchWrapper = document.getElementById('topSearchWrapper');
+            const searchInput = document.getElementById('topSearchInput');
+            if (!actionGroup || !searchInput) return;
+            if (window.innerWidth >= 1024) {
+                const w = actionGroup.offsetWidth;
+                if (w > 250) {
+                    searchInput.style.width = w + 'px';
+                    if (searchWrapper) searchWrapper.style.width = w + 'px';
+                }
+            } else {
+                searchInput.style.width = '100%';
+                if (searchWrapper) searchWrapper.style.width = '100%';
+            }
+        }
+        window.addEventListener('resize', syncSearchInputWidth);
+
         // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {
             initTheme();
@@ -5484,6 +5506,8 @@
             switchTab('welcome');
             loadFeedbacks();
             updateGovernanceAlerts(null, null);
+            setTimeout(syncSearchInputWidth, 100);
+            setTimeout(syncSearchInputWidth, 500);
         });
     </script>
 
