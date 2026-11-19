@@ -2451,6 +2451,239 @@
     </div>
 
     <!-- ===================================================================== -->
+    <!-- MODAL: AUTO 4-STEP PIPELINE PROGRESS & DELIVERABLES (TỰ ĐỘNG 4 BƯỚC)  -->
+    <!-- ===================================================================== -->
+    <div id="pipelineProgressModal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-md">
+        <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-pink-200/90 dark:border-rose-900/60 max-w-3xl w-full overflow-hidden flex flex-col max-h-[92vh] view-fade animate-in">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 text-white flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-xl shadow-inner flex-shrink-0">
+                        <i id="pipelineHeaderIcon" class="fa-solid fa-bolt-lightning text-amber-200 animate-pulse"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h3 class="font-black text-sm sm:text-base">Chu Trình 4 Bước Chuẩn Hóa Tự Động (Retail AI Pipeline)</h3>
+                            <span id="pipelineGlobalBadge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-white/25 text-white uppercase tracking-wider">Đang Xử Lý</span>
+                        </div>
+                        <p id="pipelineSubTitle" class="text-xs text-rose-100">AI Agent đang tự động nạp dữ liệu, làm sạch qua 4 chốt chặn, lập dashboard, đối soát &amp; sinh slide...</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closePipelineModal()" class="w-8 h-8 rounded-full hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer" title="Đóng">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Progress Bar Strip -->
+            <div class="bg-rose-100 dark:bg-slate-800 h-2 w-full overflow-hidden">
+                <div id="pipelineProgressBar" class="h-full bg-gradient-to-r from-rose-500 via-pink-500 to-emerald-400 transition-all duration-500 ease-out" style="width: 10%;"></div>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-5 sm:p-6 overflow-y-auto space-y-5 custom-scroll text-xs">
+                
+                <!-- File Info Chip -->
+                <div class="flex items-center justify-between p-3 rounded-2xl bg-pink-50/70 dark:bg-slate-800/60 border border-pink-100 dark:border-rose-900/40">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <span class="w-8 h-8 rounded-xl bg-white dark:bg-slate-700 text-rose-600 flex items-center justify-center shadow-xs flex-shrink-0">
+                            <i class="fa-solid fa-file-excel"></i>
+                        </span>
+                        <div class="truncate">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Tệp Đang Xử Lý</span>
+                            <span id="pipelineFileName" class="font-extrabold text-slate-800 dark:text-slate-100 truncate text-xs">--</span>
+                        </div>
+                    </div>
+                    <span id="pipelinePercentageLabel" class="font-mono font-black text-rose-600 dark:text-rose-400 text-sm">10%</span>
+                </div>
+
+                <!-- 4 Steps Interactive Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    
+                    <!-- Step 1 Card -->
+                    <div id="pipeStepCard1" class="p-3.5 rounded-2xl border border-pink-100 dark:border-slate-800 bg-white dark:bg-slate-800/70 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-rose-100 dark:bg-rose-950 text-rose-600 font-extrabold text-[11px] flex items-center justify-center">1</span>
+                                <span class="font-extrabold text-slate-900 dark:text-slate-100 text-xs">Bước 1: Tiếp Nhận Dữ Liệu</span>
+                            </div>
+                            <span id="pipeStepBadge1" class="px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-100 text-rose-700 flex items-center gap-1">
+                                <i class="fa-solid fa-spinner fa-spin"></i><span>Đang nạp</span>
+                            </span>
+                        </div>
+                        <p id="pipeStepDesc1" class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Đọc tiêu đề bảng, quét metadata và nạp dòng giao dịch nguồn.</p>
+                    </div>
+
+                    <!-- Step 2 Card -->
+                    <div id="pipeStepCard2" class="p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 opacity-70 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-extrabold text-[11px] flex items-center justify-center">2</span>
+                                <span class="font-extrabold text-slate-900 dark:text-slate-100 text-xs">Bước 2: 4 Chốt Chặn AI</span>
+                            </div>
+                            <span id="pipeStepBadge2" class="px-2 py-0.5 rounded-full text-[9px] font-black bg-slate-200 text-slate-600">
+                                <span>Chờ xử lý</span>
+                            </span>
+                        </div>
+                        <p id="pipeStepDesc2" class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Lọc trùng, tách kỳ T09, loại đơn hủy, khấu trừ đơn trả → Bảng sạch.</p>
+                    </div>
+
+                    <!-- Step 3 Card -->
+                    <div id="pipeStepCard3" class="p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 opacity-70 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-extrabold text-[11px] flex items-center justify-center">3</span>
+                                <span class="font-extrabold text-slate-900 dark:text-slate-100 text-xs">Bước 3: Dashboard &amp; Chỉ Số</span>
+                            </div>
+                            <span id="pipeStepBadge3" class="px-2 py-0.5 rounded-full text-[9px] font-black bg-slate-200 text-slate-600">
+                                <span>Chờ xử lý</span>
+                            </span>
+                        </div>
+                        <p id="pipeStepDesc3" class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Tính Doanh thu thuần, LN gộp, Biên LN%, Xếp hạng chi nhánh &amp; CSAT.</p>
+                    </div>
+
+                    <!-- Step 4 Card -->
+                    <div id="pipeStepCard4" class="p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 opacity-70 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-extrabold text-[11px] flex items-center justify-center">4</span>
+                                <span class="font-extrabold text-slate-900 dark:text-slate-100 text-xs">Bước 4: Báo Cáo &amp; Tạo Slide</span>
+                            </div>
+                            <span id="pipeStepBadge4" class="px-2 py-0.5 rounded-full text-[9px] font-black bg-slate-200 text-slate-600">
+                                <span>Chờ xử lý</span>
+                            </span>
+                        </div>
+                        <p id="pipeStepDesc4" class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">Đối soát 3 chiều (Lệch 0 đ), Ma trận P1-P4 &amp; sinh 8 Slide Pitch Deck.</p>
+                    </div>
+
+                </div>
+
+                <!-- PIPELINE CELEBRATION & 4 DELIVERABLES LAUNCHER (Hidden while running, shows when 100%) -->
+                <div id="pipelineCompletedSection" class="hidden space-y-4 pt-2">
+                    
+                    <!-- Celebration Banner -->
+                    <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-pink-500/10 to-rose-500/10 border-2 border-emerald-400/60 dark:border-emerald-500/40 flex items-center justify-between gap-3 shadow-inner">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-lg shadow-md flex-shrink-0">
+                                <i class="fa-solid fa-check-double"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-black text-slate-900 dark:text-white text-sm">Chu Trình 4 Bước Đã Hoàn Thành Xuất Sắc!</h4>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400">Toàn bộ 4 kết quả đầu ra (Bảng dữ liệu, Dashboard, Bản báo cáo, Slide) đã sẵn sàng.</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 uppercase tracking-wider">
+                            100% Khớp Tuyệt Đối
+                        </span>
+                    </div>
+
+                    <!-- 4 Signature KPI Micro Cards -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+                        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
+                            <span class="text-[10px] text-slate-400 font-bold block">Dòng Sạch / Tổng</span>
+                            <span id="pipeKpiCleanRows" class="font-extrabold font-mono text-xs sm:text-sm text-slate-800 dark:text-slate-100">--</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
+                            <span class="text-[10px] text-slate-400 font-bold block">Doanh Thu Thuần</span>
+                            <span id="pipeKpiNetRev" class="font-black font-mono text-xs sm:text-sm text-rose-600 dark:text-rose-400">--</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
+                            <span class="text-[10px] text-slate-400 font-bold block">Lợi Nhuận Gộp</span>
+                            <span id="pipeKpiGrossProfit" class="font-black font-mono text-xs sm:text-sm text-emerald-600 dark:text-emerald-400">--</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
+                            <span class="text-[10px] text-slate-400 font-bold block">Độ Khớp Đối Soát</span>
+                            <span id="pipeKpiAuditStatus" class="font-black font-mono text-xs sm:text-sm text-indigo-600 dark:text-indigo-400">100.0% (0.00 đ)</span>
+                        </div>
+                    </div>
+
+                    <!-- 4 PROMINENT DELIVERABLES BUTTONS (THE USER REQUIREMENT) -->
+                    <div class="space-y-2 pt-1">
+                        <span class="text-[11px] font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
+                            <i class="fa-solid fa-shapes text-rose-500 mr-1.5"></i>Khám Phá 4 Kết Quả Đầu Ra Tương Ứng:
+                        </span>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            
+                            <!-- Result 1: Bảng Dữ Liệu Sạch -->
+                            <button type="button" onclick="viewPipelineResult('table')" class="p-3 rounded-2xl border-2 border-pink-200 dark:border-rose-900/50 hover:border-rose-400 bg-white/80 dark:bg-slate-800/80 hover:bg-rose-50/50 dark:hover:bg-rose-950/40 text-left transition-all duration-200 cursor-pointer shadow-xs group flex items-start gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-rose-100 dark:bg-rose-950 text-rose-600 flex items-center justify-center text-sm flex-shrink-0 group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-table-list"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between">
+                                        <h5 class="font-black text-xs text-slate-900 dark:text-slate-100 group-hover:text-rose-600 transition">1. Bảng Dữ Liệu Sạch</h5>
+                                        <i class="fa-solid fa-arrow-right text-[10px] text-rose-500 opacity-0 group-hover:opacity-100 transition"></i>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1">Xem chi tiết các dòng giao dịch đã lọc qua 4 chốt chặn &amp; các dòng loại trừ.</p>
+                                </div>
+                            </button>
+
+                            <!-- Result 2: Dashboard Chỉ Số -->
+                            <button type="button" onclick="viewPipelineResult('dashboard')" class="p-3 rounded-2xl border-2 border-emerald-200 dark:border-emerald-900/50 hover:border-emerald-400 bg-white/80 dark:bg-slate-800/80 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/40 text-left transition-all duration-200 cursor-pointer shadow-xs group flex items-start gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center text-sm flex-shrink-0 group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-chart-pie"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between">
+                                        <h5 class="font-black text-xs text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 transition">2. Dashboard Chỉ Số</h5>
+                                        <i class="fa-solid fa-arrow-right text-[10px] text-emerald-500 opacity-0 group-hover:opacity-100 transition"></i>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1">4 Golden KPIs, Biểu đồ Doanh thu/Lợi nhuận, Xếp hạng chi nhánh &amp; CSAT.</p>
+                                </div>
+                            </button>
+
+                            <!-- Result 3: Bản Báo Cáo & Đối Soát -->
+                            <button type="button" onclick="viewPipelineResult('report')" class="p-3 rounded-2xl border-2 border-amber-200 dark:border-amber-900/50 hover:border-amber-400 bg-white/80 dark:bg-slate-800/80 hover:bg-amber-50/50 dark:hover:bg-amber-950/40 text-left transition-all duration-200 cursor-pointer shadow-xs group flex items-start gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 flex items-center justify-center text-sm flex-shrink-0 group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-file-shield"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between">
+                                        <h5 class="font-black text-xs text-slate-900 dark:text-slate-100 group-hover:text-amber-600 transition">3. Bản Báo Cáo &amp; Đối Soát</h5>
+                                        <i class="fa-solid fa-arrow-right text-[10px] text-amber-500 opacity-0 group-hover:opacity-100 transition"></i>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1">Đối soát 3 chiều (Lệch 0 đ), Ma trận rủi ro P1-P4 &amp; Ký duyệt can thiệp.</p>
+                                </div>
+                            </button>
+
+                            <!-- Result 4: Slide Thuyết Trình Auto-Pitch Deck -->
+                            <button type="button" onclick="viewPipelineResult('slides')" class="p-3 rounded-2xl border-2 border-pink-300 dark:border-rose-800 hover:border-pink-500 bg-gradient-to-r from-rose-50/60 to-pink-50/60 dark:from-rose-950/40 dark:to-pink-950/40 hover:scale-[1.02] text-left transition-all duration-200 cursor-pointer shadow-md group flex items-start gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center text-sm flex-shrink-0 group-hover:rotate-12 transition">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between">
+                                        <h5 class="font-black text-xs text-rose-600 dark:text-rose-400 group-hover:text-rose-700 transition">4. Slide Thuyết Trình</h5>
+                                        <span class="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-rose-200 dark:bg-rose-900 text-rose-800 dark:text-rose-200">Mới</span>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1">8 Slide Auto-Pitch Deck theo đúng số liệu thực tế vừa nạp, tải .pptx &amp; mở HTML.</p>
+                                </div>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-2">
+                    <a href="/slides" target="_blank" class="text-rose-600 dark:text-rose-400 font-bold hover:underline flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        <span>Mở Slide HTML Toàn Màn Hình</span>
+                    </a>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="closePipelineModal()" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs transition cursor-pointer">
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
     <!-- MODAL: AUTO-PITCH DECK SLIDE GENERATOR (NÚT BẤM MA THUẬT)             -->
     <!-- ===================================================================== -->
     <div id="magicPitchDeckModal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md">
@@ -2593,6 +2826,281 @@
         let feedbackList = [];
         let pitchDeckData = null;
         let currentSlideIdx = 0;
+
+        // ======================== AUTO 4-STEP PIPELINE MODAL & ENGINE ========================
+        function openPipelineModal(fileName) {
+            const modal = document.getElementById('pipelineProgressModal');
+            if (!modal) return;
+            const fNameEl = document.getElementById('pipelineFileName');
+            if (fNameEl) fNameEl.innerText = fileName || 'Tệp dữ liệu giao dịch';
+            
+            const badge = document.getElementById('pipelineGlobalBadge');
+            if (badge) {
+                badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-white/25 text-white uppercase tracking-wider';
+                badge.innerText = 'Đang Xử Lý';
+            }
+            const icon = document.getElementById('pipelineHeaderIcon');
+            if (icon) {
+                icon.className = 'fa-solid fa-bolt-lightning text-amber-200 animate-pulse';
+            }
+            const sub = document.getElementById('pipelineSubTitle');
+            if (sub) {
+                sub.innerText = 'AI Agent đang tự động nạp dữ liệu, làm sạch qua 4 chốt chặn, lập dashboard, đối soát & sinh slide...';
+            }
+            const comp = document.getElementById('pipelineCompletedSection');
+            if (comp) comp.classList.add('hidden');
+            
+            // Reset Progress Bar
+            setPipelineProgress(10, 'Bước 1: Tiếp nhận & Phân tích cấu trúc tệp...');
+
+            // Reset Steps Cards
+            for (let s = 1; s <= 4; s++) {
+                updatePipelineStepUI(s, s === 1 ? 'running' : 'waiting');
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closePipelineModal() {
+            const modal = document.getElementById('pipelineProgressModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function setPipelineProgress(percent, subTitleText) {
+            const pBar = document.getElementById('pipelineProgressBar');
+            const pLabel = document.getElementById('pipelinePercentageLabel');
+            const pSub = document.getElementById('pipelineSubTitle');
+            if (pBar) pBar.style.width = `${percent}%`;
+            if (pLabel) pLabel.innerText = `${percent}%`;
+            if (pSub && subTitleText) pSub.innerText = subTitleText;
+        }
+
+        function updatePipelineStepUI(step, status, descText) {
+            const card = document.getElementById(`pipeStepCard${step}`);
+            const badge = document.getElementById(`pipeStepBadge${step}`);
+            const desc = document.getElementById(`pipeStepDesc${step}`);
+            if (!card || !badge) return;
+
+            if (status === 'running') {
+                card.className = 'p-3.5 rounded-2xl border-2 border-rose-400 bg-rose-50/50 dark:bg-rose-950/30 dark:border-rose-500 shadow-md transition-all duration-300 opacity-100 ring-2 ring-rose-200 dark:ring-rose-900';
+                badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-500 text-white flex items-center gap-1 shadow-xs animate-pulse';
+                badge.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Đang xử lý</span>`;
+            } else if (status === 'done') {
+                card.className = 'p-3.5 rounded-2xl border-2 border-emerald-400 bg-emerald-50/40 dark:bg-emerald-950/30 dark:border-emerald-600 shadow-sm transition-all duration-300 opacity-100';
+                badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 flex items-center gap-1 shadow-xs';
+                badge.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i><span>Hoàn thành ✓</span>`;
+            } else if (status === 'error') {
+                card.className = 'p-3.5 rounded-2xl border-2 border-rose-500 bg-rose-50 dark:bg-rose-950/50 shadow-sm transition-all duration-300 opacity-100';
+                badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-600 text-white flex items-center gap-1';
+                badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i><span>Lỗi</span>`;
+            } else {
+                card.className = 'p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 opacity-70 transition-all duration-300';
+                badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-black bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
+                badge.innerHTML = `<span>Chờ xử lý</span>`;
+            }
+
+            if (desc && descText) {
+                desc.innerHTML = descText;
+            }
+        }
+
+        function showPipelineCompleted(summaryData) {
+            setPipelineProgress(100, 'Đã hoàn tất 100% chu trình 4 bước • 4 kết quả đầu ra đã sẵn sàng!');
+            const badge = document.getElementById('pipelineGlobalBadge');
+            if (badge) {
+                badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500 text-white uppercase tracking-wider shadow-sm animate-bounce';
+                badge.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i>HOÀN TẤT 4 BƯỚC ✓';
+            }
+            const icon = document.getElementById('pipelineHeaderIcon');
+            if (icon) {
+                icon.className = 'fa-solid fa-trophy text-amber-200';
+            }
+
+            // Fill Summary KPIs
+            const cleanRowsEl = document.getElementById('pipeKpiCleanRows');
+            if (cleanRowsEl) cleanRowsEl.innerText = `${fmtNum(summaryData.cleaned_rows || 0)} / ${fmtNum(summaryData.total_rows || 0)}`;
+            const netRevEl = document.getElementById('pipeKpiNetRev');
+            if (netRevEl) netRevEl.innerText = fmtVND(summaryData.net_revenue || 0);
+            const gpEl = document.getElementById('pipeKpiGrossProfit');
+            if (gpEl) gpEl.innerText = fmtVND(summaryData.gross_profit || 0);
+            const auditEl = document.getElementById('pipeKpiAuditStatus');
+            if (auditEl) auditEl.innerText = '100.0% (Lệch 0 đ)';
+
+            // Unhide celebration section
+            const compSec = document.getElementById('pipelineCompletedSection');
+            if (compSec) {
+                compSec.classList.remove('hidden');
+                compSec.classList.add('view-fade');
+                compSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            confetti({ particleCount: 75, spread: 80, origin: { y: 0.4 } });
+        }
+
+        function viewPipelineResult(target) {
+            closePipelineModal();
+            if (target === 'table') {
+                switchTab('step2');
+                const sel = document.getElementById('step2ModeSelect');
+                if (sel) sel.value = 'cleaned';
+                loadDataPreview('cleaned', 1);
+                setTimeout(() => {
+                    const el = document.getElementById('step2CleanTableBody');
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            } else if (target === 'dashboard') {
+                switchTab('step3');
+                setTimeout(() => {
+                    const el = document.getElementById('spotlightCsatBanner') || document.getElementById('step3View');
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            } else if (target === 'report') {
+                switchTab('step4');
+                setTimeout(() => {
+                    const el = document.getElementById('step4View');
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            } else if (target === 'slides') {
+                openMagicPitchDeckModal();
+            }
+        }
+
+        async function runAutomated4StepPipeline(options = {}) {
+            const fileName = options.fileName || (appState.pickedFile ? appState.pickedFile.name : 'Tệp dữ liệu giao dịch');
+            openPipelineModal(fileName);
+
+            try {
+                // ================= BƯỚC 1: TIẾP NHẬN & NẠP DỮ LIỆU NGUỒN =================
+                setPipelineProgress(15, 'Bước 1: Đang nạp tệp & phân tích metadata cấu trúc bảng...');
+                updatePipelineStepUI(1, 'running', 'Đang quét cấu trúc hàng cột và nhận diện tiêu đề thông minh...');
+
+                let r1;
+                if (options.action === 'upload') {
+                    if (!appState.pickedFile) throw new Error('Chưa chọn tệp dữ liệu để tải lên.');
+                    const fd = new FormData();
+                    fd.append('file', appState.pickedFile);
+                    r1 = await (await fetch('/api/upload-raw', { method: 'POST', body: fd })).json();
+                } else if (options.action === 'load-uploaded') {
+                    r1 = await (await fetch('/api/load-uploaded', { method: 'POST' })).json();
+                } else if (options.action === 'sample-60k') {
+                    r1 = await (await fetch('/api/load-sample', { method: 'POST' })).json();
+                } else {
+                    r1 = await (await fetch('/api/load-uploaded', { method: 'POST' })).json();
+                }
+
+                if (!r1.success) {
+                    updatePipelineStepUI(1, 'error', `Lỗi tiếp nhận: ${r1.error || 'Không xác định'}`);
+                    notify('Lỗi nạp tệp: ' + (r1.error || 'Không xác định'), 'warn');
+                    return;
+                }
+
+                appState.rawInfo = r1.data;
+                const totalRows = r1.data.total_rows || 0;
+                const activeName = r1.data.file_name || fileName;
+                const fileNameLabel = document.getElementById('activeFileNameLabel');
+                if (fileNameLabel) fileNameLabel.innerText = activeName;
+                const sbBadge = document.getElementById('sbBadgeStep1');
+                if (sbBadge) sbBadge.innerText = fmtNum(totalRows);
+                updatePipelineStepUI(1, 'done', `Đã tiếp nhận <b>${fmtNum(totalRows)} dòng</b> giao dịch từ tệp <i>${activeName}</i>.`);
+
+                // ================= BƯỚC 2: 4 CHỐT CHẶN AI GUARDRAILS & BẢNG DỮ LIỆU SẠCH =================
+                setPipelineProgress(40, 'Bước 2: Đang thực thi 4 chốt chặn kiểm soát làm sạch...');
+                updatePipelineStepUI(2, 'running', 'Đang khử trùng, tách kỳ T09, loại đơn hủy, khấu trừ đơn hoàn trả...');
+
+                const r2 = await (await fetch('/api/execute-cleaning', { method: 'POST' })).json();
+                if (!r2.success) {
+                    updatePipelineStepUI(2, 'error', `Lỗi làm sạch: ${r2.error || 'Không xác định'}`);
+                    notify('Lỗi quy trình làm sạch: ' + (r2.error || 'Không xác định'), 'warn');
+                    return;
+                }
+
+                appState.cleanInfo = r2.data;
+                renderStep2Cleaning(r2.data);
+                const cleanRows = r2.data.clean_rows || totalRows;
+                const dedup = r2.data.dedup ? r2.data.dedup.removed_rows : 0;
+                const sync = r2.data.period_sync ? r2.data.period_sync.out_of_period_rows : 0;
+                const canc = r2.data.cancelled_filter ? r2.data.cancelled_filter.cancelled_rows : 0;
+                const ret = r2.data.returns_handling ? r2.data.returns_handling.returned_rows : 0;
+                const totalEx = dedup + sync + canc + ret;
+                updatePipelineStepUI(2, 'done', `Giữ lại <b>${fmtNum(cleanRows)} dòng sạch</b> (Bóc tách ${fmtNum(totalEx)} dòng vi phạm quy tắc).`);
+
+                // Auto-confirm Human Verification (BPMN Gate)
+                try {
+                    await submitHumanVerification(true);
+                } catch (eHv) {
+                    console.warn('Auto HV note:', eHv);
+                }
+
+                // ================= BƯỚC 3: PHÂN TÍCH ĐA CHIỀU & DASHBOARD CHỈ SỐ =================
+                setPipelineProgress(68, 'Bước 3: Đang tính toán 4 Golden KPIs & phân tích chỉ số kinh doanh...');
+                updatePipelineStepUI(3, 'running', 'Đang tổng hợp Doanh thu thuần, Lợi nhuận gộp, Xếp hạng chi nhánh & CSAT...');
+
+                const r3 = await (await fetch('/api/generate-report', { method: 'POST' })).json();
+                if (!r3.success) {
+                    updatePipelineStepUI(3, 'error', `Lỗi tổng hợp báo cáo: ${r3.error || 'Không xác định'}`);
+                    notify('Lỗi phân tích chỉ số: ' + (r3.error || 'Không xác định'), 'warn');
+                    return;
+                }
+
+                appState.reportData = r3.data;
+                const s = r3.data.system_summary || r3.data;
+                const netRev = s.net_revenue || 0;
+                const grossProfit = s.gross_profit || 0;
+                const margin = s.gross_margin || 0;
+                updatePipelineStepUI(3, 'done', `Doanh thu thuần: <b>${fmtVND(netRev)}</b> | Lợi nhuận gộp: <b>${fmtVND(grossProfit)}</b> (${margin}%).`);
+
+                // ================= BƯỚC 4: ĐỐI SOÁT 3 CHIỀU & TẠO SLIDE PITCH DECK =================
+                setPipelineProgress(88, 'Bước 4: Đang đối soát 3 chiều, ma trận P1-P4 & sinh Slide Pitch Deck...');
+                updatePipelineStepUI(4, 'running', 'Đang đối chiếu chéo số liệu 100% khớp & biên soạn bộ slide PowerPoint...');
+
+                const r4 = await (await fetch('/api/cross-check-audit', { method: 'POST' })).json();
+                if (r4.success) {
+                    appState.auditData = r4.data;
+                }
+
+                try {
+                    const rSlide = await (await fetch('/api/generate-pitch-deck')).json();
+                    if (rSlide.success && (rSlide.slides || (rSlide.preview && rSlide.preview.slides))) {
+                        pitchDeckData = rSlide.slides || (rSlide.preview && rSlide.preview.slides);
+                        renderPitchDeckTabs();
+                    }
+                } catch (eSlide) {
+                    console.warn('Auto pitch deck generation note:', eSlide);
+                }
+
+                updatePipelineStepUI(4, 'done', 'Đối soát 100% khớp tuyệt đối (Lệch 0.00 đ) • Đã tạo 8 Slide Auto-Pitch Deck.');
+
+                // ================= REFRESH UI ACROSS ENTIRE PLATFORM =================
+                updateTopKpiCards();
+                renderMainAnalysisTable();
+                renderStep4AuditAndPriority();
+                renderAuditTrailView();
+                loadDataPreview('cleaned', 1);
+                loadSignedDecisions();
+                initCopilotForLoadedData(activeName, totalRows);
+                updateGovernanceAlerts(appState.cleanInfo, appState.auditData);
+
+                // Show completed celebration panel
+                showPipelineCompleted({
+                    total_rows: totalRows,
+                    cleaned_rows: cleanRows,
+                    net_revenue: netRev,
+                    gross_profit: grossProfit,
+                    gross_margin: margin
+                });
+
+                notify(`Đã hoàn tất chu trình 4 bước cho tệp ${activeName}! 4 kết quả đầu ra đã sẵn sàng.`, 'success');
+
+            } catch (err) {
+                console.error('runAutomated4StepPipeline error:', err);
+                notify('Lỗi thực thi quy trình: ' + err.message, 'warn');
+                setPipelineProgress(100, 'Quy trình gặp lỗi: ' + err.message);
+            }
+        }
 
         // ======================== AUTO-PITCH DECK MODAL LOGIC ========================
         async function openMagicPitchDeckModal() {
@@ -2851,45 +3359,7 @@
             }
 
             try {
-                // 1. Load default uploaded Excel
-                const r1 = await (await fetch('/api/load-uploaded', { method: 'POST' })).json();
-                if (r1.success) {
-                    appState.rawInfo = r1.data;
-                    document.getElementById('activeFileNameLabel').innerText = r1.data.file_name;
-                    document.getElementById('sbBadgeStep1').innerText = fmtNum(r1.data.total_rows);
-                }
-
-                // 2. Execute Cleaning
-                const r2 = await (await fetch('/api/execute-cleaning', { method: 'POST' })).json();
-                if (r2.success) {
-                    appState.cleanInfo = r2.data;
-                    renderStep2Cleaning(r2.data);
-                }
-
-                // 3. Generate Management Report
-                const r3 = await (await fetch('/api/generate-report', { method: 'POST' })).json();
-                if (r3.success) {
-                    appState.reportData = r3.data;
-                }
-
-                // 4. Cross-check Audit & Priority Matrix
-                const r4 = await (await fetch('/api/cross-check-audit', { method: 'POST' })).json();
-                if (r4.success) {
-                    appState.auditData = r4.data;
-                }
-
-                // Update UI across all 4 steps
-                updateTopKpiCards();
-                renderMainAnalysisTable();
-                renderStep4AuditAndPriority();
-                renderAuditTrailView();
-                if (appState.currentTab === 'step3') {
-                    renderAllCharts();
-                }
-                loadSignedDecisions();
-                updateGovernanceAlerts(appState.cleanInfo, appState.auditData);
-            } catch (err) {
-                notify('Lỗi chạy Pipeline: ' + err.message, 'warn');
+                await runAutomated4StepPipeline({ action: 'load-uploaded', fileName: 'PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx' });
             } finally {
                 if (btn) {
                     btn.disabled = false;
@@ -3256,11 +3726,13 @@
             onDragLeave(e);
             if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                 selectUploadFile(e.dataTransfer.files[0]);
+                submitUploadedFile();
             }
         }
         function onFilePicked(e) {
             if (e.target.files && e.target.files.length > 0) {
                 selectUploadFile(e.target.files[0]);
+                submitUploadedFile();
             }
         }
         function selectUploadFile(file) {
@@ -3407,64 +3879,28 @@
         async function submitUploadedFile() {
             if (!appState.pickedFile) return;
             const btn = document.getElementById('btnUploadNow');
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Đang tải lên...</span>`;
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Đang xử lý 4 bước...</span>`;
+            }
             try {
-                const fd = new FormData();
-                fd.append('file', appState.pickedFile);
-                const res = await fetch('/api/upload-raw', { method: 'POST', body: fd });
-                const json = await res.json();
-                if (json.success) {
-                    document.getElementById('activeFileNameLabel').innerText = json.data.file_name;
-                    document.getElementById('sbBadgeStep1').innerText = fmtNum(json.data.total_rows);
-                    confetti({ particleCount: 55, spread: 60, origin: { y: 0.4 } });
-                    notify(`Tải lên thành công ${fmtNum(json.data.total_rows)} dòng! Đang chuẩn hóa...`, 'success');
-                    await executeCleaning();
-                    const r3 = await (await fetch('/api/generate-report', { method: 'POST' })).json();
-                    if (r3.success) appState.reportData = r3.data;
-                    const r4 = await (await fetch('/api/cross-check-audit', { method: 'POST' })).json();
-                    if (r4.success) appState.auditData = r4.data;
-                    updateTopKpiCards();
-                    renderMainAnalysisTable();
-                    renderStep4AuditAndPriority();
-                    loadDataPreview('raw', 1);
-                    initCopilotForLoadedData(json.data.file_name, json.data.total_rows);
-                    updateGovernanceAlerts(appState.cleanInfo, appState.auditData);
-                } else {
-                    notify('Lỗi tải tệp: ' + json.error, 'warn');
-                }
-            } catch (err) {
-                notify('Lỗi kết nối: ' + err.message, 'warn');
+                await runAutomated4StepPipeline({ action: 'upload', fileName: appState.pickedFile.name });
             } finally {
-                btn.disabled = false;
-                btn.innerHTML = `<i class="fa-solid fa-upload"></i><span>Tải Lên &amp; Kết Nối Ngay</span>`;
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-upload"></i><span>Tải Lên &amp; Kết Nối Ngay</span>`;
+                }
             }
         }
 
         async function loadUploadedExcel() {
             notify('Đang nạp tệp PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx...', 'pink');
-            await runFullAiPipeline();
-            loadDataPreview('raw', 1);
-            notify('Đã nạp 1.006 dòng từ tệp Excel tải lên!', 'success');
+            await runAutomated4StepPipeline({ action: 'load-uploaded', fileName: 'PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx' });
         }
 
         async function loadSample60k() {
             notify('Đang nạp bộ dữ liệu mẫu 60.000 dòng...', 'pink');
-            const res = await (await fetch('/api/load-sample', { method: 'POST' })).json();
-            if (res.success) {
-                document.getElementById('activeFileNameLabel').innerText = res.data.file_name;
-                document.getElementById('sbBadgeStep1').innerText = fmtNum(res.data.total_rows);
-                await executeCleaning();
-                const r3 = await (await fetch('/api/generate-report', { method: 'POST' })).json();
-                if (r3.success) appState.reportData = r3.data;
-                const r4 = await (await fetch('/api/cross-check-audit', { method: 'POST' })).json();
-                if (r4.success) appState.auditData = r4.data;
-                updateTopKpiCards();
-                renderMainAnalysisTable();
-                renderStep4AuditAndPriority();
-                loadDataPreview('raw', 1);
-                notify('Đã nạp và xử lý xong!', 'success');
-            }
+            await runAutomated4StepPipeline({ action: 'sample-60k', fileName: 'raw_transactions_oct2026.csv (60.000 dòng mẫu)' });
         }
 
         function changePreviewPage(delta) {

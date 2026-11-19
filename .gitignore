@@ -13,5 +13,9 @@ ENV/
 .DS_Store
 scripts/
 *.pptx
+data/
+app/data/uploaded_raw.*
+app/data/cleaned_transactions_oct2026.csv
+app/data/slides.html
 
 
