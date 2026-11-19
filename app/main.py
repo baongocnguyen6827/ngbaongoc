@@ -47,7 +47,8 @@ def get_system_state():
         "verification_info": engine.human_verification,
         "report_done": report_done,
         "audit_done": audit_done,
-        "decisions_count": len(engine.executive_decisions)
+        "decisions_count": len(engine.executive_decisions),
+        "cleaning_audit_log": getattr(engine, "cleaning_audit_log", None)
     })
 
 @app.route("/api/load-sample", methods=["GET", "POST"])
