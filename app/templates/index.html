@@ -1388,11 +1388,11 @@
 
                     <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
                         <span class="text-[11px] text-slate-400">
-                            <i class="fa-solid fa-circle-info text-rose-400 mr-1"></i>Ngay sau khi tải tệp lên, AI Agent sẽ tự động đọc cấu trúc và chuẩn bị dữ liệu cho Bước 2.
+                            <i class="fa-solid fa-circle-info text-rose-400 mr-1"></i>Sau khi chọn tệp, nhấp vào nút bên cạnh hoặc nút <b>Chạy AI Pipeline</b> ở thanh tiêu đề để bắt đầu.
                         </span>
-                        <button type="button" id="btnUploadNow" onclick="submitUploadedFile()" disabled class="btn-pink-pill px-5 py-2.5 text-xs flex items-center gap-2 opacity-50 cursor-not-allowed">
-                            <i class="fa-solid fa-upload"></i>
-                            <span>Tải Lên &amp; Kết Nối Ngay</span>
+                        <button type="button" id="btnUploadNow" onclick="submitUploadedFile()" disabled class="btn-pink-pill px-5 py-2.5 text-xs flex items-center gap-2 opacity-50 cursor-not-allowed transition hover:scale-105">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Tải Lên &amp; Khởi Chạy Pipeline</span>
                         </button>
                     </div>
                 </div>
@@ -3761,13 +3761,11 @@
             onDragLeave(e);
             if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                 selectUploadFile(e.dataTransfer.files[0]);
-                submitUploadedFile();
             }
         }
         function onFilePicked(e) {
             if (e.target.files && e.target.files.length > 0) {
                 selectUploadFile(e.target.files[0]);
-                submitUploadedFile();
             }
         }
         function selectUploadFile(file) {
@@ -3793,7 +3791,7 @@
             const btn = document.getElementById('btnUploadNow');
             btn.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            notify(`Đã tiếp nhận tệp: ${file.name}. Bấm "Tải Lên & Kết Nối Ngay" để phân tích!`, 'pink');
+            notify(`Đã chọn tệp: ${file.name}. Bấm "Tải Lên & Kết Nối Ngay" để khởi chạy AI Pipeline!`, 'green');
         }
         function clearPickedFile(e) {
             if (e) e.stopPropagation();
@@ -3843,10 +3841,13 @@
                 processHeroPickedFile(e.target.files[0]);
             }
         }
-        async function processHeroPickedFile(file) {
+        function processHeroPickedFile(file) {
             selectUploadFile(file);
             switchTab('step1');
-            await submitUploadedFile();
+            const btn = document.getElementById('btnUploadNow');
+            if (btn) {
+                btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
 
         // ======================== GOVERNANCE & RISK ALERTS ========================
@@ -3944,7 +3945,7 @@
             } finally {
                 if (btn) {
                     btn.disabled = false;
-                    btn.innerHTML = `<i class="fa-solid fa-upload"></i><span>Tải Lên &amp; Kết Nối Ngay</span>`;
+                    btn.innerHTML = `<i class="fa-solid fa-play"></i><span>Tải Lên &amp; Khởi Chạy Pipeline</span>`;
                 }
             }
         }
