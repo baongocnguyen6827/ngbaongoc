@@ -155,25 +155,21 @@
             box-shadow: 0 20px 48px -10px rgba(244, 63, 110, 0.25), inset 0 1px 2px 0 rgba(255, 255, 255, 0.15) !important;
         }
 
-        /* GOVERNANCE ALERTS MENU & TOASTS - 100% OPAQUE SOLID (TUYỆT ĐỐI KHÔNG TRONG SUỐT) */
-        #governanceAlertMenu,
-        #governanceAlertMenu *,
-        #toastContainer > div {
-            opacity: 1 !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-        }
+        /* GOVERNANCE ALERTS MENU & TOASTS - LUXURY CRYSTAL GLASSMORPHISM (TRONG SUỐT VỚI BACKDROP-BLUR) */
         #governanceAlertMenu {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.45) !important;
-            border: 2px solid #fda4af !important;
+            background: rgba(255, 255, 255, 0.82) !important;
+            backdrop-filter: blur(28px) saturate(210%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(210%) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+            box-shadow: 0 25px 60px -12px rgba(244, 63, 110, 0.25), inset 0 1px 2px 0 rgba(255, 255, 255, 0.95) !important;
             z-index: 99999 !important;
         }
         body.dark #governanceAlertMenu {
-            background: #0f172a !important;
-            background-color: #0f172a !important;
-            border-color: #475569 !important;
+            background: rgba(15, 23, 42, 0.82) !important;
+            backdrop-filter: blur(28px) saturate(210%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(210%) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+            box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.60), inset 0 1px 2px 0 rgba(255, 255, 255, 0.10) !important;
         }
 
         /* NAVIGATION STEPPER TABS - CRYSTAL GLASS PILLS */
@@ -528,9 +524,9 @@
     <div class="flex-1 flex flex-col min-h-screen w-full relative z-10">
 
         <!-- TOP STICKY NAVIGATION WRAPPER (Header + Stepper Nav Stay Together Without Overlap) -->
-        <div class="sticky top-0 z-30 flex flex-col">
+        <div class="sticky top-0 z-40 flex flex-col">
             <!-- 1. TOP HEADER BAR: Brand, Search, Date, Status, Theme, Pipeline & User Profile -->
-            <header class="bg-white/20 dark:bg-slate-900/25 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 px-4 sm:px-7 py-2.5 transition-colors shadow-xs">
+            <header class="relative z-50 bg-white/20 dark:bg-slate-900/25 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 px-4 sm:px-7 py-2.5 transition-colors shadow-xs">
             <div class="max-w-[1700px] mx-auto flex flex-wrap items-center justify-between gap-4">
                 
                 <!-- Left: Brand Logo & Title -->
@@ -570,10 +566,10 @@
                                 <span id="governanceAlertBadge" class="hidden absolute -top-1.5 -right-1.5 min-w-[19px] h-[19px] px-1 rounded-full bg-rose-600 text-white text-[10px] font-black flex items-center justify-center shadow-md border-2 border-white dark:border-slate-900 animate-pulse">0</span>
                             </button>
 
-                            <!-- Governance Alert Dropdown (100% OPAQUE SOLID BACKGROUND - TUYỆT ĐỐI KHÔNG TRONG SUỐT) -->
-                            <div id="governanceAlertMenu" class="hidden absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-3xl p-4 shadow-2xl border-2 border-rose-300 dark:border-slate-700 z-[99999] space-y-3" style="background-color: #ffffff !important; background: #ffffff !important; opacity: 1 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.45) !important;">
+                            <!-- Governance Alert Dropdown (Màu trong suốt - Luxury Crystal Glassmorphism) -->
+                            <div id="governanceAlertMenu" class="hidden absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-3xl p-4 shadow-2xl border-2 border-white/80 dark:border-white/15 z-[99999] space-y-3 backdrop-blur-2xl">
                                 <!-- Header with Close (X) button -->
-                                <div class="flex items-center justify-between border-b border-pink-100 dark:border-slate-700 pb-3" style="background: transparent !important;">
+                                <div class="flex items-center justify-between border-b border-pink-100/80 dark:border-slate-700/80 pb-3" style="background: transparent !important;">
                                     <div class="flex items-center gap-2.5">
                                         <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-xs">
                                             <i class="fa-solid fa-shield-halved"></i>
@@ -594,7 +590,7 @@
                                 <!-- List of Anomaly Cards -->
                                 <div id="governanceAlertList" class="space-y-2 max-h-80 overflow-y-auto custom-scroll text-xs">
                                     <!-- Card 1: Duplicates -->
-                                    <div id="govAlertDupCard" onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="hidden p-3 rounded-2xl border border-rose-200 dark:border-slate-700 hover:border-rose-400 transition cursor-pointer flex items-start gap-3 group" style="background-color: #fff1f2 !important; background: #fff1f2 !important; opacity: 1 !important;">
+                                    <div id="govAlertDupCard" onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="hidden p-3 rounded-2xl border border-rose-200/80 dark:border-rose-900/60 bg-rose-50/70 dark:bg-rose-950/40 hover:border-rose-400 transition cursor-pointer flex items-start gap-3 group backdrop-blur-md">
                                         <div class="w-7 h-7 rounded-lg bg-rose-100 dark:bg-rose-950 text-rose-600 flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition">
                                             <i class="fa-solid fa-clone"></i>
                                         </div>
@@ -608,7 +604,7 @@
                                     </div>
 
                                     <!-- Card 2: Cancellations & Returns -->
-                                    <div id="govAlertCancelCard" onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="hidden p-3 rounded-2xl border border-amber-200 dark:border-slate-700 hover:border-amber-400 transition cursor-pointer flex items-start gap-3 group" style="background-color: #fef3c7 !important; background: #fef3c7 !important; opacity: 1 !important;">
+                                    <div id="govAlertCancelCard" onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="hidden p-3 rounded-2xl border border-amber-200/80 dark:border-amber-900/60 bg-amber-50/70 dark:bg-amber-950/40 hover:border-amber-400 transition cursor-pointer flex items-start gap-3 group backdrop-blur-md">
                                         <div class="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-600 flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition">
                                             <i class="fa-solid fa-ban"></i>
                                         </div>
@@ -622,7 +618,7 @@
                                     </div>
 
                                     <!-- Card 3: Priority Stores at Risk -->
-                                    <div id="govAlertStoreRiskCard" onclick="switchTab('step4'); toggleGovernanceAlertMenu();" class="hidden p-3 rounded-2xl border border-purple-200 dark:border-slate-700 hover:border-purple-400 transition cursor-pointer flex items-start gap-3 group" style="background-color: #f3e8ff !important; background: #f3e8ff !important; opacity: 1 !important;">
+                                    <div id="govAlertStoreRiskCard" onclick="switchTab('step4'); toggleGovernanceAlertMenu();" class="hidden p-3 rounded-2xl border border-purple-200/80 dark:border-purple-900/60 bg-purple-50/70 dark:bg-purple-950/40 hover:border-purple-400 transition cursor-pointer flex items-start gap-3 group backdrop-blur-md">
                                         <div class="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-950 text-purple-600 flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                         </div>
@@ -635,8 +631,8 @@
                                         </div>
                                     </div>
 
-                                    <!-- Clean Empty State when 0 alerts (Solid Opaque Pearl White) -->
-                                    <div id="govAlertEmptyNotice" class="py-6 px-4 text-center text-slate-500 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700" style="background-color: #f8fafc !important; background: #f8fafc !important; opacity: 1 !important;">
+                                    <!-- Clean Empty State when 0 alerts (Frosted Glass Transparent Card) -->
+                                    <div id="govAlertEmptyNotice" class="py-6 px-4 text-center text-slate-500 rounded-2xl border border-dashed border-slate-300/80 dark:border-slate-700/80 bg-white/60 dark:bg-slate-900/40 backdrop-blur-md">
                                         <i class="fa-solid fa-circle-check text-emerald-500 text-2xl mb-1.5 block animate-bounce"></i>
                                         <p class="font-bold text-xs text-slate-800 dark:text-slate-100">Không có rủi ro nào</p>
                                         <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Hệ thống đang hoạt động an toàn và ổn định tuyệt đối.</p>
@@ -644,8 +640,8 @@
                                 </div>
 
                                 <!-- Footer Actions -->
-                                <div class="pt-2 border-t border-pink-100 dark:border-slate-700 flex items-center justify-between gap-2" style="background: transparent !important;">
-                                    <button onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="flex-1 py-2 px-3 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-800 hover:text-rose-600 font-bold text-[11px] transition text-center cursor-pointer border border-slate-200">
+                                <div class="pt-2 border-t border-pink-100/80 dark:border-slate-700/80 flex items-center justify-between gap-2" style="background: transparent !important;">
+                                    <button onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="flex-1 py-2 px-3 rounded-xl bg-white/70 dark:bg-slate-800/70 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 hover:text-rose-600 font-bold text-[11px] transition text-center cursor-pointer border border-slate-200 dark:border-slate-700">
                                         Đối Soát Bước 2
                                     </button>
                                     <button onclick="switchTab('step4'); toggleGovernanceAlertMenu();" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-[11px] transition shadow-xs text-center hover:opacity-90 cursor-pointer">
@@ -781,7 +777,7 @@
         </header>
 
         <!-- 2. HORIZONTAL WORKFLOW STEPPER BAR (ĐẦU MỤC NẰM THEO HÀNG NGANG Ở TRÊN CÙNG) -->
-        <nav id="horizontalNavBar" class="bg-white/18 dark:bg-slate-900/22 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 shadow-xs transition-colors">
+        <nav id="horizontalNavBar" class="relative z-20 bg-white/18 dark:bg-slate-900/22 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 shadow-xs transition-colors">
             <div class="max-w-[1700px] mx-auto px-4 sm:px-7 py-2.5">
                 <div class="flex items-center justify-between gap-3 overflow-x-auto custom-scroll pb-1">
                     
