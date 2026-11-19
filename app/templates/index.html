@@ -544,14 +544,14 @@
 
                         <!-- Governance & Audit Risk Alert Bell Icon -->
                         <div class="relative flex-shrink-0" id="governanceAlertContainer">
-                            <button id="governanceAlertBtn" onclick="toggleGovernanceAlertMenu(event)" class="relative w-9 h-9 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white/60 dark:bg-slate-800/60 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 flex items-center justify-center transition shadow-xs cursor-pointer group" title="Cảnh Báo Quản Trị & Đối Soát (Governance Alerts)">
+                            <button id="governanceAlertBtn" onclick="toggleGovernanceAlertMenu(event)" class="relative w-9 h-9 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 flex items-center justify-center transition shadow-xs cursor-pointer group" title="Cảnh Báo Quản Trị & Đối Soát (Governance Alerts)">
                                 <i class="fa-solid fa-bell text-sm transition group-hover:rotate-12"></i>
                                 <span id="governanceAlertBadge" class="hidden absolute -top-1.5 -right-1.5 min-w-[19px] h-[19px] px-1 rounded-full bg-rose-600 text-white text-[10px] font-black flex items-center justify-center shadow-md border-2 border-white dark:border-slate-900 animate-pulse">0</span>
                             </button>
 
-                            <!-- Governance Alert Dropdown -->
-                            <div id="governanceAlertMenu" class="hidden absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-3xl os-card p-4 shadow-2xl border border-white/90 dark:border-slate-700 z-50 view-fade space-y-3 backdrop-blur-2xl">
-                                <!-- Header -->
+                            <!-- Governance Alert Dropdown (Opaque Solid Background, No Overlap / Bleed-Through) -->
+                            <div id="governanceAlertMenu" class="hidden absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-3xl bg-white dark:bg-slate-900 p-4 shadow-2xl border-2 border-rose-200/90 dark:border-slate-700 z-[100] view-fade space-y-3">
+                                <!-- Header with Close (X) button -->
                                 <div class="flex items-center justify-between border-b border-pink-100 dark:border-slate-700 pb-3">
                                     <div class="flex items-center gap-2.5">
                                         <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-xs">
@@ -562,13 +562,18 @@
                                             <p class="text-[10px] text-slate-500 dark:text-slate-400">Governance &amp; Anomaly Detection</p>
                                         </div>
                                     </div>
-                                    <span id="governanceTotalPill" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 border border-rose-200 dark:border-rose-900">0 Cảnh báo</span>
+                                    <div class="flex items-center gap-2">
+                                        <span id="governanceTotalPill" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 border border-rose-200 dark:border-rose-900">0 Cảnh báo</span>
+                                        <button onclick="toggleGovernanceAlertMenu(event)" class="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-slate-800 flex items-center justify-center transition cursor-pointer" title="Đóng bảng cảnh báo">
+                                            <i class="fa-solid fa-xmark text-xs"></i>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <!-- List of Anomaly Cards -->
                                 <div id="governanceAlertList" class="space-y-2 max-h-80 overflow-y-auto custom-scroll text-xs">
                                     <!-- Card 1: Duplicates -->
-                                    <div onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="p-3 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 hover:border-rose-300 dark:hover:border-rose-500 transition cursor-pointer flex items-start gap-3 group">
+                                    <div id="govAlertDupCard" onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="hidden p-3 rounded-2xl bg-rose-50/70 dark:bg-slate-800 border border-rose-100 dark:border-slate-700 hover:border-rose-300 dark:hover:border-rose-500 transition cursor-pointer flex items-start gap-3 group">
                                         <div class="w-7 h-7 rounded-lg bg-rose-100 dark:bg-rose-950 text-rose-600 flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition">
                                             <i class="fa-solid fa-clone"></i>
                                         </div>
@@ -582,7 +587,7 @@
                                     </div>
 
                                     <!-- Card 2: Cancellations & Returns -->
-                                    <div onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="p-3 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 hover:border-amber-300 dark:hover:border-amber-500 transition cursor-pointer flex items-start gap-3 group">
+                                    <div id="govAlertCancelCard" onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="hidden p-3 rounded-2xl bg-amber-50/70 dark:bg-slate-800 border border-amber-100 dark:border-slate-700 hover:border-amber-300 dark:hover:border-amber-500 transition cursor-pointer flex items-start gap-3 group">
                                         <div class="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-600 flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition">
                                             <i class="fa-solid fa-ban"></i>
                                         </div>
@@ -596,7 +601,7 @@
                                     </div>
 
                                     <!-- Card 3: Priority Stores at Risk -->
-                                    <div onclick="switchTab('step4'); toggleGovernanceAlertMenu();" class="p-3 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-500 transition cursor-pointer flex items-start gap-3 group">
+                                    <div id="govAlertStoreRiskCard" onclick="switchTab('step4'); toggleGovernanceAlertMenu();" class="hidden p-3 rounded-2xl bg-purple-50/70 dark:bg-slate-800 border border-purple-100 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-500 transition cursor-pointer flex items-start gap-3 group">
                                         <div class="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-950 text-purple-600 flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                         </div>
@@ -609,11 +614,11 @@
                                         </div>
                                     </div>
 
-                                    <!-- Empty State when 0 alerts -->
-                                    <div id="govAlertEmptyNotice" class="py-6 text-center text-slate-400">
-                                        <i class="fa-solid fa-circle-check text-emerald-500 text-2xl mb-1.5 block"></i>
-                                        <p class="font-bold text-xs text-slate-600 dark:text-slate-300">Không có rủi ro nào</p>
-                                        <p class="text-[10px] text-slate-400">Tải lên tệp dữ liệu để kích hoạt bộ quét rủi ro tự động</p>
+                                    <!-- Clean Empty State when 0 alerts -->
+                                    <div id="govAlertEmptyNotice" class="py-6 px-4 text-center text-slate-400 bg-slate-50/80 dark:bg-slate-800/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
+                                        <i class="fa-solid fa-circle-check text-emerald-500 text-2xl mb-1.5 block animate-bounce"></i>
+                                        <p class="font-bold text-xs text-slate-700 dark:text-slate-200">Không có rủi ro nào</p>
+                                        <p class="text-[10px] text-slate-400 mt-0.5">Hệ thống đang hoạt động an toàn và ổn định tuyệt đối.</p>
                                     </div>
                                 </div>
 
@@ -3387,7 +3392,9 @@
             }
 
             try {
-                await runAutomated4StepPipeline({ action: 'load-uploaded', fileName: 'PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx' });
+                const activeName = (appState.rawInfo && appState.rawInfo.file_name) 
+                    || (appState.pickedFile ? appState.pickedFile.name : 'Dữ liệu giao dịch Bảo Ngọc Retail');
+                await runAutomated4StepPipeline({ action: 'load-uploaded', fileName: activeName });
             } finally {
                 if (btn) {
                     btn.disabled = false;
@@ -3865,6 +3872,9 @@
             const cancelCountEl = document.getElementById('govAlertCancelCount');
             const storeRiskCountEl = document.getElementById('govAlertStoreRiskCount');
             const emptyNotice = document.getElementById('govAlertEmptyNotice');
+            const dupCard = document.getElementById('govAlertDupCard');
+            const cancelCard = document.getElementById('govAlertCancelCard');
+            const storeRiskCard = document.getElementById('govAlertStoreRiskCard');
 
             if (!cleanData && !auditData) {
                 if (badge) { badge.classList.add('hidden'); badge.innerText = '0'; }
@@ -3873,6 +3883,9 @@
                 if (cancelCountEl) cancelCountEl.innerText = '0 đơn';
                 if (storeRiskCountEl) storeRiskCountEl.innerText = '0 chi nhánh';
                 if (emptyNotice) emptyNotice.classList.remove('hidden');
+                if (dupCard) dupCard.classList.add('hidden');
+                if (cancelCard) cancelCard.classList.add('hidden');
+                if (storeRiskCard) storeRiskCard.classList.add('hidden');
                 return;
             }
 
@@ -3895,12 +3908,27 @@
                     badge.classList.remove('hidden');
                 }
                 if (emptyNotice) emptyNotice.classList.add('hidden');
+                if (dupCard) {
+                    if (dedupRows > 0) dupCard.classList.remove('hidden');
+                    else dupCard.classList.add('hidden');
+                }
+                if (cancelCard) {
+                    if (abnormalTxCount > 0) cancelCard.classList.remove('hidden');
+                    else cancelCard.classList.add('hidden');
+                }
+                if (storeRiskCard) {
+                    if (priorityStoreCount > 0) storeRiskCard.classList.remove('hidden');
+                    else storeRiskCard.classList.add('hidden');
+                }
             } else {
                 if (badge) {
                     badge.classList.add('hidden');
                     badge.innerText = '0';
                 }
                 if (emptyNotice) emptyNotice.classList.remove('hidden');
+                if (dupCard) dupCard.classList.add('hidden');
+                if (cancelCard) cancelCard.classList.add('hidden');
+                if (storeRiskCard) storeRiskCard.classList.add('hidden');
             }
         }
 
@@ -3922,8 +3950,8 @@
         }
 
         async function loadUploadedExcel() {
-            notify('Đang nạp tệp PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx...', 'pink');
-            await runAutomated4StepPipeline({ action: 'load-uploaded', fileName: 'PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx' });
+            notify('Đang nạp dữ liệu giao dịch chuẩn...', 'green');
+            await runAutomated4StepPipeline({ action: 'load-uploaded', fileName: 'raw_transactions_oct2026.csv (Dữ liệu chuẩn)' });
         }
 
         async function loadSample60k() {

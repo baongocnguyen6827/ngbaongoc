@@ -22,13 +22,23 @@ WORKSPACE_DIR = os.path.dirname(BASE_DIR)
 
 def get_writable_dir():
     """Xác định thư mục có quyền ghi (Hỗ trợ cả môi trường Local Windows và Vercel Serverless /tmp)"""
-    if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+    is_serverless = (
+        bool(os.environ.get("VERCEL"))
+        or bool(os.environ.get("VERCEL_ENV"))
+        or bool(os.environ.get("VERCEL_REGION"))
+        or bool(os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
+        or bool(os.environ.get("LAMBDA_TASK_ROOT"))
+        or "/var/task" in BASE_DIR
+        or BASE_DIR.startswith("/var/")
+        or os.name != "nt"
+    )
+    if is_serverless:
         tmp_dir = os.path.join(tempfile.gettempdir(), "baongoc_ai_data")
         os.makedirs(tmp_dir, exist_ok=True)
         return tmp_dir
     try:
         os.makedirs(APP_DATA_DIR, exist_ok=True)
-        test_file = os.path.join(APP_DATA_DIR, ".write_test")
+        test_file = os.path.join(APP_DATA_DIR, f".write_test_{os.getpid()}")
         with open(test_file, "w") as f:
             f.write("ok")
         os.remove(test_file)
@@ -48,6 +58,9 @@ def resolve_data_file(filename):
     p2 = os.path.join(APP_DATA_DIR, filename)
     if os.path.exists(p2):
         return p2
+    p3 = os.path.join(tempfile.gettempdir(), "baongoc_ai_data", filename)
+    if os.path.exists(p3):
+        return p3
     return p1
 
 class PhucAnRetailEngine:
@@ -163,23 +176,20 @@ class PhucAnRetailEngine:
         return self.business_profile
 
     def load_raw_data(self, file_path=None):
-        """Tải dữ liệu thô linh hoạt (Hỗ trợ cả file Đề thi đại lý sữa AI301, file Phúc An và file tùy biến)"""
+        """Tải dữ liệu thô linh hoạt (Hỗ trợ cả file Đề thi đại lý sữa AI301, file Bảo Ngọc Retail và file tùy biến)"""
         if file_path is None:
             uploaded_raw_xlsx = resolve_data_file("uploaded_raw.xlsx")
             uploaded_raw_csv = resolve_data_file("uploaded_raw.csv")
-            uploaded_excel = os.path.join(WORKSPACE_DIR, "PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx")
             if os.path.exists(uploaded_raw_xlsx):
                 file_path = uploaded_raw_xlsx
             elif os.path.exists(uploaded_raw_csv):
                 file_path = uploaded_raw_csv
-            elif os.path.exists(uploaded_excel):
-                file_path = uploaded_excel
             else:
                 file_path = resolve_data_file("raw_transactions_oct2026.csv")
         
         base_name = os.path.basename(file_path)
         if base_name.startswith("uploaded_raw"):
-            self.active_file_name = "Data mẫu 1000 dòng_AI301.xlsx"
+            self.active_file_name = "Data_GiaoDich_AI301.xlsx"
         else:
             self.active_file_name = base_name
         

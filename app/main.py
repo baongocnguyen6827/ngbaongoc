@@ -63,10 +63,18 @@ def load_sample_data():
 
 @app.route("/api/load-uploaded", methods=["GET", "POST"])
 def load_uploaded_data():
-    """Nạp trực tiếp tệp Excel người dùng tải lên"""
+    """Nạp tệp dữ liệu giao dịch hiện tại hoặc dữ liệu mẫu"""
     try:
-        uploaded_excel = resolve_data_file("PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx")
-        info = engine.load_raw_data(uploaded_excel)
+        uploaded_raw_xlsx = resolve_data_file("uploaded_raw.xlsx")
+        uploaded_raw_csv = resolve_data_file("uploaded_raw.csv")
+        if os.path.exists(uploaded_raw_xlsx):
+            target_file = uploaded_raw_xlsx
+        elif os.path.exists(uploaded_raw_csv):
+            target_file = uploaded_raw_csv
+        else:
+            target_file = resolve_data_file("raw_transactions_oct2026.csv")
+            
+        info = engine.load_raw_data(target_file)
         return jsonify({"success": True, "data": info, "message": f"Đã nạp thành công {info['total_rows']:,} dòng từ tệp {info['file_name']}!"})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
@@ -113,8 +121,22 @@ def upload_raw_data():
         _, ext = os.path.splitext(orig_filename)
         ext = ext.lower() if ext else ".csv"
         
-        save_path = os.path.join(DATA_DIR, f"uploaded_raw{ext}")
-        file.save(save_path)
+        # Thử lưu vào DATA_DIR, nếu gặp Read-only file system (Vercel) thì tự động chuyển sang /tmp
+        target_dir = DATA_DIR
+        try:
+            os.makedirs(target_dir, exist_ok=True)
+            save_path = os.path.join(target_dir, f"uploaded_raw{ext}")
+            file.save(save_path)
+        except OSError:
+            import tempfile
+            target_dir = os.path.join(tempfile.gettempdir(), "baongoc_ai_data")
+            os.makedirs(target_dir, exist_ok=True)
+            save_path = os.path.join(target_dir, f"uploaded_raw{ext}")
+            file.save(save_path)
+            # Cập nhật DATA_DIR toàn cục
+            import app.engine as eng_mod
+            eng_mod.DATA_DIR = target_dir
+
         info = engine.load_raw_data(save_path)
         info["file_name"] = orig_filename
         engine.active_file_name = orig_filename
