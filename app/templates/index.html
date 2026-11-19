@@ -30,7 +30,8 @@
                         }
                     },
                     fontFamily: {
-                        sans: ['"Be Vietnam Pro"', '"Plus Jakarta Sans"', 'Inter', 'sans-serif']
+                        sans: ['"Be Vietnam Pro"', '"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                        soft: ['"Quicksand"', '"Nunito"', '"Plus Jakarta Sans"', 'sans-serif']
                     }
                 }
             }
@@ -41,7 +42,13 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Quicksand:wght@500;600;700;800&family=Nunito:wght@600;700;800;900&display=swap');
+
+        /* SOFT ELEGANT HERO FONT (PHÔNG CHỮ MỀM MẠI, THANH THOÁT CHO TIÊU ĐỀ SLOGAN) */
+        .font-soft-hero {
+            font-family: 'Quicksand', 'Nunito', 'Plus Jakarta Sans', sans-serif !important;
+            letter-spacing: -0.01em;
+        }
 
         * { box-sizing: border-box; }
         
@@ -1037,9 +1044,9 @@
                             <span data-i18n="hero_badge">Hệ Điều Hành Thông Minh Thế Hệ Mới • Bảo Ngọc AI</span>
                         </div>
 
-                        <h1 class="text-2xl sm:text-3xl xl:text-4xl font-black tracking-tight leading-normal">
-                            <span class="block text-slate-900 dark:text-white" data-i18n="hero_slogan_l1">Tối Ưu Hóa Vận Hành Bằng</span>
-                            <span data-i18n="hero_slogan_l2" class="inline-block bg-gradient-to-r from-rose-600 via-pink-600 to-amber-600 bg-clip-text text-transparent mt-1.5 sm:mt-2 pb-2 pr-1 leading-snug tracking-normal filter drop-shadow-[0_1px_2px_rgba(244,63,110,0.25)]">
+                        <h1 class="font-soft-hero text-2xl sm:text-3xl xl:text-4xl font-bold tracking-normal leading-relaxed sm:leading-normal">
+                            <span class="block text-slate-800 dark:text-slate-100 font-bold" data-i18n="hero_slogan_l1">Tối Ưu Hóa Vận Hành Bằng</span>
+                            <span data-i18n="hero_slogan_l2" class="inline-block bg-gradient-to-r from-rose-600 via-pink-600 to-amber-600 bg-clip-text text-transparent mt-1.5 sm:mt-2 pb-2 pr-1 font-extrabold leading-snug tracking-normal filter drop-shadow-[0_1px_3px_rgba(244,63,110,0.22)]">
                                 Trí Tuệ Nhân Tạo AI Agent
                             </span>
                         </h1>
