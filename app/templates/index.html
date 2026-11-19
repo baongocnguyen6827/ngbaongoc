@@ -533,96 +533,99 @@
                         <input id="topSearchInput" oninput="handleGlobalSearch(this.value)" type="text" placeholder="Tìm kiếm cửa hàng, mã đơn, sản phẩm, quản lý..." data-i18n-ph="search_ph" class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50/90 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:bg-white dark:focus:bg-slate-800 focus:border-rose-300 focus:ring-2 focus:ring-rose-100 transition shadow-xs" style="width: 780px; max-width: 100%;">
                     </div>
 
-                    <!-- Date Picker -->
-                    <div class="hidden xl:flex items-center gap-2 text-xs flex-shrink-0">
-                        <i class="fa-regular fa-calendar-check text-rose-500"></i>
-                        <span data-i18n="audit_date_label" class="text-slate-500 dark:text-slate-400 font-medium leading-tight">Ngày đối<br>chiếu chuẩn:</span>
-                        <input type="date" id="standardAuditDate" value="2026-10-31" class="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-bold text-slate-800 dark:text-slate-200 text-xs focus:outline-none focus:border-rose-400">
-                    </div>
+                    <!-- Row 1 Utility Controls (Date Picker & Governance Alert Bell) - Synced with Row 2 Utilities -->
+                    <div id="row1UtilityControls" class="flex items-center gap-2.5 sm:gap-3 flex-shrink-0 justify-end">
+                        <!-- Date Picker -->
+                        <div class="hidden xl:flex items-center gap-2 text-xs flex-shrink-0">
+                            <i class="fa-regular fa-calendar-check text-rose-500"></i>
+                            <span data-i18n="audit_date_label" class="text-slate-500 dark:text-slate-400 font-medium leading-tight">Ngày đối<br>chiếu chuẩn:</span>
+                            <input type="date" id="standardAuditDate" value="2026-10-31" class="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-bold text-slate-800 dark:text-slate-200 text-xs focus:outline-none focus:border-rose-400">
+                        </div>
 
-                    <!-- Governance & Audit Risk Alert Bell Icon -->
-                    <div class="relative flex-shrink-0" id="governanceAlertContainer">
-                        <button id="governanceAlertBtn" onclick="toggleGovernanceAlertMenu(event)" class="relative w-9 h-9 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white/60 dark:bg-slate-800/60 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 flex items-center justify-center transition shadow-xs cursor-pointer group" title="Cảnh Báo Quản Trị & Đối Soát (Governance Alerts)">
-                            <i class="fa-solid fa-bell text-sm transition group-hover:rotate-12"></i>
-                            <span id="governanceAlertBadge" class="hidden absolute -top-1.5 -right-1.5 min-w-[19px] h-[19px] px-1 rounded-full bg-rose-600 text-white text-[10px] font-black flex items-center justify-center shadow-md border-2 border-white dark:border-slate-900 animate-pulse">0</span>
-                        </button>
+                        <!-- Governance & Audit Risk Alert Bell Icon -->
+                        <div class="relative flex-shrink-0" id="governanceAlertContainer">
+                            <button id="governanceAlertBtn" onclick="toggleGovernanceAlertMenu(event)" class="relative w-9 h-9 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white/60 dark:bg-slate-800/60 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 flex items-center justify-center transition shadow-xs cursor-pointer group" title="Cảnh Báo Quản Trị & Đối Soát (Governance Alerts)">
+                                <i class="fa-solid fa-bell text-sm transition group-hover:rotate-12"></i>
+                                <span id="governanceAlertBadge" class="hidden absolute -top-1.5 -right-1.5 min-w-[19px] h-[19px] px-1 rounded-full bg-rose-600 text-white text-[10px] font-black flex items-center justify-center shadow-md border-2 border-white dark:border-slate-900 animate-pulse">0</span>
+                            </button>
 
-                        <!-- Governance Alert Dropdown -->
-                        <div id="governanceAlertMenu" class="hidden absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-3xl os-card p-4 shadow-2xl border border-white/90 dark:border-slate-700 z-50 view-fade space-y-3 backdrop-blur-2xl">
-                            <!-- Header -->
-                            <div class="flex items-center justify-between border-b border-pink-100 dark:border-slate-700 pb-3">
-                                <div class="flex items-center gap-2.5">
-                                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-xs">
-                                        <i class="fa-solid fa-shield-halved"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-extrabold text-xs text-slate-900 dark:text-white leading-tight">Cảnh Báo Quản Trị &amp; Đối Soát</h4>
-                                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Governance &amp; Anomaly Detection</p>
-                                    </div>
-                                </div>
-                                <span id="governanceTotalPill" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 border border-rose-200 dark:border-rose-900">0 Cảnh báo</span>
-                            </div>
-
-                            <!-- List of Anomaly Cards -->
-                            <div id="governanceAlertList" class="space-y-2 max-h-80 overflow-y-auto custom-scroll text-xs">
-                                <!-- Card 1: Duplicates -->
-                                <div onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="p-3 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 hover:border-rose-300 dark:hover:border-rose-500 transition cursor-pointer flex items-start gap-3 group">
-                                    <div class="w-7 h-7 rounded-lg bg-rose-100 dark:bg-rose-950 text-rose-600 flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition">
-                                        <i class="fa-solid fa-clone"></i>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <div class="flex items-center justify-between">
-                                            <p class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-rose-600 transition">Đếm Trùng Dòng Giao Dịch</p>
-                                            <span id="govAlertDupCount" class="font-black text-rose-600 font-mono">0 dòng</span>
+                            <!-- Governance Alert Dropdown -->
+                            <div id="governanceAlertMenu" class="hidden absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-3xl os-card p-4 shadow-2xl border border-white/90 dark:border-slate-700 z-50 view-fade space-y-3 backdrop-blur-2xl">
+                                <!-- Header -->
+                                <div class="flex items-center justify-between border-b border-pink-100 dark:border-slate-700 pb-3">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-rose-500 to-amber-500 text-white flex items-center justify-center text-xs shadow-xs">
+                                            <i class="fa-solid fa-shield-halved"></i>
                                         </div>
-                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">RULE-DEDUP: Tự động phát hiện &amp; lọc bỏ trùng lặp mã đơn.</p>
-                                    </div>
-                                </div>
-
-                                <!-- Card 2: Cancellations & Returns -->
-                                <div onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="p-3 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 hover:border-amber-300 dark:hover:border-amber-500 transition cursor-pointer flex items-start gap-3 group">
-                                    <div class="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-600 flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition">
-                                        <i class="fa-solid fa-ban"></i>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <div class="flex items-center justify-between">
-                                            <p class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-amber-600 transition">Đơn Hủy &amp; Đổi Trả Bất Thường</p>
-                                            <span id="govAlertCancelCount" class="font-black text-amber-600 font-mono">0 đơn</span>
+                                        <div>
+                                            <h4 class="font-extrabold text-xs text-slate-900 dark:text-white leading-tight">Cảnh Báo Quản Trị &amp; Đối Soát</h4>
+                                            <p class="text-[10px] text-slate-500 dark:text-slate-400">Governance &amp; Anomaly Detection</p>
                                         </div>
-                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">RULE-CANC &amp; RET: Bóc tách tiền hoàn trả và cập nhật tồn kho.</p>
                                     </div>
+                                    <span id="governanceTotalPill" class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-300 border border-rose-200 dark:border-rose-900">0 Cảnh báo</span>
                                 </div>
 
-                                <!-- Card 3: Priority Stores at Risk -->
-                                <div onclick="switchTab('step4'); toggleGovernanceAlertMenu();" class="p-3 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-500 transition cursor-pointer flex items-start gap-3 group">
-                                    <div class="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-950 text-purple-600 flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <div class="flex items-center justify-between">
-                                            <p class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-purple-600 transition">Cửa Hàng Cần Can Thiệp Khẩn</p>
-                                            <span id="govAlertStoreRiskCount" class="font-black text-purple-600 font-mono">0 chi nhánh</span>
+                                <!-- List of Anomaly Cards -->
+                                <div id="governanceAlertList" class="space-y-2 max-h-80 overflow-y-auto custom-scroll text-xs">
+                                    <!-- Card 1: Duplicates -->
+                                    <div onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="p-3 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 hover:border-rose-300 dark:hover:border-rose-500 transition cursor-pointer flex items-start gap-3 group">
+                                        <div class="w-7 h-7 rounded-lg bg-rose-100 dark:bg-rose-950 text-rose-600 flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition">
+                                            <i class="fa-solid fa-clone"></i>
                                         </div>
-                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Tỷ lệ hủy/đổi trả > 3.5%, cảnh báo sụt giảm lợi nhuận gộp.</p>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between">
+                                                <p class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-rose-600 transition">Đếm Trùng Dòng Giao Dịch</p>
+                                                <span id="govAlertDupCount" class="font-black text-rose-600 font-mono">0 dòng</span>
+                                            </div>
+                                            <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">RULE-DEDUP: Tự động phát hiện &amp; lọc bỏ trùng lặp mã đơn.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card 2: Cancellations & Returns -->
+                                    <div onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="p-3 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 hover:border-amber-300 dark:hover:border-amber-500 transition cursor-pointer flex items-start gap-3 group">
+                                        <div class="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-600 flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition">
+                                            <i class="fa-solid fa-ban"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between">
+                                                <p class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-amber-600 transition">Đơn Hủy &amp; Đổi Trả Bất Thường</p>
+                                                <span id="govAlertCancelCount" class="font-black text-amber-600 font-mono">0 đơn</span>
+                                            </div>
+                                            <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">RULE-CANC &amp; RET: Bóc tách tiền hoàn trả và cập nhật tồn kho.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card 3: Priority Stores at Risk -->
+                                    <div onclick="switchTab('step4'); toggleGovernanceAlertMenu();" class="p-3 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-500 transition cursor-pointer flex items-start gap-3 group">
+                                        <div class="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-950 text-purple-600 flex items-center justify-center text-xs flex-shrink-0 group-hover:scale-110 transition">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between">
+                                                <p class="font-bold text-slate-800 dark:text-slate-100 group-hover:text-purple-600 transition">Cửa Hàng Cần Can Thiệp Khẩn</p>
+                                                <span id="govAlertStoreRiskCount" class="font-black text-purple-600 font-mono">0 chi nhánh</span>
+                                            </div>
+                                            <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Tỷ lệ hủy/đổi trả > 3.5%, cảnh báo sụt giảm lợi nhuận gộp.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Empty State when 0 alerts -->
+                                    <div id="govAlertEmptyNotice" class="py-6 text-center text-slate-400">
+                                        <i class="fa-solid fa-circle-check text-emerald-500 text-2xl mb-1.5 block"></i>
+                                        <p class="font-bold text-xs text-slate-600 dark:text-slate-300">Không có rủi ro nào</p>
+                                        <p class="text-[10px] text-slate-400">Tải lên tệp dữ liệu để kích hoạt bộ quét rủi ro tự động</p>
                                     </div>
                                 </div>
 
-                                <!-- Empty State when 0 alerts -->
-                                <div id="govAlertEmptyNotice" class="py-6 text-center text-slate-400">
-                                    <i class="fa-solid fa-circle-check text-emerald-500 text-2xl mb-1.5 block"></i>
-                                    <p class="font-bold text-xs text-slate-600 dark:text-slate-300">Không có rủi ro nào</p>
-                                    <p class="text-[10px] text-slate-400">Tải lên tệp dữ liệu để kích hoạt bộ quét rủi ro tự động</p>
+                                <!-- Footer Actions -->
+                                <div class="pt-2 border-t border-pink-100 dark:border-slate-700 flex items-center justify-between gap-2">
+                                    <button onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="flex-1 py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-[11px] transition text-center cursor-pointer">
+                                        Đối Soát Bước 2
+                                    </button>
+                                    <button onclick="switchTab('step4'); toggleGovernanceAlertMenu();" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-[11px] transition shadow-xs text-center hover:opacity-90 cursor-pointer">
+                                        Kiểm Soát Rủi Ro
+                                    </button>
                                 </div>
-                            </div>
-
-                            <!-- Footer Actions -->
-                            <div class="pt-2 border-t border-pink-100 dark:border-slate-700 flex items-center justify-between gap-2">
-                                <button onclick="switchTab('step2'); toggleGovernanceAlertMenu();" class="flex-1 py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-[11px] transition text-center cursor-pointer">
-                                    Đối Soát Bước 2
-                                </button>
-                                <button onclick="switchTab('step4'); toggleGovernanceAlertMenu();" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-[11px] transition shadow-xs text-center hover:opacity-90 cursor-pointer">
-                                    Kiểm Soát Rủi Ro
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -680,68 +683,71 @@
                             </div>
                         </div>
 
-                        <!-- Divider -->
-                        <div class="h-6 w-[1px] bg-pink-100 dark:bg-slate-700"></div>
+                        <!-- Row 2 Utility Controls (Divider, Language, Contact, Theme) - Synced with Row 1 Utilities -->
+                        <div id="row2UtilityControls" class="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
+                            <!-- Divider -->
+                            <div class="h-6 w-[1px] bg-pink-100 dark:bg-slate-700"></div>
 
-                        <!-- Language Selector Dropdown (Multi-Language: VI, EN, JA, ZH, KO - Mộc mạc, không viền, không nền) -->
-                        <div class="relative" id="langDropdownContainer">
-                            <button id="langToggleBtn" onclick="toggleLangDropdown(event)" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-transparent border-0 hover:bg-rose-50/60 dark:hover:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:text-rose-600 font-semibold text-xs transition cursor-pointer" title="Thay đổi ngôn ngữ / Change Language">
-                                <span id="currentLangFlag" class="text-sm">🇻🇳</span>
-                                <span id="currentLangText" class="hidden sm:inline font-bold">Tiếng Việt</span>
-                                <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
+                            <!-- Language Selector Dropdown (Multi-Language: VI, EN, JA, ZH, KO - Mộc mạc, không viền, không nền) -->
+                            <div class="relative" id="langDropdownContainer">
+                                <button id="langToggleBtn" onclick="toggleLangDropdown(event)" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-transparent border-0 hover:bg-rose-50/60 dark:hover:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:text-rose-600 font-semibold text-xs transition cursor-pointer" title="Thay đổi ngôn ngữ / Change Language">
+                                    <span id="currentLangFlag" class="text-sm">🇻🇳</span>
+                                    <span id="currentLangText" class="hidden sm:inline font-bold">Tiếng Việt</span>
+                                    <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
+                                </button>
+
+                                <!-- Dropdown Menu (Glassmorphism) -->
+                                <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-48 rounded-2xl os-card p-1.5 shadow-2xl border border-white/90 dark:border-slate-700 z-50 view-fade">
+                                    <button onclick="changeLanguage('vi')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
+                                        <span class="text-base">🇻🇳</span>
+                                        <div class="leading-tight">
+                                            <p class="font-bold">Tiếng Việt</p>
+                                            <span class="text-[10px] text-slate-400 font-medium">Mặc định</span>
+                                        </div>
+                                    </button>
+                                    <button onclick="changeLanguage('en')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
+                                        <span class="text-base">🇺🇸</span>
+                                        <div class="leading-tight">
+                                            <p class="font-bold">English</p>
+                                            <span class="text-[10px] text-slate-400 font-medium">International</span>
+                                        </div>
+                                    </button>
+                                    <button onclick="changeLanguage('ja')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
+                                        <span class="text-base">🇯🇵</span>
+                                        <div class="leading-tight">
+                                            <p class="font-bold">日本語</p>
+                                            <span class="text-[10px] text-slate-400 font-medium">Japanese</span>
+                                        </div>
+                                    </button>
+                                    <button onclick="changeLanguage('zh')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
+                                        <span class="text-base">🇨🇳</span>
+                                        <div class="leading-tight">
+                                            <p class="font-bold">中文</p>
+                                            <span class="text-[10px] text-slate-400 font-medium">Simplified</span>
+                                        </div>
+                                    </button>
+                                    <button onclick="changeLanguage('ko')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
+                                        <span class="text-base">🇰🇷</span>
+                                        <div class="leading-tight">
+                                            <p class="font-bold">한국어</p>
+                                            <span class="text-[10px] text-slate-400 font-medium">Korean</span>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Contact Quick Button -->
+                            <button onclick="openContactModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs" title="Thông tin liên hệ / Contact Info">
+                                <i class="fa-solid fa-headset text-rose-500"></i>
+                                <span class="hidden sm:inline" data-i18n="contact_btn">Liên Hệ</span>
                             </button>
 
-                            <!-- Dropdown Menu (Glassmorphism) -->
-                            <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-48 rounded-2xl os-card p-1.5 shadow-2xl border border-white/90 dark:border-slate-700 z-50 view-fade">
-                                <button onclick="changeLanguage('vi')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
-                                    <span class="text-base">🇻🇳</span>
-                                    <div class="leading-tight">
-                                        <p class="font-bold">Tiếng Việt</p>
-                                        <span class="text-[10px] text-slate-400 font-medium">Mặc định</span>
-                                    </div>
-                                </button>
-                                <button onclick="changeLanguage('en')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
-                                    <span class="text-base">🇺🇸</span>
-                                    <div class="leading-tight">
-                                        <p class="font-bold">English</p>
-                                        <span class="text-[10px] text-slate-400 font-medium">International</span>
-                                    </div>
-                                </button>
-                                <button onclick="changeLanguage('ja')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
-                                    <span class="text-base">🇯🇵</span>
-                                    <div class="leading-tight">
-                                        <p class="font-bold">日本語</p>
-                                        <span class="text-[10px] text-slate-400 font-medium">Japanese</span>
-                                    </div>
-                                </button>
-                                <button onclick="changeLanguage('zh')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
-                                    <span class="text-base">🇨🇳</span>
-                                    <div class="leading-tight">
-                                        <p class="font-bold">中文</p>
-                                        <span class="text-[10px] text-slate-400 font-medium">Simplified</span>
-                                    </div>
-                                </button>
-                                <button onclick="changeLanguage('ko')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 transition text-left cursor-pointer">
-                                    <span class="text-base">🇰🇷</span>
-                                    <div class="leading-tight">
-                                        <p class="font-bold">한국어</p>
-                                        <span class="text-[10px] text-slate-400 font-medium">Korean</span>
-                                    </div>
-                                </button>
-                            </div>
+                            <!-- Theme Switcher Button (Light / Dark) -->
+                            <button id="themeToggleBtn"  onclick="toggleTheme()" class="flex items-center gap-2 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs" title="Chuyển đổi giao diện Sáng / Tối">
+                                <i id="themeToggleIcon" class="fa-solid fa-moon text-rose-500"></i>
+                                <span id="themeToggleText" data-i18n="theme_dark" class="hidden sm:inline">Chế độ Tối</span>
+                            </button>
                         </div>
-
-                        <!-- Contact Quick Button -->
-                        <button onclick="openContactModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs" title="Thông tin liên hệ / Contact Info">
-                            <i class="fa-solid fa-headset text-rose-500"></i>
-                            <span class="hidden sm:inline" data-i18n="contact_btn">Liên Hệ</span>
-                        </button>
-
-                        <!-- Theme Switcher Button (Light / Dark) -->
-                        <button id="themeToggleBtn"  onclick="toggleTheme()" class="flex items-center gap-2 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-rose-600 font-bold text-xs transition cursor-pointer shadow-xs" title="Chuyển đổi giao diện Sáng / Tối">
-                            <i id="themeToggleIcon" class="fa-solid fa-moon text-rose-500"></i>
-                            <span id="themeToggleText" data-i18n="theme_dark" class="hidden sm:inline">Chế độ Tối</span>
-                        </button>
                     </div>
                 </div>
 
@@ -3343,6 +3349,8 @@
                     link.classList.toggle('active', link.getAttribute('data-nav') === tab);
                 });
 
+                setTimeout(syncSearchInputWidth, 50);
+
                 if (tab === 'step1') {
                     loadDataPreview('raw', 1);
                 } else if (tab === 'step2') {
@@ -5496,21 +5504,38 @@
             changeLanguage(savedLang, true);
         }
 
-        // Đồng bộ độ dài thanh tìm kiếm bằng chính xác cụm 'Feedback KH' đến 'Nguyễn Bảo Ngọc (Bảo Ngọc retail)'
+        // Đồng bộ độ dài và căn lề chính xác: Điểm bắt đầu (mép trái) khớp Feedback KH, điểm kết thúc (mép phải) khớp Nguyễn Bảo Ngọc
         function syncSearchInputWidth() {
             const actionGroup = document.getElementById('headerActionsProfileGroup');
+            const row2Utils = document.getElementById('row2UtilityControls');
             const searchWrapper = document.getElementById('topSearchWrapper');
             const searchInput = document.getElementById('topSearchInput');
+            const row1Utils = document.getElementById('row1UtilityControls');
             if (!actionGroup || !searchInput) return;
+
             if (window.innerWidth >= 1024) {
+                // 1. Kích thước bằng đúng cụm Feedback KH -> Nguyễn Bảo Ngọc
                 const w = actionGroup.offsetWidth;
                 if (w > 250) {
-                    searchInput.style.width = w + 'px';
-                    if (searchWrapper) searchWrapper.style.width = w + 'px';
+                    searchWrapper.style.width = w + 'px';
+                    searchInput.style.width = '100%';
+                }
+                
+                // 2. Dịch sang trái để điểm kết thúc & điểm bắt đầu khớp 100%:
+                // Căn khoảng cách tiện ích bên phải ở Hàng 1 (row1Utils) bằng đúng khoảng cách tiện ích Hàng 2 (row2Utils)
+                if (row2Utils && row1Utils) {
+                    const uWidth = row2Utils.offsetWidth;
+                    if (uWidth > 40) {
+                        row1Utils.style.width = uWidth + 'px';
+                        row1Utils.style.justifyContent = 'flex-end';
+                    }
                 }
             } else {
+                searchWrapper.style.width = '100%';
                 searchInput.style.width = '100%';
-                if (searchWrapper) searchWrapper.style.width = '100%';
+                if (row1Utils) {
+                    row1Utils.style.width = 'auto';
+                }
             }
         }
         window.addEventListener('resize', syncSearchInputWidth);
