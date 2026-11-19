@@ -887,7 +887,7 @@
         <main class="flex-1 max-w-[1700px] w-full mx-auto px-4 sm:px-7 py-6 space-y-6">
 
             <!-- ===================================================================== -->
-            <!-- TOP 4 SIGNATURE KPI CARDS (Hiển thị ở 4 bước quy trình)               -->
+            <!-- TOP 4 SIGNATURE KPI CARDS (Hiển thị ở Bước 3 & Bước 4 Dashboard & Báo Cáo) -->
             <!-- ===================================================================== -->
             <section id="topKpiSection" class="hidden grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
                 <!-- CARD 1: Doanh Thu Thuần (Net Revenue) -->
@@ -3588,13 +3588,13 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
 
-                // Top KPI Cards Section: Hidden on Welcome landing page, shown on workflow steps
+                // Top KPI Cards Section: Xóa / ẩn ở Bước 1, Bước 2, Welcome, Copilot, Feedback. Chỉ hiển thị ở Bước 3 (Dashboard) & Bước 4 (Báo Cáo / Ra Quyết Định) & Audit
                 const kpiSec = document.getElementById('topKpiSection');
                 if (kpiSec) {
-                    if (tab === 'welcome') {
-                        kpiSec.classList.add('hidden');
-                    } else {
+                    if (tab === 'step3' || tab === 'step4' || tab === 'audit') {
                         kpiSec.classList.remove('hidden');
+                    } else {
+                        kpiSec.classList.add('hidden');
                     }
                 }
 
