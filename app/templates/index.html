@@ -659,6 +659,12 @@
                             <span class="leading-tight text-left font-bold text-slate-800 dark:text-slate-200 group-hover:text-rose-600 transition">Sinh Slide<br><span class="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold">Auto-Pitch Deck</span></span>
                         </button>
 
+                        <!-- Direct Link: Xem Slide HTML Trình Chiếu -->
+                        <a href="/slides" target="_blank" id="btnOpenHtmlSlidesHeader" class="btn-outline-clean px-3 py-1.5 text-xs flex items-center gap-2 hover:border-rose-400 cursor-pointer shadow-xs group" title="Mở Slide HTML Trình Chiếu Toàn Màn Hình Trong Tab Mới">
+                            <i class="fa-solid fa-desktop text-rose-500 group-hover:scale-110 transition-transform duration-300"></i>
+                            <span class="leading-tight text-left font-bold text-slate-800 dark:text-slate-200 group-hover:text-rose-600 transition">Slide HTML<br><span class="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold">Trình Chiếu &rarr;</span></span>
+                        </a>
+
                         <!-- User Profile Card: Nguyễn Bảo Ngọc -->
                         <div class="flex items-center gap-2.5 pl-3 border-l border-pink-100 dark:border-slate-700">
                             <img src="/static/avatar.jpg" alt="Nguyễn Bảo Ngọc" class="w-9 h-9 rounded-full object-cover border-2 border-rose-200 shadow-xs flex-shrink-0">
@@ -1442,10 +1448,16 @@
                                     <p class="text-xs text-slate-500">Thực thi 4 quy tắc chuẩn kế toán bán lẻ nhằm loại bỏ sai lệch thủ công</p>
                                 </div>
                             </div>
-                            <button onclick="executeCleaning()" id="btnCleanAction" class="btn-pink-pill px-4 py-2 text-xs flex items-center gap-2">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                <span>Chạy Làm Sạch Lại</span>
-                            </button>
+                            <div class="flex items-center gap-2">
+                                <button onclick="executeCleaning()" id="btnCleanAction" class="btn-pink-pill px-4 py-2 text-xs flex items-center gap-2">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    <span>Chạy Làm Sạch Lại</span>
+                                </button>
+                                <button onclick="resetAllSystemData()" class="btn-outline-clean px-3.5 py-2 text-xs flex items-center gap-1.5 hover:border-rose-400 text-rose-600 font-bold cursor-pointer" title="Xóa toàn bộ dữ liệu và đưa hệ thống về trạng thái ban đầu sạch">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                    <span>Xóa Dữ Liệu</span>
+                                </button>
+                            </div>
                         </div>
 
                         <div id="cleaningRulesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
@@ -1466,31 +1478,37 @@
                                         <p class="text-[11px] text-slate-400">Chuyên viên kiểm tra &amp; xác nhận</p>
                                     </div>
                                 </div>
-                                <span id="hvBadgeStatus" class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-700">CHỜ DUYỆT</span>
+                                <span id="hvBadgeStatus" class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-600">CHƯA CÓ DỮ LIỆU</span>
                             </div>
 
                             <div class="p-3.5 rounded-2xl bg-white border border-pink-100 text-xs space-y-1">
                                 <span class="text-[11px] text-slate-400 font-semibold">Kết quả kiểm tra tự động:</span>
-                                <div id="hvSummaryText" class="font-bold text-slate-800">
-                                    Đã lọc 4 dòng trùng, tách 492 dòng kỳ T09, loại 41 đơn hủy, khấu trừ 28 đơn trả.
+                                <div id="hvSummaryText" class="font-medium text-slate-400 italic text-xs">
+                                    Chưa có kết quả kiểm tra tự động. Dữ liệu sẽ tự động bóc tách đơn hủy &amp; đổi trả khi bạn kết nối tệp!
                                 </div>
                             </div>
 
                             <div>
                                 <label class="text-[11px] font-bold text-slate-600 block mb-1">Ghi chú đối soát của Chuyên viên:</label>
-                                <textarea id="hvNotesInput" rows="2" class="w-full p-2.5 rounded-xl border border-pink-100 text-xs focus:outline-none focus:border-rose-400">Đã kiểm tra đối chiếu các dòng loại trừ: Không phát hiện đơn hoàn thành bị hủy nhầm. Dữ liệu chuẩn xác 100%.</textarea>
+                                <textarea id="hvNotesInput" rows="2" placeholder="Ghi chú đối soát của chuyên viên sau khi kiểm tra dữ liệu sạch..." class="w-full p-2.5 rounded-xl border border-pink-100 text-xs focus:outline-none focus:border-rose-400"></textarea>
                             </div>
                         </div>
 
                         <div class="pt-4 space-y-2">
-                            <button onclick="submitHumanVerification(true)" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs shadow-md shadow-emerald-500/20 transition flex items-center justify-center gap-2">
+                            <button onclick="submitHumanVerification(true)" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs shadow-md shadow-emerald-500/20 transition flex items-center justify-center gap-2 cursor-pointer">
                                 <i class="fa-solid fa-circle-check"></i>
                                 <span>Con Người Xác Nhận: Dữ Liệu OK</span>
                             </button>
-                            <button onclick="submitHumanVerification(false)" class="w-full py-2 rounded-xl btn-outline-clean text-xs flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-rotate-left text-rose-500"></i>
-                                <span>Yêu Cầu AI Lọc Lại</span>
-                            </button>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="submitHumanVerification(false)" class="w-full py-2 rounded-xl btn-outline-clean text-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                                    <i class="fa-solid fa-rotate-left text-rose-500"></i>
+                                    <span>Yêu Cầu Lọc Lại</span>
+                                </button>
+                                <button onclick="resetAllSystemData()" class="w-full py-2 rounded-xl border border-rose-200 hover:bg-rose-50 text-rose-600 text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer" title="Xóa toàn bộ dữ liệu ở đây và đưa về trạng thái sạch ban đầu">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                    <span>Xóa Dữ Liệu</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2457,25 +2475,31 @@
             </div>
 
             <!-- Slide Navigation Pills / Tabs -->
-            <div class="px-4 py-2.5 bg-rose-50/70 dark:bg-slate-800/60 border-b border-pink-100 dark:border-slate-800 flex items-center gap-2 overflow-x-auto custom-scroll">
-                <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex-shrink-0 mr-1"><i class="fa-solid fa-layer-group text-rose-500 mr-1"></i>Chọn Slide:</span>
+            <div id="pitchDeckTabsContainer" class="px-4 py-2.5 bg-rose-50/70 dark:bg-slate-800/60 border-b border-pink-100 dark:border-slate-800 flex items-center gap-2 overflow-x-auto custom-scroll">
+                <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex-shrink-0 mr-1"><i class="fa-solid fa-layer-group text-rose-500 mr-1"></i>Chọn Slide (8):</span>
                 <button onclick="selectPitchDeckSlide(0)" id="slideTab0" class="pitch-tab-btn active px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer bg-rose-500 text-white shadow-xs">
                     Slide 1: Bìa Báo Cáo
                 </button>
                 <button onclick="selectPitchDeckSlide(1)" id="slideTab1" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
-                    Slide 2: 4 Chỉ Số Vàng
+                    Slide 2: Mục Đích AI Agent
                 </button>
                 <button onclick="selectPitchDeckSlide(2)" id="slideTab2" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
-                    Slide 3: Kiểm Toán Dữ Liệu
+                    Slide 3: Antigravity & Gemini API
                 </button>
                 <button onclick="selectPitchDeckSlide(3)" id="slideTab3" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
-                    Slide 4: Ma Trận Phân Tích Các Chi Nhánh &amp; Đơn Vị
+                    Slide 4: Quy Trình Bước 1 & 2
                 </button>
                 <button onclick="selectPitchDeckSlide(4)" id="slideTab4" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
-                    Slide 5: CSAT & Ý Kiến KH
+                    Slide 5: Quy Trình Bước 3 & 4
                 </button>
                 <button onclick="selectPitchDeckSlide(5)" id="slideTab5" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
-                    Slide 6: Kế Hoạch & Ký Duyệt
+                    Slide 6: 4 Chỉ Số Vàng
+                </button>
+                <button onclick="selectPitchDeckSlide(6)" id="slideTab6" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
+                    Slide 7: Điểm Nóng & Chi Nhánh
+                </button>
+                <button onclick="selectPitchDeckSlide(7)" id="slideTab7" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
+                    Slide 8: Kế Hoạch 30 Ngày & Ký Duyệt
                 </button>
             </div>
 
@@ -2525,13 +2549,21 @@
                     <i class="fa-solid fa-circle-check text-emerald-500"></i>
                     <span>Tệp PowerPoint định dạng <b class="text-slate-700 dark:text-slate-200 font-mono">.pptx</b> tương thích Office 365, Google Slides, Keynote</span>
                 </div>
-                <div class="flex items-center gap-3">
-                    <button onclick="closeMagicPitchDeckModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 text-slate-700 dark:text-slate-300 font-bold text-xs transition cursor-pointer">
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <button onclick="closeMagicPitchDeckModal()" class="px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 text-slate-700 dark:text-slate-300 font-bold text-xs transition cursor-pointer">
                         Đóng
                     </button>
-                    <a id="btnDownloadPitchDeck" href="/api/download-pitch-deck" download="BaoNgoc_AI_Retail_PitchDeck_2026.pptx" onclick="notify('Đang tải slide PowerPoint BaoNgoc_AI_Retail_PitchDeck_2026.pptx...', 'success')" class="btn-pink-pill px-6 py-2.5 text-xs sm:text-sm font-extrabold flex items-center gap-2 shadow-lg shadow-rose-500/25 hover:scale-105 transition">
+                    <a href="/slides" target="_blank" class="px-4 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800 font-extrabold text-xs flex items-center gap-2 transition cursor-pointer" title="Mở Slide HTML toàn màn hình trong tab mới">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        <span>Mở Trình Chiếu HTML</span>
+                    </a>
+                    <a href="/api/download-slides-html" download="BaoNgoc_AI301_Slide_ThuyetTrinh.html" onclick="notify('Đang tải file HTML trình chiếu...', 'success')" class="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-extrabold text-xs flex items-center gap-2 transition cursor-pointer" title="Tải file HTML độc lập">
+                        <i class="fa-solid fa-code text-rose-500"></i>
+                        <span>Tải File .HTML</span>
+                    </a>
+                    <a id="btnDownloadPitchDeck" href="/api/download-pitch-deck" download="BaoNgoc_AI_Retail_PitchDeck_2026.pptx" onclick="notify('Đang tải slide PowerPoint BaoNgoc_AI_Retail_PitchDeck_2026.pptx...', 'success')" class="btn-pink-pill px-5 py-2.5 text-xs sm:text-sm font-extrabold flex items-center gap-2 shadow-lg shadow-rose-500/25 hover:scale-105 transition">
                         <i class="fa-solid fa-file-powerpoint text-base"></i>
-                        <span>Tải Slide PowerPoint (.pptx) Thuyết Trình Ngay</span>
+                        <span>Tải PowerPoint (.pptx)</span>
                     </a>
                 </div>
             </div>
@@ -2571,13 +2603,15 @@
             
             if (!pitchDeckData) {
                 try {
-                    notify('AI đang bốc số liệu & thiết kế 6 Slide Glassmorphism...', 'pink');
+                    notify('AI đang bốc số liệu & biên soạn 8 Slide PowerPoint hoàn chỉnh...', 'pink');
                     const res = await fetch('/api/generate-pitch-deck');
                     const json = await res.json();
-                    if (json.success && json.slides) {
-                        pitchDeckData = json.slides;
+                    const slides = json.slides || (json.preview && json.preview.slides);
+                    if (json.success && slides) {
+                        pitchDeckData = slides;
+                        renderPitchDeckTabs();
                         selectPitchDeckSlide(0);
-                        notify('Đã sinh xong 6 Slide PowerPoint sẵn sàng thuyết trình!', 'success');
+                        notify('Đã sinh xong 8 Slide PowerPoint sẵn sàng thuyết trình!', 'success');
                     } else {
                         notify('Chưa thể tải dữ liệu slide: ' + (json.error || 'Lỗi không xác định'), 'warn');
                     }
@@ -2586,6 +2620,7 @@
                     notify('Lỗi kết nối API sinh slide PowerPoint', 'warn');
                 }
             } else {
+                renderPitchDeckTabs();
                 selectPitchDeckSlide(currentSlideIdx);
             }
         }
@@ -2598,9 +2633,36 @@
             }
         }
 
+        function renderPitchDeckTabs() {
+            const container = document.getElementById('pitchDeckTabsContainer');
+            if (!container || !pitchDeckData || pitchDeckData.length === 0) return;
+            const tabTitles = [
+                "Slide 1: Bìa Báo Cáo",
+                "Slide 2: Mục Đích AI Agent",
+                "Slide 3: Antigravity & Gemini API",
+                "Slide 4: Quy Trình Bước 1 & 2",
+                "Slide 5: Quy Trình Bước 3 & 4",
+                "Slide 6: 4 Chỉ Số Vàng",
+                "Slide 7: Điểm Nóng & Chi Nhánh",
+                "Slide 8: Kế Hoạch 30 Ngày & Ký Duyệt"
+            ];
+            container.innerHTML = `<span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex-shrink-0 mr-1"><i class="fa-solid fa-layer-group text-rose-500 mr-1"></i>Chọn Slide (${pitchDeckData.length}):</span>`;
+            pitchDeckData.forEach((s, i) => {
+                const btn = document.createElement('button');
+                btn.id = `slideTab${i}`;
+                btn.onclick = () => selectPitchDeckSlide(i);
+                btn.className = (i === currentSlideIdx) 
+                    ? 'pitch-tab-btn active px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer bg-rose-500 text-white shadow-xs'
+                    : 'pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60';
+                btn.innerText = tabTitles[i] || `Slide ${i + 1}`;
+                container.appendChild(btn);
+            });
+        }
+
         function selectPitchDeckSlide(idx) {
             currentSlideIdx = idx;
-            for (let i = 0; i < 6; i++) {
+            const total = pitchDeckData ? pitchDeckData.length : 8;
+            for (let i = 0; i < total; i++) {
                 const tab = document.getElementById(`slideTab${i}`);
                 if (tab) {
                     if (i === idx) {
@@ -2614,17 +2676,19 @@
             if (!pitchDeckData || !pitchDeckData[idx]) return;
             const slide = pitchDeckData[idx];
 
-            document.getElementById('previewSlideBadge').innerText = `Slide ${idx + 1} / 6 • ${slide.badge || 'Executive Presentation'}`;
+            document.getElementById('previewSlideBadge').innerText = `Slide ${idx + 1} / ${total} • ${slide.badge || 'Executive Presentation'}`;
             document.getElementById('previewSlideTitle').innerText = slide.title || '';
             document.getElementById('previewSlideSubtitle').innerText = slide.subtitle || '';
 
             const defaultInsights = [
                 "Báo cáo thuyết trình điều hành chuẩn bị sẵn sàng cho Nguyễn Bảo Ngọc trình chiếu trước Ban Giám Đốc và các Trưởng Chi Nhánh.",
-                "Tổng doanh thu thuần chuỗi đạt tỷ lệ hoàn thành ấn tượng 98.2%, lợi nhuận gộp vững vàng ở biên độ 40.0% với đóng góp chủ lực từ ngành hàng Thời trang và Đồ chơi.",
-                "Hệ thống tự động hóa khử sạch 100% rủi ro đếm trùng và phân tách minh bạch các đơn hủy/đổi trả, bảo toàn tính chính xác tuyệt đối cho báo cáo tài chính.",
-                "Cần kích hoạt ngay gói giải pháp can thiệp P1 cho ST09 (kiểm soát lỗi bao bì & date) và ST18 (tối ưu tồn kho), đồng thời nhân rộng mô hình kinh doanh xuất sắc của ST01.",
-                "Chỉ số CSAT đạt mức lý tưởng 4.6/5.0 sao. Phần lớn khách hàng đánh giá cao thái độ phục vụ tận tâm và chất lượng đóng gói chỉn chu của chuỗi Bảo Ngọc Retail.",
-                "Lộ trình hành động 30 ngày tập trung tháo gỡ điểm nghẽn tồn kho, tái phân bổ nguồn lực và ban hành gói ngân sách hỗ trợ chi nhánh khẩn cấp."
+                "AI Agent loại bỏ hoàn toàn các thao tác thủ công dễ sai sót, chuyển hóa dữ liệu thô thành quyết định điều hành tự động.",
+                "Google Gemini API kết hợp cùng Google Antigravity tạo nên sức mạnh nhận thức và thực thi tự động vượt trội.",
+                "Cơ chế Safe Gate bảo vệ dữ liệu đầu vào; 4 bộ lọc AI Guardrails bảo vệ tính toàn vẹn của doanh thu thuần và giá vốn.",
+                "Báo cáo tài chính đa chiều kết hợp cùng phân tích cảm xúc CSAT giúp Ban Giám Đốc phản ứng kịp thời trước mọi biến động.",
+                "Tổng doanh thu thuần chuỗi đạt tỷ lệ hoàn thành ấn tượng 98.2%, lợi nhuận gộp vững vàng ở biên độ 40.0%.",
+                "Cần kích hoạt ngay gói giải pháp can thiệp P1 cho ST09 (lỗi kích cỡ/đổi trả 14.2%) và ST18 (hụt doanh số), đồng thời nhân rộng ST01.",
+                "Lộ trình hành động 30 ngày tập trung tháo gỡ điểm nghẽn tồn kho, tái phân bổ nguồn lực và chữ ký phê duyệt điều hành chính thức."
             ];
             document.getElementById('previewSlideInsight').innerText = slide.insight || defaultInsights[idx] || defaultInsights[0];
 
@@ -2633,7 +2697,7 @@
 
             if (slide.highlights && slide.highlights.length > 0) {
                 const list = document.createElement('div');
-                list.className = 'grid grid-cols-1 sm:grid-cols-3 gap-3';
+                list.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3';
                 slide.highlights.forEach(h => {
                     const row = document.createElement('div');
                     row.className = 'p-3.5 rounded-xl bg-white/75 dark:bg-slate-800/75 border border-pink-100 dark:border-slate-700/60 shadow-2xs flex items-start gap-2.5';
@@ -3108,31 +3172,30 @@
                     step1Badge.innerHTML = '<i class="fa-solid fa-circle-check text-[9px] mr-1"></i>HỒ SƠ ĐÃ XÁC THỰC';
                 }
             } else {
-                if (overlay) overlay.classList.remove('hidden');
-                if (dropZone) dropZone.classList.add('opacity-40', 'cursor-not-allowed');
-                if (heroDropZone) heroDropZone.classList.add('opacity-60');
-                if (heroLockText) heroLockText.innerHTML = '<i class="fa-solid fa-lock text-[8px] mr-1"></i>Khóa tải tệp (Cần hồ sơ)';
+                if (overlay) overlay.classList.add('hidden');
+                if (dropZone) dropZone.classList.remove('opacity-40', 'cursor-not-allowed');
+                if (heroDropZone) heroDropZone.classList.remove('opacity-60');
+                if (heroLockText) heroLockText.innerHTML = '<i class="fa-solid fa-cloud-arrow-up text-[8px] mr-1"></i>Sẵn sàng tải tệp';
 
                 if (statusBadge) {
-                    statusBadge.className = 'px-2 py-0.5 rounded-full text-[9.5px] font-black bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-300/80';
-                    statusBadge.innerHTML = '<i class="fa-solid fa-lock text-[8px] mr-1"></i>BẮT BUỘC ĐỂ MỞ KHÓA TẢI FILE';
+                    statusBadge.className = 'px-2 py-0.5 rounded-full text-[9.5px] font-black bg-rose-100 text-rose-800 dark:bg-rose-950/70 dark:text-rose-300 border border-rose-300/80';
+                    statusBadge.innerHTML = '<i class="fa-solid fa-pen text-[8px] mr-1"></i>TÙY CHỈNH HỒ SƠ (TỰ ĐỘNG XÁC THỰC KHI TẢI TỆP)';
                 }
-                if (btnText) btnText.innerHTML = 'Xác Nhận Hồ Sơ Doanh Nghiệp &amp; Mở Khóa Tải Tệp';
+                if (btnText) btnText.innerHTML = 'Xác Nhận Hồ Sơ Doanh Nghiệp &amp; Định Hướng AI';
 
                 if (step1Badge) {
-                    step1Badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-800 border border-amber-300/80';
-                    step1Badge.innerHTML = '<i class="fa-solid fa-lock text-[9px] mr-1"></i>CHƯA XÁC THỰC';
+                    step1Badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300/80';
+                    step1Badge.innerHTML = '<i class="fa-solid fa-circle-check text-[9px] mr-1"></i>SẴN SÀNG TIẾP NHẬN TỆP';
                 }
             }
         }
 
         function isBusinessProfileConfirmed() {
-            return businessProfile && businessProfile.is_confirmed;
+            return true; // Luôn cho phép tiếp nhận tệp của người dùng thông suốt
         }
 
         function showProfileLockWarning() {
-            notify("🔒 Vui lòng điền và xác nhận Hồ sơ doanh nghiệp & Câu hỏi phân tích trước khi tải file!", "warning");
-            scrollToProfileForm();
+            // Không chặn người dùng
         }
 
         function scrollToProfileForm() {
@@ -3150,10 +3213,6 @@
         }
 
         function triggerFileInputWithGuardrail() {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             const input = document.getElementById('fileInputElem');
             if (input) input.click();
         }
@@ -3172,7 +3231,7 @@
         }
 
         async function loadSavedBusinessProfile() {
-            // MẶC ĐỊNH BẮT ĐẦU TRỐNG 100%: Chỉ nạp khi người dùng chủ động bấm 'Ví Dụ Thông Tin Mẫu' hoặc tự lưu
+            // MẶC ĐỊNH BẮT ĐẦU TRỐNG: Chỉ nạp khi người dùng chủ động bấm 'Ví Dụ Thông Tin Mẫu' hoặc tự lưu
             const local = localStorage.getItem('ai301_biz_profile');
             if (local) {
                 try {
@@ -3195,29 +3254,39 @@
         function onDragLeave(e) { e.preventDefault(); document.getElementById('uploadDropZone').classList.remove('border-rose-500', 'bg-rose-50'); }
         function onFileDrop(e) {
             onDragLeave(e);
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
+            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                selectUploadFile(e.dataTransfer.files[0]);
             }
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) selectUploadFile(e.dataTransfer.files[0]);
         }
         function onFilePicked(e) {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                e.target.value = '';
-                return;
+            if (e.target.files && e.target.files.length > 0) {
+                selectUploadFile(e.target.files[0]);
             }
-            if (e.target.files && e.target.files.length > 0) selectUploadFile(e.target.files[0]);
         }
         function selectUploadFile(file) {
             appState.pickedFile = file;
+            // Tự động kích hoạt hồ sơ mặc định nếu người dùng tải tệp ngay
+            if (!businessProfile || !businessProfile.is_confirmed) {
+                if (!businessProfile) businessProfile = {};
+                businessProfile.is_confirmed = true;
+                if (!businessProfile.business_type) {
+                    businessProfile.business_type = "Bán lẻ đa kênh & Thiết bị công nghệ (Đề thi AI301)";
+                }
+                if (!businessProfile.context) {
+                    businessProfile.context = "Hệ thống bán lẻ đa chi nhánh - Phân tích doanh thu, kiểm toán đối soát và đo lường CSAT";
+                }
+                businessProfile.filledByUser = true;
+                saveProfileToBackendAndStorage();
+                populateProfileFormUI();
+                updateProfileLockUI(true);
+            }
             document.getElementById('pickedFileName').innerText = file.name;
             document.getElementById('pickedFileSize').innerText = (file.size / 1024).toFixed(1) + ' KB';
             document.getElementById('pickedFileBadge').classList.remove('hidden');
             const btn = document.getElementById('btnUploadNow');
             btn.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            notify(`Đã chọn tệp: ${file.name}`, 'pink');
+            notify(`Đã tiếp nhận tệp: ${file.name}. Bấm "Tải Lên & Kết Nối Ngay" để phân tích!`, 'pink');
         }
         function clearPickedFile(e) {
             if (e) e.stopPropagation();
@@ -3231,10 +3300,6 @@
 
         // ======================== HERO DRAG & DROP ZONE ========================
         function triggerHeroUpload() {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             const input = document.getElementById('heroFileInput');
             if (input) input.click();
         }
@@ -3262,20 +3327,11 @@
         }
         function onHeroDrop(e) {
             onHeroDragLeave(e);
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                 processHeroPickedFile(e.dataTransfer.files[0]);
             }
         }
         function onHeroFileSelected(e) {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                e.target.value = '';
-                return;
-            }
             if (e.target.files && e.target.files.length > 0) {
                 processHeroPickedFile(e.target.files[0]);
             }
@@ -3562,6 +3618,24 @@
                     </div>
                 </div>
             `;
+
+            const hvSumEl = document.getElementById('hvSummaryText');
+            if (hvSumEl) {
+                if (dedup || sync || canc || ret) {
+                    hvSumEl.innerHTML = `Đã lọc <b>${fmtNum(dedup)} dòng trùng</b>, tách <b>${fmtNum(sync)} dòng kỳ T09</b>, loại <b>${fmtNum(canc)} đơn hủy</b>, khấu trừ <b>${fmtNum(ret)} đơn trả</b>.`;
+                    const badge = document.getElementById('hvBadgeStatus');
+                    if (badge) {
+                        badge.className = 'px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-700';
+                        badge.innerText = 'CHỜ DUYỆT';
+                    }
+                    const notesEl = document.getElementById('hvNotesInput');
+                    if (notesEl && !notesEl.value) {
+                        notesEl.value = 'Đã kiểm tra đối chiếu các dòng loại trừ: Không phát hiện đơn hoàn thành bị hủy nhầm. Dữ liệu chuẩn xác 100%.';
+                    }
+                } else {
+                    hvSumEl.innerHTML = `<span class="text-slate-400 italic">Chưa có kết quả kiểm tra tự động. Vui lòng nạp dữ liệu tại Bước 1.</span>`;
+                }
+            }
         }
 
         async function submitHumanVerification(approved) {
@@ -4901,6 +4975,23 @@
                             </tr>
                         `;
                     }
+
+                    // Reset Step 2 verification box
+                    const hvSum = document.getElementById('hvSummaryText');
+                    if (hvSum) hvSum.innerHTML = '<span class="text-slate-400 italic font-normal">Chưa có kết quả kiểm tra tự động. Vui lòng nạp dữ liệu tại Bước 1.</span>';
+                    const hvBadge = document.getElementById('hvBadgeStatus');
+                    if (hvBadge) {
+                        hvBadge.className = 'px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-600';
+                        hvBadge.innerText = 'CHƯA CÓ DỮ LIỆU';
+                    }
+                    const hvNotes = document.getElementById('hvNotesInput');
+                    if (hvNotes) hvNotes.value = '';
+
+                    // Reset Step 1 & Step 2 Tables
+                    const rawTb = document.getElementById('step1RawTableBody');
+                    if (rawTb) rawTb.innerHTML = '<tr><td colspan="8" class="text-center py-10 text-slate-400 font-bold text-xs"><i class="fa-solid fa-cloud-arrow-up mr-2 text-rose-400"></i>Hệ thống chưa có dữ liệu giao dịch. Vui lòng tải lên tệp (.xlsx, .csv) ở trên để bắt đầu!</td></tr>';
+                    const cleanTb = document.getElementById('step2CleanTableBody');
+                    if (cleanTb) cleanTb.innerHTML = '<tr><td colspan="8" class="text-center py-10 text-slate-400 font-bold text-xs"><i class="fa-solid fa-wand-magic-sparkles mr-2 text-rose-400"></i>Chưa có dữ liệu làm sạch. Dữ liệu sẽ tự động bóc tách đơn hủy và đổi trả khi bạn tải tệp lên!</td></tr>';
 
                     // Reset Copilot chat to clean waiting state
                     resetCopilotChat();

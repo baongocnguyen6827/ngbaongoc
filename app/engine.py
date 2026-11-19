@@ -12,12 +12,43 @@ Bao gồm:
 import os
 import json
 import datetime
+import tempfile
 import pandas as pd
 import numpy as np
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "data")
+APP_DATA_DIR = os.path.join(BASE_DIR, "data")
 WORKSPACE_DIR = os.path.dirname(BASE_DIR)
+
+def get_writable_dir():
+    """Xác định thư mục có quyền ghi (Hỗ trợ cả môi trường Local Windows và Vercel Serverless /tmp)"""
+    if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+        tmp_dir = os.path.join(tempfile.gettempdir(), "baongoc_ai_data")
+        os.makedirs(tmp_dir, exist_ok=True)
+        return tmp_dir
+    try:
+        os.makedirs(APP_DATA_DIR, exist_ok=True)
+        test_file = os.path.join(APP_DATA_DIR, ".write_test")
+        with open(test_file, "w") as f:
+            f.write("ok")
+        os.remove(test_file)
+        return APP_DATA_DIR
+    except Exception:
+        tmp_dir = os.path.join(tempfile.gettempdir(), "baongoc_ai_data")
+        os.makedirs(tmp_dir, exist_ok=True)
+        return tmp_dir
+
+DATA_DIR = get_writable_dir()
+
+def resolve_data_file(filename):
+    """Tìm file dữ liệu: ưu tiên tìm trong DATA_DIR (/tmp khi chạy trên Vercel), nếu chưa có thì lấy từ APP_DATA_DIR đính kèm"""
+    p1 = os.path.join(DATA_DIR, filename)
+    if os.path.exists(p1):
+        return p1
+    p2 = os.path.join(APP_DATA_DIR, filename)
+    if os.path.exists(p2):
+        return p2
+    return p1
 
 class PhucAnRetailEngine:
     def __init__(self):
@@ -56,12 +87,12 @@ class PhucAnRetailEngine:
 
     def load_metadata(self):
         """Tải danh mục và quy tắc nghiệp vụ"""
-        stores_path = os.path.join(DATA_DIR, "stores.csv")
-        products_path = os.path.join(DATA_DIR, "products_cogs.csv")
-        targets_path = os.path.join(DATA_DIR, "targets_oct2026.csv")
-        prior_path = os.path.join(DATA_DIR, "prior_period_sep2026.csv")
-        rules_path = os.path.join(DATA_DIR, "business_rules.json")
-        feedback_path = os.path.join(DATA_DIR, "customer_feedbacks.json")
+        stores_path = resolve_data_file("stores.csv")
+        products_path = resolve_data_file("products_cogs.csv")
+        targets_path = resolve_data_file("targets_oct2026.csv")
+        prior_path = resolve_data_file("prior_period_sep2026.csv")
+        rules_path = resolve_data_file("business_rules.json")
+        feedback_path = resolve_data_file("customer_feedbacks.json")
 
         if os.path.exists(stores_path):
             self.stores_df = pd.read_csv(stores_path, encoding="utf-8-sig")
@@ -80,7 +111,7 @@ class PhucAnRetailEngine:
         else:
             self.customer_feedbacks = []
             
-        profile_path = os.path.join(DATA_DIR, "business_profile.json")
+        profile_path = resolve_data_file("business_profile.json")
         if os.path.exists(profile_path):
             try:
                 with open(profile_path, "r", encoding="utf-8") as f:
@@ -134,8 +165,8 @@ class PhucAnRetailEngine:
     def load_raw_data(self, file_path=None):
         """Tải dữ liệu thô linh hoạt (Hỗ trợ cả file Đề thi đại lý sữa AI301, file Phúc An và file tùy biến)"""
         if file_path is None:
-            uploaded_raw_xlsx = os.path.join(DATA_DIR, "uploaded_raw.xlsx")
-            uploaded_raw_csv = os.path.join(DATA_DIR, "uploaded_raw.csv")
+            uploaded_raw_xlsx = resolve_data_file("uploaded_raw.xlsx")
+            uploaded_raw_csv = resolve_data_file("uploaded_raw.csv")
             uploaded_excel = os.path.join(WORKSPACE_DIR, "PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx")
             if os.path.exists(uploaded_raw_xlsx):
                 file_path = uploaded_raw_xlsx
@@ -144,7 +175,7 @@ class PhucAnRetailEngine:
             elif os.path.exists(uploaded_excel):
                 file_path = uploaded_excel
             else:
-                file_path = os.path.join(DATA_DIR, "raw_transactions_oct2026.csv")
+                file_path = resolve_data_file("raw_transactions_oct2026.csv")
         
         base_name = os.path.basename(file_path)
         if base_name.startswith("uploaded_raw"):
@@ -281,6 +312,19 @@ class PhucAnRetailEngine:
                 except Exception:
                     df = pd.read_csv(file_path, encoding="latin1")
 
+        # Tự động phát hiện dòng Header nếu dòng đầu là Unnamed hoặc tiêu đề
+        unnamed_cols = [c for c in df.columns if str(c).startswith("Unnamed:")]
+        if len(unnamed_cols) >= len(df.columns) * 0.4 and len(df) > 0:
+            for r_idx in range(min(12, len(df))):
+                row_vals = df.iloc[r_idx].dropna().astype(str).tolist()
+                row_lower = " ".join(row_vals).lower()
+                if any(k in row_lower for k in ['mã', 'ngày', 'tiền', 'giá', 'số lượng', 'id', 'date', 'amount', 'qty', 'status', 'trạng thái', 'cửa hàng', 'chi nhánh', 'store']):
+                    df.columns = [str(c).strip() for c in df.iloc[r_idx].values]
+                    df = df.iloc[r_idx+1:].reset_index(drop=True)
+                    break
+
+        df.columns = [str(c).strip() for c in df.columns]
+
         # Chuẩn hóa tên cột linh hoạt cho mọi bộ dữ liệu
         col_map = {
             # Format Đề thi AI301 (RFQ, Quotation, Báo giá)
@@ -306,7 +350,14 @@ class PhucAnRetailEngine:
             'Note': 'note',
             # Format Đề thi AI301 (Đại lý sữa Hà Nội - Du_lieu_1000_dong)
             'Mã hóa đơn': 'transaction_id',
+            'Mã Hóa Đơn': 'transaction_id',
+            'Mã đơn': 'transaction_id',
+            'Mã Đơn': 'transaction_id',
+            'Mã giao dịch': 'transaction_id',
+            'Mã Giao Dịch': 'transaction_id',
             'Ngày bán': 'transaction_date',
+            'Ngày Bán': 'transaction_date',
+            'Ngày giao dịch': 'transaction_date',
             'Quận/Huyện': 'store_name',
             'Mã sản phẩm': 'product_id',
             'Tên sản phẩm': 'product_name',
@@ -315,10 +366,19 @@ class PhucAnRetailEngine:
             'Đơn vị tính': 'unit',
             'Số lượng': 'quantity',
             'Đơn giá niêm yết (VND)': 'unit_price',
+            'Đơn giá (VND)': 'unit_price',
+            'Đơn giá': 'unit_price',
             'Doanh thu thuần (VND)': 'total_amount',
+            'Doanh thu': 'total_amount',
+            'Tổng tiền (VND)': 'total_amount',
+            'Tổng tiền': 'total_amount',
             'Giá vốn đơn vị (VND)': 'unit_cost',
             'Giá vốn hàng bán (VND)': 'cogs',
+            'Giá vốn (VND)': 'cogs',
+            'Giá vốn': 'cogs',
             'Lợi nhuận gộp (VND)': 'gross_profit',
+            'Lợi nhuận gộp': 'gross_profit',
+            'Lợi nhuận': 'gross_profit',
             'Tiền chiết khấu (VND)': 'refund_amount',
             'Tỷ lệ chiết khấu': 'discount_rate',
             'Phương thức thanh toán': 'payment_method',
@@ -344,16 +404,32 @@ class PhucAnRetailEngine:
             # Định dạng tiếng Anh / thông dụng
             'order_id': 'transaction_id',
             'invoice_id': 'transaction_id',
+            'trans_id': 'transaction_id',
             'date': 'transaction_date',
+            'datetime': 'transaction_date',
+            'timestamp': 'transaction_date',
             'store': 'store_name',
+            'branch': 'store_name',
             'location': 'store_name',
             'item_name': 'product_name',
+            'product': 'product_name',
             'qty': 'quantity',
             'price': 'unit_price',
             'amount': 'total_amount',
-            'net_revenue': 'total_amount'
+            'revenue': 'total_amount',
+            'net_revenue': 'total_amount',
+            'cost': 'cogs',
+            'status': 'status',
+            'state': 'status'
         }
-        df = df.rename(columns=col_map)
+        col_map_lower = {k.lower(): v for k, v in col_map.items()}
+        renamed_cols = {}
+        for c in df.columns:
+            if c in col_map:
+                renamed_cols[c] = col_map[c]
+            elif str(c).lower() in col_map_lower:
+                renamed_cols[c] = col_map_lower[str(c).lower()]
+        df = df.rename(columns=renamed_cols)
 
         # Xử lý store_id & store_name
         if 'store_name' in df.columns and 'store_id' not in df.columns:
@@ -487,12 +563,13 @@ class PhucAnRetailEngine:
             "analysis_questions": [],
             "is_confirmed": False
         }
-        profile_path = os.path.join(DATA_DIR, "business_profile.json")
-        if os.path.exists(profile_path):
-            try:
-                os.remove(profile_path)
-            except Exception:
-                pass
+        for fname in ["uploaded_raw.xlsx", "uploaded_raw.csv", "cleaned_transactions_oct2026.csv", "business_profile.json"]:
+            fpath = os.path.join(DATA_DIR, fname)
+            if os.path.exists(fpath):
+                try:
+                    os.remove(fpath)
+                except Exception:
+                    pass
         return {"status": "CLEAN", "message": "Đã xóa toàn bộ dữ liệu, hệ thống sẵn sàng tiếp nhận tệp mới."}
 
     # ==========================================

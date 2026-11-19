@@ -10,7 +10,7 @@ import io
 import pandas as pd
 import numpy as np
 from flask import Flask, render_template, request, jsonify, send_file
-from app.engine import engine, DATA_DIR
+from app.engine import engine, DATA_DIR, WORKSPACE_DIR, BASE_DIR, APP_DATA_DIR, resolve_data_file
 from app.pitch_deck_generator import generate_pitch_deck, get_pitch_deck_preview_data
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -24,13 +24,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.jinja_env.auto_reload = True
 
-# Tự động nạp tệp dữ liệu người dùng đã tải lên gần nhất (nếu có)
-uploaded_file = os.path.join(DATA_DIR, "uploaded_raw.xlsx")
-if os.path.exists(uploaded_file):
-    try:
-        engine.load_raw_data(uploaded_file)
-    except Exception as e:
-        print(f"Lỗi nạp uploaded_raw.xlsx: {e}")
+# Mặc định khởi động hệ thống ở trạng thái sạch 100% (không tự ý nạp dữ liệu ngầm)
 
 @app.route("/")
 def index():
@@ -60,17 +54,9 @@ def get_system_state():
 def load_sample_data():
     """Nạp bộ dữ liệu thô: Mặc định ưu tiên file người dùng tải lên"""
     try:
-        uploaded_excel = os.path.join(DATA_DIR, "PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx")
-        if not os.path.exists(uploaded_excel):
-            uploaded_excel = os.path.join(os.path.dirname(os.path.dirname(DATA_DIR)), "PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx")
-            
-        if os.path.exists(uploaded_excel):
-            info = engine.load_raw_data(uploaded_excel)
-            msg = f"Đã nạp thành công {info['total_rows']:,} dòng từ tệp tải lên: {info['file_name']}!"
-        else:
-            sample_path = os.path.join(DATA_DIR, "raw_transactions_oct2026.csv")
-            info = engine.load_raw_data(sample_path)
-            msg = f"Đã nạp thành công {info['total_rows']:,} dòng dữ liệu thô!"
+        sample_path = resolve_data_file("raw_transactions_oct2026.csv")
+        info = engine.load_raw_data(sample_path)
+        msg = f"Đã nạp thành công {info['total_rows']:,} dòng dữ liệu thô!"
         return jsonify({"success": True, "data": info, "message": msg})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
@@ -79,9 +65,7 @@ def load_sample_data():
 def load_uploaded_data():
     """Nạp trực tiếp tệp Excel người dùng tải lên"""
     try:
-        uploaded_excel = os.path.join(DATA_DIR, "PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx")
-        if not os.path.exists(uploaded_excel):
-            uploaded_excel = os.path.join(os.path.dirname(os.path.dirname(DATA_DIR)), "PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx")
+        uploaded_excel = resolve_data_file("PhucAn_DuLieuBanHangTho_DaBoSungTruong.xlsx")
         info = engine.load_raw_data(uploaded_excel)
         return jsonify({"success": True, "data": info, "message": f"Đã nạp thành công {info['total_rows']:,} dòng từ tệp {info['file_name']}!"})
     except Exception as e:
@@ -152,7 +136,7 @@ def execute_cleaning():
 @app.route("/api/human-verify", methods=["GET", "POST"])
 def human_verify():
     """Giai đoạn 1: Con người kiểm tra lại (Human Verification)"""
-    data = request.json or request.args or {}
+    data = request.get_json(silent=True) or request.args.to_dict() or {}
     approved = str(data.get("approved", "true")).lower() in ["true", "1", "yes"]
     notes = data.get("notes", "")
     res = engine.human_verify(approved, notes)
@@ -365,7 +349,7 @@ def clear_customer_feedbacks():
 @app.route("/api/feedbacks/load-sample", methods=["POST"])
 def load_sample_customer_feedbacks():
     """Nạp dữ liệu phản hồi khách hàng mẫu khi cần thử nghiệm"""
-    sample_path = os.path.join(DATA_DIR, "sample_customer_feedbacks.json")
+    sample_path = resolve_data_file("sample_customer_feedbacks.json")
     if os.path.exists(sample_path):
         try:
             with open(sample_path, "r", encoding="utf-8") as f:
@@ -394,11 +378,31 @@ def api_generate_pitch_deck():
         return jsonify({
             "success": True,
             "message": "Đã tự động tạo bộ Slide PowerPoint ma thuật thành công!",
+            "slides": preview_data.get("slides", []),
             "preview": preview_data,
             "download_url": "/api/download-pitch-deck"
         })
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/slides", methods=["GET"])
+def presentation_slides():
+    """Xem trực tiếp bài trình chiếu 8 Slide HTML toàn màn hình"""
+    return render_template("slides.html")
+
+@app.route("/api/download-slides-html", methods=["GET"])
+def api_download_slides_html():
+    """Tải xuống tệp trình chiếu HTML (.html) hoàn chỉnh độc lập"""
+    html_path = os.path.join(WORKSPACE_DIR, "BaoNgoc_AI301_Slide_ThuyetTrinh.html")
+    if not os.path.exists(html_path):
+        html_path = os.path.join(os.path.dirname(BASE_DIR), "BaoNgoc_AI301_Slide_ThuyetTrinh.html")
+        
+    return send_file(
+        html_path,
+        mimetype="text/html",
+        as_attachment=True,
+        download_name="BaoNgoc_AI301_Slide_ThuyetTrinh.html"
+    )
 
 @app.route("/api/download-pitch-deck", methods=["GET"])
 def api_download_pitch_deck():
