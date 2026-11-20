@@ -91,7 +91,20 @@ auto_init_engine()
 @app.route("/home", methods=["GET"])
 def index():
     """Trang chủ hiển thị toàn bộ quy trình 3 giai đoạn theo BPMN"""
-    return render_template("index.html")
+    try:
+        return render_template("index.html")
+    except Exception:
+        candidates = [
+            os.path.join(BASE_DIR, "templates", "index.html"),
+            os.path.join(os.path.dirname(BASE_DIR), "app", "templates", "index.html"),
+            os.path.join(WORKSPACE_DIR, "app", "templates", "index.html"),
+            os.path.join(os.getcwd(), "app", "templates", "index.html"),
+        ]
+        for p in candidates:
+            if os.path.exists(p):
+                with open(p, "r", encoding="utf-8") as f:
+                    return f.read(), 200, {"Content-Type": "text/html; charset=utf-8"}
+        raise
 
 @app.route("/api/system-state", methods=["GET"])
 def get_system_state():
@@ -533,7 +546,21 @@ def api_generate_pitch_deck():
 @app.route("/api/index/slides", methods=["GET"])
 def presentation_slides():
     """Xem trực tiếp bài trình chiếu 8 Slide HTML toàn màn hình"""
-    return render_template("slides.html")
+    try:
+        return render_template("slides.html")
+    except Exception:
+        candidates = [
+            os.path.join(BASE_DIR, "templates", "slides.html"),
+            os.path.join(os.path.dirname(BASE_DIR), "app", "templates", "slides.html"),
+            os.path.join(WORKSPACE_DIR, "app", "templates", "slides.html"),
+            os.path.join(WORKSPACE_DIR, "slides.html"),
+            os.path.join(os.getcwd(), "slides.html"),
+        ]
+        for p in candidates:
+            if os.path.exists(p):
+                with open(p, "r", encoding="utf-8") as f:
+                    return f.read(), 200, {"Content-Type": "text/html; charset=utf-8"}
+        raise
 
 @app.route("/api/download-slides-html", methods=["GET"])
 def api_download_slides_html():
