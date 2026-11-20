@@ -86,6 +86,8 @@ class PhucAnRetailEngine:
         self.audit_results = None
         self.executive_decisions = []
         self.customer_feedbacks = []
+        self.initial_cleaned_df = None
+        self.user_custom_edits = []
         
         # Hồ sơ Doanh nghiệp & Vấn đề phân tích định hướng cho AI Agent (Mặc định để trống, chỉ nạp khi bấm 'Ví Dụ Thông Tin Mẫu' hoặc do người dùng nhập)
         self.business_profile = {
@@ -566,6 +568,8 @@ class PhucAnRetailEngine:
         self.audit_results = None
         self.executive_decisions = []
         self.customer_feedbacks = []
+        self.initial_cleaned_df = None
+        self.user_custom_edits = []
         self.business_profile = {
             "business_type": "",
             "context": "",
@@ -640,6 +644,8 @@ class PhucAnRetailEngine:
         
         # Lưu bảng dữ liệu sạch
         self.cleaned_df = df_valid.copy()
+        self.initial_cleaned_df = self.cleaned_df.copy()
+        self.user_custom_edits = []
         cleaned_path = os.path.join(DATA_DIR, "cleaned_transactions_oct2026.csv")
         self.cleaned_df.to_csv(cleaned_path, index=False, encoding="utf-8-sig")
         
@@ -699,6 +705,188 @@ class PhucAnRetailEngine:
         self.human_verification["verified_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.human_verification["notes"] = notes
         return self.human_verification
+
+    def apply_custom_cleaning(self, instruction="", action_type="", target_column="", target_row_id=""):
+        """
+        Áp dụng ghi chú / yêu cầu tùy biến làm sạch dữ liệu từ người dùng ở Bước 2.
+        Hỗ trợ:
+        - Xóa 1 cột (Drop column)
+        - Xóa 1 dòng hoặc theo mã giao dịch (Drop row by ID or index)
+        - Xóa các dòng có doanh thu <= 0 (Filter zero / negative amount)
+        - Xóa các dòng NaN / Null
+        - Tự động nhận diện lệnh từ ngôn ngữ tự nhiên trong instruction.
+        """
+        if self.cleaned_df is None:
+            raise ValueError("Chưa có dữ liệu làm sạch để tùy biến. Vui lòng chạy làm sạch trước.")
+
+        inst_lower = (instruction or "").strip().lower()
+        action_log = None
+        rows_affected = 0
+        cols_affected = 0
+        now_str = datetime.datetime.now().strftime("%H:%M:%S %d/%m/%Y")
+
+        # 1. XỬ LÝ XÓA CỘT (DROP COLUMN)
+        col_to_drop = None
+        if action_type == "drop_column" and target_column:
+            col_to_drop = target_column
+        elif any(k in inst_lower for k in ["xóa cột", "xoa cot", "loại cột", "loai cot", "bỏ cột", "bo cot", "drop column"]):
+            for c in self.cleaned_df.columns:
+                if c.lower() in inst_lower:
+                    col_to_drop = c
+                    break
+            if not col_to_drop:
+                words = inst_lower.replace(":", " ").replace('"', ' ').replace("'", " ").split()
+                for w in words:
+                    for c in self.cleaned_df.columns:
+                        if c.lower() == w:
+                            col_to_drop = c
+                            break
+
+        if col_to_drop and col_to_drop in self.cleaned_df.columns:
+            self.cleaned_df = self.cleaned_df.drop(columns=[col_to_drop]).copy()
+            cols_affected = 1
+            action_log = {
+                "timestamp": now_str,
+                "action": "Xóa cột",
+                "detail": f"Đã xóa cột '{col_to_drop}' khỏi bảng dữ liệu",
+                "rows_affected": 0,
+                "cols_affected": 1
+            }
+
+        # 2. XỬ LÝ XÓA DÒNG (DROP ROW BY ID / INDEX)
+        elif action_type == "drop_row" and target_row_id:
+            initial_len = len(self.cleaned_df)
+            id_cols = [c for c in self.cleaned_df.columns if "id" in c.lower() or c in ["Quote_ID", "order_id"]]
+            dropped = False
+            for c in id_cols:
+                mask = self.cleaned_df[c].astype(str) == str(target_row_id).strip()
+                if mask.any():
+                    self.cleaned_df = self.cleaned_df[~mask].copy()
+                    dropped = True
+                    break
+            if not dropped:
+                try:
+                    idx_val = int(target_row_id)
+                    if 0 <= idx_val < len(self.cleaned_df):
+                        self.cleaned_df = self.cleaned_df.drop(self.cleaned_df.index[idx_val]).copy()
+                        dropped = True
+                except Exception:
+                    pass
+            rows_affected = initial_len - len(self.cleaned_df)
+            action_log = {
+                "timestamp": now_str,
+                "action": "Xóa dòng",
+                "detail": f"Đã xóa dòng có mã '{target_row_id}' ({rows_affected} dòng bị loại)",
+                "rows_affected": rows_affected,
+                "cols_affected": 0
+            }
+
+        # Nhận diện tự động nếu gõ "Xóa dòng TX-xxx"
+        elif any(k in inst_lower for k in ["xóa dòng", "xoa dong", "loại dòng", "bỏ dòng", "xóa mã", "xoa ma"]):
+            import re
+            m = re.search(r'(tx[-\w]+|[0-9]+)', instruction, re.IGNORECASE)
+            extracted_id = m.group(1) if m else None
+            if extracted_id:
+                initial_len = len(self.cleaned_df)
+                id_cols = [c for c in self.cleaned_df.columns if "id" in c.lower() or c in ["Quote_ID", "order_id"]]
+                dropped = False
+                for c in id_cols:
+                    mask = self.cleaned_df[c].astype(str).str.lower() == str(extracted_id).lower()
+                    if mask.any():
+                        self.cleaned_df = self.cleaned_df[~mask].copy()
+                        dropped = True
+                        break
+                rows_affected = initial_len - len(self.cleaned_df)
+                action_log = {
+                    "timestamp": now_str,
+                    "action": "Xóa dòng",
+                    "detail": f"Đã xóa dòng có mã '{extracted_id}' ({rows_affected} dòng bị loại)",
+                    "rows_affected": rows_affected,
+                    "cols_affected": 0
+                }
+
+        # 3. XỬ LÝ LỌC / XÓA THEO ĐIỀU KIỆN (DOANH THU <= 0 HOẶC NULL)
+        elif action_type == "filter_zero" or any(k in inst_lower for k in ["doanh thu <= 0", "doanh thu = 0", "doanh thu bằng 0", "đơn 0đ", "tiền <= 0", "<= 0", "= 0"]):
+            initial_len = len(self.cleaned_df)
+            amount_col = None
+            for c in ["total_amount", "amount", "revenue", "Gross_Amount_VND", "Net_Amount_VND"]:
+                if c in self.cleaned_df.columns:
+                    amount_col = c
+                    break
+            if amount_col:
+                self.cleaned_df = self.cleaned_df[self.cleaned_df[amount_col] > 0].copy()
+                rows_affected = initial_len - len(self.cleaned_df)
+                action_log = {
+                    "timestamp": now_str,
+                    "action": "Lọc đơn giá trị 0đ hoặc âm",
+                    "detail": f"Đã loại bỏ {rows_affected} dòng giao dịch có giá trị <= 0",
+                    "rows_affected": rows_affected,
+                    "cols_affected": 0
+                }
+
+        elif action_type == "drop_na" or any(k in inst_lower for k in ["xóa null", "xóa trống", "bỏ trống", "xóa dòng trống", "dòng nan", "dòng null"]):
+            initial_len = len(self.cleaned_df)
+            self.cleaned_df = self.cleaned_df.dropna(how="all").copy()
+            rows_affected = initial_len - len(self.cleaned_df)
+            action_log = {
+                "timestamp": now_str,
+                "action": "Xóa dòng rỗng (NaN/Null)",
+                "detail": f"Đã loại bỏ {rows_affected} dòng dữ liệu trống hoàn toàn",
+                "rows_affected": rows_affected,
+                "cols_affected": 0
+            }
+
+        # 4. GHI NHẬN GHI CHÚ CHUNG
+        else:
+            action_log = {
+                "timestamp": now_str,
+                "action": "Ghi chú người dùng",
+                "detail": instruction or "Đã xác nhận yêu cầu tùy biến bổ sung",
+                "rows_affected": 0,
+                "cols_affected": 0
+            }
+
+        if action_log:
+            self.user_custom_edits.append(action_log)
+
+        # Lưu lại file đã cập nhật
+        cleaned_path = os.path.join(DATA_DIR, "cleaned_transactions_oct2026.csv")
+        self.cleaned_df.to_csv(cleaned_path, index=False, encoding="utf-8-sig")
+
+        # Đồng bộ tính toán lại báo cáo quản trị nếu đã nạp
+        try:
+            self.generate_management_report()
+        except Exception:
+            pass
+
+        return {
+            "success": True,
+            "message": action_log["detail"] if action_log else "Đã áp dụng yêu cầu thành công!",
+            "action_log": action_log,
+            "clean_rows": len(self.cleaned_df),
+            "columns": list(self.cleaned_df.columns),
+            "custom_edits": self.user_custom_edits
+        }
+
+    def reset_custom_cleaning(self):
+        """Khôi phục lại dữ liệu làm sạch ban đầu của Bước 2 (hủy các tùy biến của người dùng)"""
+        if self.initial_cleaned_df is not None:
+            self.cleaned_df = self.initial_cleaned_df.copy()
+            self.user_custom_edits = []
+            cleaned_path = os.path.join(DATA_DIR, "cleaned_transactions_oct2026.csv")
+            self.cleaned_df.to_csv(cleaned_path, index=False, encoding="utf-8-sig")
+            try:
+                self.generate_management_report()
+            except Exception:
+                pass
+            return {
+                "success": True,
+                "message": "Đã khôi phục dữ liệu sạch về trạng thái ban đầu của Bước 2!",
+                "clean_rows": len(self.cleaned_df),
+                "columns": list(self.cleaned_df.columns)
+            }
+        else:
+            return {"success": False, "error": "Chưa có dữ liệu làm sạch ban đầu."}
 
     # ==========================================
     # GIAI ĐOẠN 2: TẠO BÁO CÁO QUẢN TRỊ

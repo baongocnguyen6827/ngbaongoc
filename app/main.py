@@ -12,6 +12,8 @@ import numpy as np
 from flask import Flask, render_template, request, jsonify, send_file
 from app.engine import engine, DATA_DIR, WORKSPACE_DIR, BASE_DIR, APP_DATA_DIR, resolve_data_file
 from app.pitch_deck_generator import generate_pitch_deck, get_pitch_deck_preview_data
+from app.word_report_generator import generate_word_report, get_word_report_preview_html
+from app.excel_export_generator import generate_excel_workbook
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(
@@ -440,6 +442,84 @@ def api_download_pitch_deck():
         as_attachment=True,
         download_name="BaoNgoc_AI_Retail_PitchDeck_2026.pptx"
     )
+
+@app.route("/api/apply-custom-cleaning", methods=["POST"])
+def api_apply_custom_cleaning():
+    """Áp dụng ghi chú / yêu cầu tùy biến làm sạch từ người dùng ở Bước 2"""
+    try:
+        data = request.get_json() or {}
+        instruction = data.get("instruction", "")
+        action_type = data.get("action_type", "")
+        target_column = data.get("target_column", "")
+        target_row_id = data.get("target_row_id", "")
+        
+        result = engine.apply_custom_cleaning(
+            instruction=instruction,
+            action_type=action_type,
+            target_column=target_column,
+            target_row_id=target_row_id
+        )
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
+
+@app.route("/api/reset-custom-cleaning", methods=["POST"])
+def api_reset_custom_cleaning():
+    """Khôi phục lại dữ liệu sạch ban đầu của Bước 2"""
+    try:
+        result = engine.reset_custom_cleaning()
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
+
+@app.route("/api/preview-word-report", methods=["GET"])
+def api_preview_word_report():
+    """Lấy bản xem trước HTML định dạng A4 của Báo cáo Word"""
+    try:
+        if engine.management_report is None and engine.cleaned_df is not None:
+            engine.generate_management_report()
+        html = get_word_report_preview_html(engine)
+        return jsonify({"success": True, "html": html})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/download-word-report", methods=["GET"])
+def api_download_word_report():
+    """Tải xuống tệp Báo cáo Quản trị Microsoft Word (.docx)"""
+    try:
+        if engine.management_report is None and engine.cleaned_df is not None:
+            engine.generate_management_report()
+        docx_path = os.path.join(DATA_DIR, "BaoNgoc_BaoCao_QuanTri_AI301.docx")
+        generate_word_report(engine, docx_path)
+        return send_file(
+            docx_path,
+            mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            as_attachment=True,
+            download_name="BaoNgoc_BaoCao_QuanTri_AI301.docx"
+        )
+    except Exception as e:
+        return str(e), 500
+
+@app.route("/api/export-cleaned-excel", methods=["GET"])
+@app.route("/api/download-cleaned-excel", methods=["GET"])
+def api_download_cleaned_excel():
+    """Tải xuống tệp Bảng Dữ Liệu Chuẩn Hóa Microsoft Excel (.xlsx) gồm 4 Sheet"""
+    try:
+        if engine.cleaned_df is None:
+            if engine.raw_df is not None:
+                engine.execute_data_cleaning()
+            else:
+                return "Chưa có dữ liệu để xuất Excel", 400
+        excel_path = os.path.join(DATA_DIR, "BaoNgoc_DuLieu_ChuanHoa_AI301.xlsx")
+        generate_excel_workbook(engine, excel_path)
+        return send_file(
+            excel_path,
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            as_attachment=True,
+            download_name="BaoNgoc_DuLieu_ChuanHoa_AI301.xlsx"
+        )
+    except Exception as e:
+        return str(e), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5050, debug=False)
