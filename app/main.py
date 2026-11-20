@@ -27,6 +27,41 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.jinja_env.auto_reload = True
 
+class VercelPathMiddleware:
+    """WSGI Middleware hỗ trợ định tuyến chuẩn xác trên Vercel Serverless Functions.
+    Khôi phục PATH_INFO từ header HTTP_X_MATCHED_PATH và chuẩn hóa tiền tố /api/index
+    đảm bảo Flask route '/' và các API con hoạt động mượt mà cả trên localhost và Vercel.
+    """
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+
+    def __call__(self, environ, start_response):
+        matched = environ.get('HTTP_X_MATCHED_PATH') or environ.get('HTTP_X_FORWARDED_URI')
+        if matched:
+            if '?' in matched:
+                path_part, _, qs = matched.partition('?')
+                environ['PATH_INFO'] = path_part
+                if qs and not environ.get('QUERY_STRING'):
+                    environ['QUERY_STRING'] = qs
+            else:
+                environ['PATH_INFO'] = matched
+
+        path = environ.get('PATH_INFO', '')
+        if path in ('/api/index', '/api/index.py', '/api', '/api/'):
+            environ['PATH_INFO'] = '/'
+        elif path.startswith('/api/index/'):
+            environ['PATH_INFO'] = path[len('/api/index'):]
+        elif path.startswith('/api/index.py/'):
+            environ['PATH_INFO'] = path[len('/api/index.py'):]
+
+        if not environ.get('PATH_INFO'):
+            environ['PATH_INFO'] = '/'
+
+        environ['SCRIPT_NAME'] = ''
+        return self.wsgi_app(environ, start_response)
+
+app.wsgi_app = VercelPathMiddleware(app.wsgi_app)
+
 def auto_init_engine():
     """Tự động khởi tạo dữ liệu tệp mới nhất khi khởi động máy chủ"""
     try:
@@ -50,6 +85,10 @@ def auto_init_engine():
 auto_init_engine()
 
 @app.route("/")
+@app.route("/api/index", methods=["GET", "POST"])
+@app.route("/api/index.py", methods=["GET", "POST"])
+@app.route("/index.html", methods=["GET"])
+@app.route("/home", methods=["GET"])
 def index():
     """Trang chủ hiển thị toàn bộ quy trình 3 giai đoạn theo BPMN"""
     return render_template("index.html")
@@ -491,6 +530,7 @@ def api_generate_pitch_deck():
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route("/slides", methods=["GET"])
+@app.route("/api/index/slides", methods=["GET"])
 def presentation_slides():
     """Xem trực tiếp bài trình chiếu 8 Slide HTML toàn màn hình"""
     return render_template("slides.html")

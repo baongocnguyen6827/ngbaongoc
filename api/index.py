@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 
@@ -6,7 +7,11 @@ root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if root_dir not in sys.path:
     sys.path.insert(0, root_dir)
 
-from app.main import app
+from app.main import app, VercelPathMiddleware
+
+# Đảm bảo wsgi_app đã gắn VercelPathMiddleware
+if not isinstance(app.wsgi_app, VercelPathMiddleware):
+    app.wsgi_app = VercelPathMiddleware(app.wsgi_app)
 
 # Các biến entrypoint WSGI chuẩn mực cấp module (top-level) cho Vercel Python Runtime
 handler = app
