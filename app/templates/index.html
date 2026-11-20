@@ -1177,12 +1177,12 @@
                                 <input type="text" id="inputBusinessTypeCustom" placeholder="Nhập loại hình cụ thể..." class="hidden w-full px-3 py-1.5 rounded-xl border border-rose-300 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none mt-1">
                             </div>
 
-                            <!-- Thông tin bổ sung (Chi nhánh, trần chiết khấu) -->
+                            <!-- Thông tin bổ sung -->
                             <div class="space-y-1">
                                 <label class="block text-[11px] font-black text-slate-800 dark:text-slate-200 flex items-center justify-between">
-                                    <span>2. Thông tin bổ sung (Chi nhánh) <span class="text-rose-500">*</span></span>
+                                    <span>2. Thông tin bổ sung <span class="text-rose-500">*</span></span>
                                 </label>
-                                <input type="text" id="inputAdditionalInfo" placeholder="VD: 5 chi nhánh (Hà Nội, TP.HCM, Đà Nẵng, Bắc Ninh, Hải Phòng), trần chiết khấu 5%..." class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none focus:border-rose-400">
+                                <input type="text" id="inputAdditionalInfo" placeholder="VD: Quy mô hoạt động, các khu vực (Hà Nội, TP.HCM, Đà Nẵng...), trần chiết khấu 5%..." class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none focus:border-rose-400">
                             </div>
                         </div>
 
@@ -3935,7 +3935,7 @@
                 return;
             }
             if (!bAdd) {
-                notify("Vui lòng nhập Thông tin bổ sung (VD: Nhiều chi nhánh, quy mô)!", "warning");
+                notify("Vui lòng nhập Thông tin bổ sung (VD: Quy mô hoạt động, thị trường)!", "warning");
                 if (add) add.focus();
                 return;
             }
@@ -3988,7 +3988,7 @@
                 if (step1BizType && businessProfile.business_type) step1BizType.innerText = businessProfile.business_type;
                 if (step1BizSub) {
                     const qCount = (businessProfile.analysis_questions || []).length;
-                    step1BizSub.innerText = `${businessProfile.additional_info || 'Đa chi nhánh'} • ${qCount} câu hỏi phân tích trọng tâm`;
+                    step1BizSub.innerText = `${businessProfile.additional_info || 'Thông tin vận hành'} • ${qCount} câu hỏi phân tích trọng tâm`;
                 }
                 if (step1Badge) {
                     step1Badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-300/80';
