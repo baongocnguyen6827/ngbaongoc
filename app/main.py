@@ -82,7 +82,9 @@ def auto_init_engine():
     except Exception as e:
         print("auto_init_engine notice:", e)
 
-auto_init_engine()
+# Khởi tạo lười (Lazy initialization): KHÔNG chạy auto_init_engine() ở cấp toàn cục (global)
+# để tránh gây timeout khi Vercel khởi tạo container serverless (Cold Start < 100ms)
+# Dữ liệu sẽ được tự động nạp khi frontend gửi yêu cầu đầu tiên đến /api/system-state
 
 @app.route("/")
 @app.route("/api/index", methods=["GET", "POST"])
