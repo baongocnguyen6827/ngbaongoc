@@ -973,7 +973,7 @@
                             <span class="text-xs font-medium text-slate-400">cửa hàng</span>
                         </div>
 
-                        <p class="text-xs text-slate-400 mt-0.5">
+                        <p id="topKpiUrgentDesc" class="text-xs text-slate-400 mt-0.5">
                             Chưa có cảnh báo bất thường nào
                         </p>
                     </div>
@@ -3580,9 +3580,10 @@
 
                 let r1;
                 if (options.action === 'upload') {
-                    if (!appState.pickedFile) throw new Error('Chưa chọn tệp dữ liệu để tải lên.');
+                    const fileToSend = options.file || appState.pickedFile;
+                    if (!fileToSend) throw new Error('Chưa chọn tệp dữ liệu để tải lên.');
                     const fd = new FormData();
-                    fd.append('file', appState.pickedFile);
+                    fd.append('file', fileToSend);
                     r1 = await (await fetch('/api/upload-raw', { method: 'POST', body: fd })).json();
                 } else if (options.action === 'load-uploaded') {
                     r1 = await (await fetch('/api/load-uploaded', { method: 'POST' })).json();
@@ -4147,7 +4148,11 @@
             try {
                 const activeName = (appState.rawInfo && appState.rawInfo.file_name) 
                     || (appState.pickedFile ? appState.pickedFile.name : 'Dữ liệu giao dịch Bảo Ngọc Retail');
-                await runAutomated4StepPipeline({ action: 'load-uploaded', fileName: activeName });
+                if (appState.pickedFile) {
+                    await runAutomated4StepPipeline({ action: 'upload', fileName: appState.pickedFile.name, file: appState.pickedFile });
+                } else {
+                    await runAutomated4StepPipeline({ action: 'load-uploaded', fileName: activeName });
+                }
             } finally {
                 if (btn) {
                     btn.disabled = false;
@@ -4197,20 +4202,59 @@
                 const ret = cln.returns_handling ? cln.returns_handling.returned_rows : 0;
                 const retAmt = cln.returns_handling ? cln.returns_handling.returned_amount : 0;
                 const validRows = cln.final_cleaned ? cln.final_cleaned.valid_rows : 0;
-                const initRows = cln.initial_rows || 1006;
+                const initRows = cln.initial_rows || 1000;
 
-                document.getElementById('topKpiCancelReturnCount').innerText = fmtNum(canc + ret);
-                document.getElementById('topKpiCancelReturnDesc').innerText = `${fmtNum(canc)} đơn hủy & ${fmtNum(ret)} đơn hoàn trả (-${(retAmt / 1e6).toFixed(1)}tr đ)`;
-                document.getElementById('topKpiValidRows').innerText = fmtNum(validRows);
-                document.getElementById('topKpiTotalRows').innerText = `/ ${fmtNum(initRows)} dòng`;
-                document.getElementById('sbBadgeStep2').innerText = fmtNum(validRows);
+                const cCountEl = document.getElementById('topKpiCancelReturnCount');
+                if (cCountEl) {
+                    cCountEl.innerText = fmtNum(canc + ret);
+                    cCountEl.className = (canc + ret > 0) ? 'text-[28px] font-extrabold text-rose-600' : 'text-[28px] font-extrabold text-emerald-600';
+                }
+                const cDescEl = document.getElementById('topKpiCancelReturnDesc');
+                if (cDescEl) {
+                    if (canc + ret > 0) {
+                        cDescEl.innerText = `${fmtNum(canc)} đơn hủy & ${fmtNum(ret)} đơn hoàn trả (-${(retAmt / 1e6).toFixed(1)}tr đ)`;
+                    } else {
+                        cDescEl.innerText = `100% hợp lệ (0 đơn hủy / đổi trả)`;
+                    }
+                }
+                const vRowEl = document.getElementById('topKpiValidRows');
+                if (vRowEl) vRowEl.innerText = fmtNum(validRows);
+                const tRowEl = document.getElementById('topKpiTotalRows');
+                if (tRowEl) tRowEl.innerText = `/ ${fmtNum(initRows)} dòng`;
+                const sb2 = document.getElementById('sbBadgeStep2');
+                if (sb2) sb2.innerText = fmtNum(validRows);
             }
 
             if (aud && aud.priority_stores) {
-                const urgent = aud.priority_stores.filter(p => p.priority_level === 'P1_URGENT' || p.priority_level === 'P2_SUPPORT');
-                const p1Only = aud.priority_stores.filter(p => p.priority_level === 'P1_URGENT');
-                document.getElementById('topKpiUrgentStores').innerText = urgent.length;
-                document.getElementById('topKpiUrgentList').innerText = p1Only.map(x => x.store_id).join(', ') || 'ST09, ST18';
+                const p1List = aud.priority_stores.filter(p => p.priority_level === 'P1_URGENT');
+                const p2List = aud.priority_stores.filter(p => p.priority_level === 'P2_SUPPORT');
+                const urgentTotal = p1List.length + p2List.length;
+                
+                const uStoresEl = document.getElementById('topKpiUrgentStores');
+                if (uStoresEl) {
+                    uStoresEl.innerText = p1List.length > 0 ? p1List.length : urgentTotal;
+                    uStoresEl.className = (p1List.length > 0) ? 'text-[28px] font-extrabold text-rose-600' : ((urgentTotal > 0) ? 'text-[28px] font-extrabold text-amber-500' : 'text-[28px] font-extrabold text-emerald-600');
+                }
+                const uDescEl = document.getElementById('topKpiUrgentDesc');
+                if (uDescEl) {
+                    if (p1List.length > 0) {
+                        uDescEl.innerText = `Phát hiện ${p1List.length} chi nhánh khẩn cấp P1 cần xử lý ngay`;
+                    } else if (p2List.length > 0) {
+                        uDescEl.innerText = `Có ${p2List.length} chi nhánh nhóm P2 cần kế hoạch hỗ trợ`;
+                    } else {
+                        uDescEl.innerText = `Toàn bộ chi nhánh đang vận hành ổn định`;
+                    }
+                }
+                const uListEl = document.getElementById('topKpiUrgentList');
+                if (uListEl) {
+                    if (p1List.length > 0) {
+                        uListEl.innerText = p1List.map(x => x.store_name ? x.store_name.replace('Chi nhánh ', '') : x.store_id).join(', ');
+                    } else if (p2List.length > 0) {
+                        uListEl.innerText = p2List.map(x => x.store_name ? x.store_name.replace('Chi nhánh ', '') : x.store_id).join(', ');
+                    } else {
+                        uListEl.innerText = 'Toàn hệ thống an toàn';
+                    }
+                }
             }
         }
 
@@ -4629,9 +4673,15 @@
             document.getElementById('pickedFileSize').innerText = (file.size / 1024).toFixed(1) + ' KB';
             document.getElementById('pickedFileBadge').classList.remove('hidden');
             const btn = document.getElementById('btnUploadNow');
-            btn.disabled = false;
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            notify(`Đã chọn tệp: ${file.name}. Bấm "Tải Lên & Kết Nối Ngay" để khởi chạy AI Pipeline!`, 'green');
+            if (btn) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+            notify(`Đã nhận diện tệp: ${file.name}. Đang tải lên và khởi chạy phân tích...`, 'pink');
+            // TỰ ĐỘNG KHỞI CHẠY TẢI LÊN NGAY LẬP TỨC
+            setTimeout(() => {
+                submitUploadedFile();
+            }, 300);
         }
         function clearPickedFile(e) {
             if (e) e.stopPropagation();

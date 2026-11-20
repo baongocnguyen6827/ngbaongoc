@@ -37,11 +37,18 @@ def index():
 @app.route("/api/system-state", methods=["GET"])
 def get_system_state():
     """Lấy trạng thái hiện tại của hệ thống"""
-    # Nếu có file uploaded_raw.xlsx nhưng chưa nạp, tự động nạp
+    # Nếu có file uploaded_raw nhưng chưa nạp, tự động nạp tệp mới nhất
     if engine.raw_df is None:
         up_xlsx = resolve_data_file("uploaded_raw.xlsx")
         up_csv = resolve_data_file("uploaded_raw.csv")
-        target_f = up_xlsx if os.path.exists(up_xlsx) else (up_csv if os.path.exists(up_csv) else None)
+        target_f = None
+        if os.path.exists(up_xlsx) and os.path.exists(up_csv):
+            target_f = up_xlsx if os.path.getmtime(up_xlsx) >= os.path.getmtime(up_csv) else up_csv
+        elif os.path.exists(up_xlsx):
+            target_f = up_xlsx
+        elif os.path.exists(up_csv):
+            target_f = up_csv
+
         if target_f:
             try:
                 engine.load_raw_data(target_f)
@@ -86,7 +93,10 @@ def load_uploaded_data():
     try:
         uploaded_raw_xlsx = resolve_data_file("uploaded_raw.xlsx")
         uploaded_raw_csv = resolve_data_file("uploaded_raw.csv")
-        if os.path.exists(uploaded_raw_xlsx):
+        target_file = None
+        if os.path.exists(uploaded_raw_xlsx) and os.path.exists(uploaded_raw_csv):
+            target_file = uploaded_raw_xlsx if os.path.getmtime(uploaded_raw_xlsx) >= os.path.getmtime(uploaded_raw_csv) else uploaded_raw_csv
+        elif os.path.exists(uploaded_raw_xlsx):
             target_file = uploaded_raw_xlsx
         elif os.path.exists(uploaded_raw_csv):
             target_file = uploaded_raw_csv
@@ -144,12 +154,27 @@ def upload_raw_data():
         target_dir = DATA_DIR
         try:
             os.makedirs(target_dir, exist_ok=True)
+            # Xóa các tệp uploaded_raw cũ để không bị lẫn lộn giữa .csv và .xlsx
+            for old_ext in [".xlsx", ".csv", ".xls"]:
+                old_p = os.path.join(target_dir, f"uploaded_raw{old_ext}")
+                if os.path.exists(old_p):
+                    try:
+                        os.remove(old_p)
+                    except Exception:
+                        pass
             save_path = os.path.join(target_dir, f"uploaded_raw{ext}")
             file.save(save_path)
         except OSError:
             import tempfile
             target_dir = os.path.join(tempfile.gettempdir(), "baongoc_ai_data")
             os.makedirs(target_dir, exist_ok=True)
+            for old_ext in [".xlsx", ".csv", ".xls"]:
+                old_p = os.path.join(target_dir, f"uploaded_raw{old_ext}")
+                if os.path.exists(old_p):
+                    try:
+                        os.remove(old_p)
+                    except Exception:
+                        pass
             save_path = os.path.join(target_dir, f"uploaded_raw{ext}")
             file.save(save_path)
             # Cập nhật DATA_DIR toàn cục
