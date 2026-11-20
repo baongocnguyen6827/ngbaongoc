@@ -108,10 +108,8 @@ def upload_raw_data():
                 "analysis_questions": questions
             })
         else:
-            return jsonify({
-                "success": False,
-                "error": "Vui lòng nhập và xác nhận Hồ sơ doanh nghiệp trước khi tải tệp dữ liệu!"
-            }), 400
+            # Tự động kích hoạt mẫu đề thi AI301 mặc định để người dùng luôn tải file thành công
+            engine.business_profile["is_confirmed"] = True
 
     if 'file' not in request.files:
         return jsonify({"success": False, "error": "Không tìm thấy tệp tải lên"}), 400
@@ -444,5 +442,5 @@ def api_download_pitch_deck():
     )
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5050, debug=False)
+    app.run(host="0.0.0.0", port=5050, debug=False)
 
