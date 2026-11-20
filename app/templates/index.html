@@ -4381,7 +4381,9 @@
             saveProfileToBackendAndStorage();
             updateProfileLockUI(true);
             notify("✓ Đã nạp thông tin mẫu đại lý sữa Hà Nội và 10 câu hỏi phân tích! Khu vực tải file đã mở khóa.", "pink");
-            confetti({ particleCount: 50, spread: 60, origin: { y: 0.4 } });
+            if (typeof confetti === 'function') {
+                try { confetti({ particleCount: 50, spread: 60, origin: { y: 0.4 } }); } catch(e) {}
+            }
         }
 
         function clearBusinessProfileForm() {
@@ -5612,7 +5614,6 @@
                     hvSumEl.innerHTML = `<span class="text-slate-400 italic">Chưa có kết quả kiểm tra tự động. Vui lòng nạp dữ liệu tại Bước 1.</span>`;
                 }
             }
-        }
         }
 
         async function submitHumanVerification(approved, triggerNext = true) {
@@ -7197,6 +7198,7 @@
         // =====================================================================
         function initSparkleCursor() {
             try {
+                if (document.getElementById('sparkleCursorCanvas')) return;
                 const canvas = document.createElement('canvas');
                 canvas.id = 'sparkleCursorCanvas';
                 canvas.style.position = 'fixed';
@@ -7277,6 +7279,7 @@
                 }
 
                 document.addEventListener('pointermove', onPointerMove, { passive: true });
+                document.addEventListener('mousemove', onPointerMove, { passive: true });
 
                 // Mini sparkle burst on click (5 hạt tỏa nhẹ)
                 document.addEventListener('pointerdown', (e) => {
@@ -7371,7 +7374,7 @@
         }
 
         // Initialize on load
-        window.addEventListener('DOMContentLoaded', () => {
+        function startApp() {
             initTheme();
             initLanguage();
             loadSavedBusinessProfile();
@@ -7382,7 +7385,13 @@
             initSparkleCursor();
             setTimeout(syncSearchInputWidth, 100);
             setTimeout(syncSearchInputWidth, 500);
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startApp);
+        } else {
+            startApp();
+        }
     </script>
 
     <!-- ===================================================================== -->
