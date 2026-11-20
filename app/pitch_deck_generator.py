@@ -16,11 +16,20 @@ Gồm 8 Slide Báo Cáo Kinh Doanh Điều Hành Thực Tế dựa trên 100% d�
 
 import os
 from datetime import datetime
-from pptx import Presentation
-from pptx.util import Inches, Pt
-from pptx.dml.color import RGBColor
-from pptx.enum.text import PP_ALIGN
-from pptx.enum.shapes import MSO_SHAPE
+try:
+    from pptx import Presentation
+    from pptx.util import Inches, Pt
+    from pptx.dml.color import RGBColor
+    from pptx.enum.text import PP_ALIGN
+    from pptx.enum.shapes import MSO_SHAPE
+    PPTX_AVAILABLE = True
+except ImportError:
+    PPTX_AVAILABLE = False
+    Presentation = None
+    Inches = Pt = None
+    PP_ALIGN = MSO_SHAPE = None
+    def RGBColor(r, g, b):
+        return (r, g, b)
 
 # Bảng màu Pink Crystal Glassmorphism & Xám Than Doanh Nghiệp C-Level
 COLOR_ROSE_PRIMARY = RGBColor(244, 63, 110)   # #f43f6e

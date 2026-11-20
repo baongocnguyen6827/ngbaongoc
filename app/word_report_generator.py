@@ -18,12 +18,20 @@ Cho phép mở, xem và chỉnh sửa 100% trong Microsoft Word.
 
 import os
 import datetime
-from docx import Document
-from docx.shared import Inches, Pt, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
-from docx.oxml import OxmlElement, parse_xml
-from docx.oxml.ns import nsdecls, qn
+try:
+    from docx import Document
+    from docx.shared import Inches, Pt, RGBColor
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
+    from docx.oxml import OxmlElement, parse_xml
+    from docx.oxml.ns import nsdecls, qn
+    DOCX_AVAILABLE = True
+except ImportError:
+    DOCX_AVAILABLE = False
+    Document = None
+    Inches = Pt = RGBColor = None
+    WD_ALIGN_PARAGRAPH = WD_TABLE_ALIGNMENT = WD_ALIGN_VERTICAL = None
+    OxmlElement = parse_xml = nsdecls = qn = None
 
 def set_cell_background(cell, hex_color):
     """Thiết lập màu nền cho ô trong bảng docx"""
@@ -55,6 +63,9 @@ def generate_word_report(engine, output_path):
     """
     Tạo tệp Word (.docx) Báo Cáo Quản Trị & Điều Hành Kinh Doanh Chuyên Sâu Đa Trang
     """
+    if not DOCX_AVAILABLE:
+        raise ImportError("Thư viện 'python-docx' chưa được cài đặt trên môi trường máy chủ.")
+
     doc = Document()
 
     # Thiết lập lề trang tiêu chuẩn A4 (0.75 inch)

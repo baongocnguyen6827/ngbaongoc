@@ -14,7 +14,7 @@ ENV/
 scripts/
 *.pptx
 data/
-app/data/uploaded_raw.*
+app/data/uploaded_raw.csv
 app/data/cleaned_transactions_oct2026.csv
 app/data/slides.html
 

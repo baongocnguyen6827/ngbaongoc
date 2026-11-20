@@ -699,7 +699,10 @@ class PhucAnRetailEngine:
         self.initial_cleaned_df = self.cleaned_df.copy()
         self.user_custom_edits = []
         cleaned_path = os.path.join(DATA_DIR, "cleaned_transactions_oct2026.csv")
-        self.cleaned_df.to_csv(cleaned_path, index=False, encoding="utf-8-sig")
+        try:
+            self.cleaned_df.to_csv(cleaned_path, index=False, encoding="utf-8-sig")
+        except Exception:
+            pass
         
         # Doanh thu thuần = COMPLETED - RETURNED
         net_revenue = completed_amount - returned_amount
@@ -903,7 +906,10 @@ class PhucAnRetailEngine:
 
         # Lưu lại file đã cập nhật
         cleaned_path = os.path.join(DATA_DIR, "cleaned_transactions_oct2026.csv")
-        self.cleaned_df.to_csv(cleaned_path, index=False, encoding="utf-8-sig")
+        try:
+            self.cleaned_df.to_csv(cleaned_path, index=False, encoding="utf-8-sig")
+        except Exception:
+            pass
 
         # Đồng bộ tính toán lại báo cáo quản trị nếu đã nạp
         try:
@@ -926,7 +932,10 @@ class PhucAnRetailEngine:
             self.cleaned_df = self.initial_cleaned_df.copy()
             self.user_custom_edits = []
             cleaned_path = os.path.join(DATA_DIR, "cleaned_transactions_oct2026.csv")
-            self.cleaned_df.to_csv(cleaned_path, index=False, encoding="utf-8-sig")
+            try:
+                self.cleaned_df.to_csv(cleaned_path, index=False, encoding="utf-8-sig")
+            except Exception:
+                pass
             try:
                 self.generate_management_report()
             except Exception:
