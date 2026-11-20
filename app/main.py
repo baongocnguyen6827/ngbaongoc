@@ -27,7 +27,27 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.jinja_env.auto_reload = True
 
-# Mặc định khởi động hệ thống ở trạng thái sạch 100% (không tự ý nạp dữ liệu ngầm)
+def auto_init_engine():
+    """Tự động khởi tạo dữ liệu tệp mới nhất khi khởi động máy chủ"""
+    try:
+        up_xlsx = resolve_data_file("uploaded_raw.xlsx")
+        up_csv = resolve_data_file("uploaded_raw.csv")
+        target_f = None
+        if os.path.exists(up_xlsx) and os.path.exists(up_csv):
+            target_f = up_xlsx if os.path.getmtime(up_xlsx) >= os.path.getmtime(up_csv) else up_csv
+        elif os.path.exists(up_xlsx):
+            target_f = up_xlsx
+        elif os.path.exists(up_csv):
+            target_f = up_csv
+        if target_f:
+            engine.load_raw_data(target_f)
+            engine.execute_data_cleaning()
+            engine.generate_management_report()
+            engine.perform_cross_check_audit()
+    except Exception as e:
+        print("auto_init_engine notice:", e)
+
+auto_init_engine()
 
 @app.route("/")
 def index():
@@ -54,6 +74,7 @@ def get_system_state():
                 engine.load_raw_data(target_f)
                 engine.execute_data_cleaning()
                 engine.generate_management_report()
+                engine.perform_cross_check_audit()
             except Exception:
                 pass
 
@@ -80,7 +101,8 @@ def get_system_state():
 def load_sample_data():
     """Nạp bộ dữ liệu thô: Mặc định ưu tiên file người dùng tải lên"""
     try:
-        sample_path = resolve_data_file("raw_transactions_oct2026.csv")
+        up_xlsx = resolve_data_file("uploaded_raw.xlsx")
+        sample_path = up_xlsx if os.path.exists(up_xlsx) else resolve_data_file("raw_transactions_oct2026.csv")
         info = engine.load_raw_data(sample_path)
         msg = f"Đã nạp thành công {info['total_rows']:,} dòng dữ liệu thô!"
         return jsonify({"success": True, "data": info, "message": msg})

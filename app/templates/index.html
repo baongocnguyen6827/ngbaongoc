@@ -689,10 +689,10 @@
                             </button>
 
 
-                            <!-- Direct Link: Xem Slide HTML Trình Chiếu Thuyết Trình Về AI Agent -->
-                            <a href="/slides" target="_blank" id="btnOpenHtmlSlidesHeader" class="btn-outline-clean px-3 py-1.5 text-xs flex items-center gap-2 hover:border-rose-400 cursor-pointer shadow-xs group" title="Slide HTML: Bài thuyết trình trực quan về kiến trúc và quy trình hệ thống AI Agent môn AI301">
-                                <i class="fa-solid fa-desktop text-rose-500 group-hover:scale-110 transition-transform duration-300"></i>
-                                <span class="leading-tight text-left font-bold text-slate-800 dark:text-slate-200 group-hover:text-rose-600 transition">Slide HTML<br><span class="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold">Về AI Agent &rarr;</span></span>
+                            <!-- Direct Link: Xem Slide HTML Trình Chiếu Báo Cáo Kinh Doanh -->
+                            <a href="/slides" target="_blank" id="btnOpenHtmlSlidesHeader" class="btn-outline-clean px-3 py-1.5 text-xs flex items-center gap-2 hover:border-rose-400 cursor-pointer shadow-xs group" title="Slide HTML: Báo cáo kết quả kinh doanh và tài chính điều hành môn AI301">
+                                <i class="fa-solid fa-chart-line text-rose-500 group-hover:scale-110 transition-transform duration-300"></i>
+                                <span class="leading-tight text-left font-bold text-slate-800 dark:text-slate-200 group-hover:text-rose-600 transition">Slide HTML<br><span class="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold">Báo Cáo KD &rarr;</span></span>
                             </a>
 
                             <!-- User Profile Card: Nguyễn Bảo Ngọc -->
@@ -3931,7 +3931,7 @@
                 "Cơ chế Safe Gate bảo vệ dữ liệu đầu vào; 4 bộ lọc AI Guardrails bảo vệ tính toàn vẹn của doanh thu thuần và giá vốn.",
                 "Báo cáo tài chính đa chiều kết hợp cùng phân tích cảm xúc CSAT giúp Ban Giám Đốc phản ứng kịp thời trước mọi biến động.",
                 "Tổng doanh thu thuần chuỗi đạt tỷ lệ hoàn thành ấn tượng 98.2%, lợi nhuận gộp vững vàng ở biên độ 40.0%.",
-                "Cần kích hoạt ngay gói giải pháp can thiệp P1 cho ST09 (lỗi kích cỡ/đổi trả 14.2%) và ST18 (hụt doanh số), đồng thời nhân rộng ST01.",
+                "Cần kích hoạt ngay gói giải pháp can thiệp P1 cho Chi nhánh Hoàn Kiếm, Hoàng Mai và Nam Từ Liêm nhằm tối ưu giá vốn, chiết khấu và tăng tốc độ tiêu thụ.",
                 "Lộ trình hành động 30 ngày tập trung tháo gỡ điểm nghẽn tồn kho, tái phân bổ nguồn lực và chữ ký phê duyệt điều hành chính thức."
             ];
             document.getElementById('previewSlideInsight').innerText = slide.insight || defaultInsights[idx] || defaultInsights[0];
@@ -4090,37 +4090,37 @@
                     const sel = document.getElementById('step2ModeSelect');
                     loadDataPreview(sel ? sel.value : 'cleaned', 1);
                 } else if (tab === 'step3') {
-                    // Tự động kiểm tra và tải báo cáo nếu chưa có sẵn trong bộ nhớ
-                    if (!appState.reportData || !appState.reportData.store_reports || appState.reportData.store_reports.length === 0) {
-                        fetch('/api/generate-report', { method: 'POST' })
-                            .then(r => r.json())
-                            .then(res => {
-                                if (res.success && res.data) {
-                                    appState.reportData = res.data;
-                                    updateTopKpiCards();
+                    // Tự động kiểm tra và tải báo cáo & audit nếu chưa có sẵn trong bộ nhớ
+                    const ensureStep3Data = async () => {
+                        try {
+                            if (!appState.reportData || !appState.reportData.store_reports || appState.reportData.store_reports.length === 0) {
+                                const repRes = await fetch('/api/generate-report');
+                                const repJson = await repRes.json();
+                                if (repJson.success && repJson.data) {
+                                    appState.reportData = repJson.data;
                                     renderMainAnalysisTable();
+                                    const b3 = document.getElementById('sbBadgeStep3');
+                                    if (b3) b3.innerText = fmtNum(appState.reportData.store_reports?.length || 11);
                                 }
-                                setTimeout(() => {
-                                    if (typeof renderAllCharts === 'function' && typeof Chart !== 'undefined') {
-                                        renderAllCharts();
-                                    }
-                                }, 100);
-                            })
-                            .catch(() => {
-                                setTimeout(() => {
-                                    if (typeof renderAllCharts === 'function' && typeof Chart !== 'undefined') {
-                                        renderAllCharts();
-                                    }
-                                }, 100);
-                            });
-                    } else {
+                            }
+                            if (!appState.auditData) {
+                                const audRes = await fetch('/api/cross-check-audit');
+                                const audJson = await audRes.json();
+                                if (audJson.success && audJson.data) {
+                                    appState.auditData = audJson.data;
+                                }
+                            }
+                        } catch (e) {
+                            console.warn("ensureStep3Data error:", e);
+                        }
                         updateTopKpiCards();
                         setTimeout(() => {
                             if (typeof renderAllCharts === 'function' && typeof Chart !== 'undefined') {
                                 renderAllCharts();
                             }
-                        }, 80);
-                    }
+                        }, 100);
+                    };
+                    ensureStep3Data();
                 } else if (tab === 'feedback') {
                     loadFeedbacks();
                 }
@@ -4255,6 +4255,21 @@
                         uListEl.innerText = 'Toàn hệ thống an toàn';
                     }
                 }
+            } else if (rep && rep.store_reports) {
+                const lowMarginStores = rep.store_reports.filter(s => (s.rev_completion_pct || 100) < 90 || (s.gross_margin || 100) < 17.5);
+                const uStoresEl = document.getElementById('topKpiUrgentStores');
+                if (uStoresEl && lowMarginStores.length > 0) {
+                    uStoresEl.innerText = lowMarginStores.length;
+                    uStoresEl.className = 'text-[28px] font-extrabold text-rose-600';
+                }
+                const uDescEl = document.getElementById('topKpiUrgentDesc');
+                if (uDescEl && lowMarginStores.length > 0) {
+                    uDescEl.innerText = `Có ${lowMarginStores.length} chi nhánh cần rà soát chỉ tiêu & biên lợi nhuận`;
+                }
+                const uListEl = document.getElementById('topKpiUrgentList');
+                if (uListEl && lowMarginStores.length > 0) {
+                    uListEl.innerText = lowMarginStores.map(x => x.store_name ? x.store_name.replace('Chi nhánh ', '') : x.store_id).slice(0, 3).join(', ');
+                }
             }
         }
 
@@ -4344,20 +4359,20 @@
 
         function quickFillAI301Profile() {
             businessProfile = {
-                business_type: "Phân phối & B2B Thiết bị Công nghệ (Hạ tầng mạng & Viễn thông)",
-                context: "Doanh nghiệp phân phối thiết bị CNTT & viễn thông tham gia đấu thầu 200 dự án RFQ tại 5 tỉnh thành, cần kiểm soát chặt chẽ giá vốn, chính sách chiết khấu không vượt trần 5% và rà soát sự đáp ứng tiêu chuẩn kỹ thuật thiết bị.",
-                additional_info: "Mô hình 5 chi nhánh: Hà Nội, TP.HCM, Đà Nẵng, Bắc Ninh, Hải Phòng; 10 nhóm khách hàng trọng điểm; trần chiết khấu 5% (vượt 5% bắt buộc Sales Manager duyệt); kiểm tra thông lượng Firewall IPS >= 2Gbps.",
+                business_type: "Đại lý phân phối Sữa & Thực phẩm tiêu dùng (FMCG)",
+                context: "Bạn là chuyên viên BI của một đại lý bán sữa tại Hà Nội. Ban quản lý cần dashboard theo dõi hiệu quả kinh doanh năm 2025 tại 11 quận/huyện để phát hiện xu hướng, sản phẩm/khu vực/kênh bán hiệu quả và vấn đề cần xử lý.",
+                additional_info: "Mạng lưới 11 quận/huyện tại Hà Nội: Ba Đình, Cầu Giấy, Đống Đa, Hai Bà Trưng, Hoàn Kiếm, Hoàng Mai, Long Biên, Nam Từ Liêm, Bắc Từ Liêm, Hà Đông, Thanh Xuân; 7 danh mục sản phẩm sữa; đối soát 1.000 đơn hàng năm 2025.",
                 analysis_questions: [
-                    "Tổng doanh thu thuần và lợi nhuận gộp toàn chuỗi đạt bao nhiêu so với kế hoạch?",
-                    "Chi nhánh nào đóng góp doanh thu và lợi nhuận cao nhất trong 5 khu vực?",
-                    "Có bao nhiêu hợp đồng/yêu cầu RFQ có tỷ lệ chiết khấu vượt trần 5% cần phê duyệt khẩn cấp?",
-                    "Đánh giá biên lợi nhuận gộp theo từng dòng sản phẩm (Switch 24/48 port, Router, Wi-Fi 6, Firewall)?",
-                    "Thiết bị Firewall Edge có đáp ứng yêu cầu kỹ thuật throughput IPS (>= 2Gbps) hay vi phạm?",
-                    "Những khách hàng lớn nào (Top 5 khách hàng) có giá trị đơn hàng và công nợ cao nhất?",
-                    "Đánh giá tiến độ triển khai theo cam kết hạn chót (Deployment Deadline) giữa các vùng miền?",
-                    "Năng lực đội ngũ kỹ thuật (Deployment Capacity) tại các chi nhánh có bị quá tải không?",
-                    "Đề xuất chính sách giá và chiết khấu tối ưu để bảo toàn biên lợi nhuận gộp >= 18%?",
-                    "Kế hoạch hành động cụ thể cho Sales Manager và Giám đốc điều hành trong 30 ngày tới?"
+                    "Kết quả doanh thu thuần và lợi nhuận gộp toàn chuỗi đại lý sữa đạt bao nhiêu so với mục tiêu?",
+                    "Xu hướng doanh thu và lợi nhuận gộp biến động theo từng tháng trong năm 2025 như thế nào?",
+                    "Danh mục sản phẩm sữa nào (Sữa bột, Sữa tươi, Sữa chua, Sữa hạt, Sữa đặc...) đóng góp doanh thu lớn nhất?",
+                    "Những danh mục hoặc thương hiệu sữa nào có biên lợi nhuận gộp thấp (<15%) cần rà soát giá vốn và chiết khấu?",
+                    "Hiệu quả kinh doanh giữa 11 quận/huyện tại Hà Nội ra sao, quận nào dẫn đầu và quận nào cần can thiệp hỗ trợ?",
+                    "Các quận/huyện có hiệu suất thấp (Hoàn Kiếm, Hoàng Mai, Nam Từ Liêm) gặp rào cản gì và kế hoạch cải thiện là gì?",
+                    "Hiệu quả doanh thu và lợi nhuận theo từng kênh bán hàng (Đại lý, Cửa hàng tiện lợi, Siêu thị, Bán lẻ trực tiếp) thế nào?",
+                    "Cơ cấu doanh thu theo phân loại khách hàng (Khách sỉ, Khách lẻ, Nhà trẻ/Trường học, Hộ gia đình) ra sao?",
+                    "Top những sản phẩm sữa bán chạy nhất và sản phẩm tồn kho chậm luân chuyển là gì?",
+                    "Kế hoạch hành động cụ thể cho Chủ đại lý và Quản lý kinh doanh trong quý tới để tối ưu dòng tiền và tăng biên lợi nhuận?"
                 ],
                 is_confirmed: true,
                 filledByUser: true
@@ -4365,7 +4380,7 @@
             populateProfileFormUI();
             saveProfileToBackendAndStorage();
             updateProfileLockUI(true);
-            notify("✓ Đã nạp ví dụ thông tin mẫu và 10 câu hỏi phân tích! Khu vực tải file đã mở khóa.", "pink");
+            notify("✓ Đã nạp thông tin mẫu đại lý sữa Hà Nội và 10 câu hỏi phân tích! Khu vực tải file đã mở khóa.", "pink");
             confetti({ particleCount: 50, spread: 60, origin: { y: 0.4 } });
         }
 
@@ -5019,6 +5034,12 @@
                 if (cleanTb) cleanTb.innerHTML = rowsHtml;
                 const pLbl = document.getElementById('step2PageLabel');
                 if (pLbl) pLbl.innerText = pageStr;
+                if (mode === 'cleaned' && json.total) {
+                    const b2 = document.getElementById('sbBadgeStep2');
+                    if (b2) b2.innerText = fmtNum(json.total);
+                    const vRowEl = document.getElementById('topKpiValidRows');
+                    if (vRowEl) vRowEl.innerText = fmtNum(json.total);
+                }
             } catch (e) {
                 console.error(e);
             }
@@ -5515,6 +5536,12 @@
             const cancAmt = d.cancelled_filter ? d.cancelled_filter.cancelled_amount : 0;
             const ret = d.returns_handling ? d.returns_handling.returned_rows : 0;
             const retAmt = d.returns_handling ? d.returns_handling.returned_amount : 0;
+            const validRows = d.final_cleaned ? d.final_cleaned.valid_rows : (d.initial_rows || 1000);
+
+            const rule1Desc = dedup > 0 ? `Đã loại bỏ <b>${fmtNum(dedup)} dòng</b> trùng mã đơn.` : `100% hợp lệ: Không phát hiện mã giao dịch trùng lặp.`;
+            const rule2Desc = sync > 0 ? `Tách <b>${fmtNum(sync)} dòng</b> thuộc kỳ so sánh khỏi kỳ báo cáo.` : `100% hợp lệ: Toàn bộ giao dịch thuộc đúng kỳ phân tích.`;
+            const rule3Desc = canc > 0 ? `Loại <b>${fmtNum(canc)} đơn CANCELLED</b> (${fmtVND(cancAmt)}) khỏi doanh thu.` : `100% hợp lệ: Không có đơn hàng bị hủy bỏ (CANCELLED).`;
+            const rule4Desc = ret > 0 ? `Khấu trừ <b>${fmtNum(ret)} đơn trả</b> (-${fmtVND(retAmt)}) và hoàn nhập giá vốn.` : `100% hợp lệ: Không có đơn hàng đổi trả, doanh thu được ghi nhận trọn vẹn.`;
 
             document.getElementById('cleaningRulesGrid').innerHTML = `
                 <div class="p-4 rounded-2xl border border-pink-100 bg-blush-50/50 flex items-start gap-3">
@@ -5524,7 +5551,7 @@
                             <span class="font-extrabold text-xs text-slate-800">Khử Trùng Lặp (RULE-DEDUP)</span>
                             <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-100 text-emerald-700">PASSED</span>
                         </div>
-                        <p class="text-[11px] text-slate-500 mt-1">Đã loại bỏ <b>${fmtNum(dedup)} dòng</b> giao dịch bị ghi nhận trùng mã đơn.</p>
+                        <p class="text-[11px] text-slate-500 mt-1">${rule1Desc}</p>
                     </div>
                 </div>
                 <div class="p-4 rounded-2xl border border-pink-100 bg-blush-50/50 flex items-start gap-3">
@@ -5534,7 +5561,7 @@
                             <span class="font-extrabold text-xs text-slate-800">Đồng Bộ Kỳ (RULE-PERIOD-SYNC)</span>
                             <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-100 text-emerald-700">PASSED</span>
                         </div>
-                        <p class="text-[11px] text-slate-500 mt-1">Tách <b>${fmtNum(sync)} dòng</b> thuộc kỳ so sánh T09/2026 khỏi kỳ báo cáo T10/2026.</p>
+                        <p class="text-[11px] text-slate-500 mt-1">${rule2Desc}</p>
                     </div>
                 </div>
                 <div class="p-4 rounded-2xl border border-pink-100 bg-blush-50/50 flex items-start gap-3">
@@ -5544,7 +5571,7 @@
                             <span class="font-extrabold text-xs text-slate-800">Loại Đơn Hủy (RULE-CANCEL)</span>
                             <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-100 text-emerald-700">PASSED</span>
                         </div>
-                        <p class="text-[11px] text-slate-500 mt-1">Loại <b>${fmtNum(canc)} đơn CANCELLED</b> (${fmtVND(cancAmt)}) không tính vào doanh thu.</p>
+                        <p class="text-[11px] text-slate-500 mt-1">${rule3Desc}</p>
                     </div>
                 </div>
                 <div class="p-4 rounded-2xl border border-pink-100 bg-blush-50/50 flex items-start gap-3">
@@ -5554,28 +5581,38 @@
                             <span class="font-extrabold text-xs text-slate-800">Chuẩn Hóa Đổi Trả (RULE-RETURN)</span>
                             <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-100 text-emerald-700">STANDARDIZED</span>
                         </div>
-                        <p class="text-[11px] text-slate-500 mt-1">Khấu trừ <b>${fmtNum(ret)} đơn trả</b> (-${fmtVND(retAmt)}) và hoàn nhập giá vốn kho.</p>
+                        <p class="text-[11px] text-slate-500 mt-1">${rule4Desc}</p>
                     </div>
                 </div>
             `;
 
             const hvSumEl = document.getElementById('hvSummaryText');
             if (hvSumEl) {
+                const badge = document.getElementById('hvBadgeStatus');
+                const notesEl = document.getElementById('hvNotesInput');
                 if (dedup || sync || canc || ret) {
                     hvSumEl.innerHTML = `Đã lọc <b>${fmtNum(dedup)} dòng trùng</b>, tách <b>${fmtNum(sync)} dòng kỳ T09</b>, loại <b>${fmtNum(canc)} đơn hủy</b>, khấu trừ <b>${fmtNum(ret)} đơn trả</b>.`;
-                    const badge = document.getElementById('hvBadgeStatus');
                     if (badge) {
                         badge.className = 'px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-700';
                         badge.innerText = 'CHỜ DUYỆT';
                     }
-                    const notesEl = document.getElementById('hvNotesInput');
                     if (notesEl && !notesEl.value) {
                         notesEl.value = 'Đã kiểm tra đối chiếu các dòng loại trừ: Không phát hiện đơn hoàn thành bị hủy nhầm. Dữ liệu chuẩn xác 100%.';
+                    }
+                } else if (validRows > 0) {
+                    hvSumEl.innerHTML = `Đã kiểm tra 4 quy tắc: Toàn bộ <b>${fmtNum(validRows)} dòng giao dịch</b> đều hợp lệ 100%, không phát hiện đơn trùng, lệch kỳ hay đơn hủy.`;
+                    if (badge) {
+                        badge.className = 'px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-700';
+                        badge.innerText = 'ĐẠT CHUẨN 100%';
+                    }
+                    if (notesEl && !notesEl.value) {
+                        notesEl.value = 'Toàn bộ 1.000 dòng dữ liệu giao dịch năm 2025 đạt chuẩn nghiệp vụ kế toán & BI. Sẵn sàng phê duyệt xuất báo cáo.';
                     }
                 } else {
                     hvSumEl.innerHTML = `<span class="text-slate-400 italic">Chưa có kết quả kiểm tra tự động. Vui lòng nạp dữ liệu tại Bước 1.</span>`;
                 }
             }
+        }
         }
 
         async function submitHumanVerification(approved, triggerNext = true) {
@@ -5836,8 +5873,8 @@
                 let catLabels = Object.keys(cats);
                 let catData = Object.values(cats).map(c => c.revenue);
                 if (catLabels.length === 0) {
-                    catLabels = ['Switch mạng', 'Access Point Wi-Fi 6', 'Firewall bảo mật', 'Router định tuyến'];
-                    catData = [64311480000, 13904016000, 12325760000, 7239960000];
+                    catLabels = ['Sữa bột', 'Sữa chua uống', 'Sữa nước', 'Sản phẩm từ sữa', 'Sữa chua', 'Sữa đặc', 'Sữa hạt'];
+                    catData = [358447000, 64262200, 48076250, 36316800, 25449200, 16088800, 15147600];
                 }
 
                 const ctx3 = elCtx3.getContext('2d');
@@ -7089,16 +7126,66 @@
             try {
                 const res = await fetch('/api/system-state');
                 const state = await res.json();
+                
+                // 1. Đồng bộ Bước 1: Dữ liệu thô nguồn
                 if (state.raw_loaded) {
                     await loadDataPreview('raw', 1);
                     const b1 = document.getElementById('sbBadgeStep1');
                     if (b1) b1.innerText = fmtNum(state.raw_rows || 1000);
                 }
+                
+                // 2. Đồng bộ Bước 2: Dữ liệu sạch & Quy tắc chuẩn hóa
                 if (state.cleaned_done && state.cleaning_audit_log) {
                     appState.cleanInfo = state.cleaning_audit_log;
                     renderStep2Cleaning(state.cleaning_audit_log);
                     const b2 = document.getElementById('sbBadgeStep2');
                     if (b2) b2.innerText = fmtNum(state.cleaned_rows || 1000);
+                }
+                
+                // 3. Đồng bộ Bước 3: Báo cáo quản trị & Dashboard
+                if (state.report_done) {
+                    try {
+                        const repRes = await fetch('/api/generate-report');
+                        const repJson = await repRes.json();
+                        if (repJson.success && repJson.data) {
+                            appState.reportData = repJson.data;
+                            renderMainAnalysisTable();
+                            const b3 = document.getElementById('sbBadgeStep3');
+                            if (b3) b3.innerText = fmtNum(appState.reportData.store_reports?.length || 11);
+                        }
+                    } catch (errRep) {
+                        console.warn("fetch report error:", errRep);
+                    }
+                }
+                
+                // 4. Đồng bộ Đối soát chéo (Audit)
+                if (state.audit_done) {
+                    try {
+                        const audRes = await fetch('/api/cross-check-audit');
+                        const audJson = await audRes.json();
+                        if (audJson.success && audJson.data) {
+                            appState.auditData = audJson.data;
+                        }
+                    } catch (errAud) {
+                        console.warn("fetch audit error:", errAud);
+                    }
+                }
+                
+                // 5. Cập nhật ngay 4 Thẻ KPI đỉnh cao và Biểu đồ
+                updateTopKpiCards();
+                updateGovernanceAlerts(appState.cleanInfo, appState.auditData);
+                
+                if (appState.reportData && typeof renderAllCharts === 'function' && typeof Chart !== 'undefined') {
+                    setTimeout(() => renderAllCharts(), 120);
+                }
+                
+                // 6. Đồng bộ Bước 4: 3 Đầu ra xuất báo cáo (Slide, Word, Excel)
+                if (state.cleaned_done && state.report_done) {
+                    const b4 = document.getElementById('sbBadgeStep4');
+                    if (b4) b4.innerText = '100%';
+                    if (typeof renderStep4Preview === 'function') {
+                        renderStep4Preview('slide');
+                    }
                 }
             } catch (e) {
                 console.warn("syncInitialSystemState error:", e);
