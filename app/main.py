@@ -509,10 +509,25 @@ def api_download_slides_html():
         download_name="BaoNgoc_AI301_Slide_ThuyetTrinh.html"
     )
 
+def get_safe_export_path(filename):
+    """Lấy đường dẫn an toàn để lưu file xuất (hỗ trợ môi trường Read-only trên Vercel)"""
+    try:
+        os.makedirs(DATA_DIR, exist_ok=True)
+        test_path = os.path.join(DATA_DIR, ".test_write")
+        with open(test_path, "w") as f:
+            f.write("1")
+        os.remove(test_path)
+        return os.path.join(DATA_DIR, filename)
+    except Exception:
+        import tempfile
+        tmp = os.path.join(tempfile.gettempdir(), "baongoc_exports")
+        os.makedirs(tmp, exist_ok=True)
+        return os.path.join(tmp, filename)
+
 @app.route("/api/download-pitch-deck", methods=["GET"])
 def api_download_pitch_deck():
     """Tải xuống tệp trình chiếu PowerPoint (.pptx) hoàn chỉnh"""
-    pptx_path = os.path.join(DATA_DIR, "BaoNgoc_Retail_PitchDeck_AI.pptx")
+    pptx_path = get_safe_export_path("BaoNgoc_Retail_PitchDeck_AI.pptx")
     if not os.path.exists(pptx_path):
         generate_pitch_deck(engine, pptx_path)
         
@@ -569,7 +584,7 @@ def api_download_word_report():
     try:
         if engine.management_report is None and engine.cleaned_df is not None:
             engine.generate_management_report()
-        docx_path = os.path.join(DATA_DIR, "BaoNgoc_BaoCao_QuanTri_AI301.docx")
+        docx_path = get_safe_export_path("BaoNgoc_BaoCao_QuanTri_AI301.docx")
         generate_word_report(engine, docx_path)
         return send_file(
             docx_path,
@@ -590,7 +605,7 @@ def api_download_cleaned_excel():
                 engine.execute_data_cleaning()
             else:
                 return "Chưa có dữ liệu để xuất Excel", 400
-        excel_path = os.path.join(DATA_DIR, "BaoNgoc_DuLieu_ChuanHoa_AI301.xlsx")
+        excel_path = get_safe_export_path("BaoNgoc_DuLieu_ChuanHoa_AI301.xlsx")
         generate_excel_workbook(engine, excel_path)
         return send_file(
             excel_path,
