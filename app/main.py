@@ -7,6 +7,7 @@ Chạy trên localhost để Quản lý và Chuyên viên thao tác trực tiế
 import os
 import json
 import io
+import datetime
 import pandas as pd
 import numpy as np
 from flask import Flask, render_template, request, jsonify, send_file
@@ -36,6 +37,19 @@ def index():
 @app.route("/api/system-state", methods=["GET"])
 def get_system_state():
     """Lấy trạng thái hiện tại của hệ thống"""
+    # Nếu có file uploaded_raw.xlsx nhưng chưa nạp, tự động nạp
+    if engine.raw_df is None:
+        up_xlsx = resolve_data_file("uploaded_raw.xlsx")
+        up_csv = resolve_data_file("uploaded_raw.csv")
+        target_f = up_xlsx if os.path.exists(up_xlsx) else (up_csv if os.path.exists(up_csv) else None)
+        if target_f:
+            try:
+                engine.load_raw_data(target_f)
+                engine.execute_data_cleaning()
+                engine.generate_management_report()
+            except Exception:
+                pass
+
     raw_loaded = engine.raw_df is not None
     cleaned_done = engine.cleaned_df is not None
     verified = engine.human_verification["status"] == "APPROVED"
@@ -50,7 +64,9 @@ def get_system_state():
         "report_done": report_done,
         "audit_done": audit_done,
         "decisions_count": len(engine.executive_decisions),
-        "cleaning_audit_log": getattr(engine, "cleaning_audit_log", None)
+        "cleaning_audit_log": getattr(engine, "cleaning_audit_log", None),
+        "raw_rows": len(engine.raw_df) if engine.raw_df is not None else 0,
+        "cleaned_rows": len(engine.cleaned_df) if engine.cleaned_df is not None else 0
     })
 
 @app.route("/api/load-sample", methods=["GET", "POST"])
@@ -175,14 +191,25 @@ def reset_all_data():
 
 @app.route("/api/cleaned-data-preview", methods=["GET"])
 def cleaned_data_preview():
-    """Xem trước các dòng dữ liệu sạch và dữ liệu bị loại trừ (Không tự động nạp dữ liệu ngầm)"""
+    """Xem trước các dòng dữ liệu sạch và dữ liệu bị loại trừ"""
     page = int(request.args.get("page", 1))
     limit = int(request.args.get("limit", 20))
     status_filter = request.args.get("status", "")
     store_filter = request.args.get("store", "")
     mode = request.args.get("mode", "cleaned") # 'cleaned', 'raw', 'excluded'
     
-    # Nếu hệ thống chưa nạp dữ liệu thô, trả về rỗng ngay lập tức
+    # Nếu hệ thống chưa nạp dữ liệu thô nhưng có file trên đĩa, tự động nạp
+    if engine.raw_df is None:
+        up_xlsx = resolve_data_file("uploaded_raw.xlsx")
+        up_csv = resolve_data_file("uploaded_raw.csv")
+        target_f = up_xlsx if os.path.exists(up_xlsx) else (up_csv if os.path.exists(up_csv) else None)
+        if target_f:
+            try:
+                engine.load_raw_data(target_f)
+                engine.execute_data_cleaning()
+            except Exception:
+                pass
+
     if engine.raw_df is None:
         return jsonify({
             "success": True,
@@ -190,11 +217,12 @@ def cleaned_data_preview():
             "page": 1,
             "limit": limit,
             "mode": mode,
+            "columns": [],
             "records": []
         })
     
     if mode == "raw":
-        df = engine.raw_df
+        df = engine.original_raw_df if getattr(engine, 'original_raw_df', None) is not None else engine.raw_df
     elif mode == "excluded":
         if engine.cleaned_df is not None:
             cleaned_ids = set(engine.cleaned_df["transaction_id"])
@@ -211,6 +239,7 @@ def cleaned_data_preview():
             "page": 1,
             "limit": limit,
             "mode": mode,
+            "columns": [],
             "records": []
         })
         
@@ -224,6 +253,7 @@ def cleaned_data_preview():
     end_idx = min(start_idx + limit, total_records)
     
     subset_df = df.iloc[start_idx:end_idx].copy().fillna("")
+    cols = list(subset_df.columns)
     records = subset_df.to_dict(orient="records")
     
     clean_records = []
@@ -232,6 +262,8 @@ def cleaned_data_preview():
         for k, v in r.items():
             if pd.isna(v) or v is None or (isinstance(v, float) and (np.isnan(v) or np.isinf(v))):
                 clean_r[k] = ""
+            elif isinstance(v, (pd.Timestamp, datetime.date, datetime.datetime)):
+                clean_r[k] = v.strftime('%Y-%m-%d')
             elif isinstance(v, (int, np.integer)):
                 clean_r[k] = int(v)
             elif isinstance(v, (float, np.floating)):
@@ -246,6 +278,7 @@ def cleaned_data_preview():
         "page": page,
         "limit": limit,
         "mode": mode,
+        "columns": cols,
         "records": clean_records
     })
 

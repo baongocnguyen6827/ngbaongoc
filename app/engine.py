@@ -66,6 +66,7 @@ def resolve_data_file(filename):
 class PhucAnRetailEngine:
     def __init__(self):
         self.raw_df = None
+        self.original_raw_df = None
         self.cleaned_df = None
         self.stores_df = None
         self.products_df = None
@@ -268,6 +269,7 @@ class PhucAnRetailEngine:
 
                 # Loại bỏ các cột trùng lặp nếu có
                 df = df.loc[:, ~df.columns.duplicated()].copy()
+                self.original_raw_df = df.copy()
                 self.raw_df = df
                 self.cleaned_df = None
                 self.cleaning_audit_log = {}
@@ -336,6 +338,7 @@ class PhucAnRetailEngine:
                     break
 
         df.columns = [str(c).strip() for c in df.columns]
+        self.original_raw_df = df.copy()
 
         # Chuẩn hóa tên cột linh hoạt cho mọi bộ dữ liệu
         col_map = {
@@ -444,15 +447,15 @@ class PhucAnRetailEngine:
             'Địa điểm': 'store_name',
             'Điểm bán': 'store_name',
             'Cơ sở': 'store_name',
-            'Kênh': 'category',
-            'Kênh bán': 'category',
-            'Kênh bán hàng': 'category',
+            'Kênh': 'sales_channel',
+            'Kênh bán': 'sales_channel',
+            'Kênh bán hàng': 'sales_channel',
             'Loại hàng': 'category',
             'Ngành hàng': 'category',
             'Nhóm hàng': 'category',
             'Phân loại': 'category',
-            'Tháng': 'transaction_date',
-            'Năm': 'transaction_date',
+            'Tháng': 'month',
+            'Năm': 'year',
             'Doanh thu (VND)': 'total_amount',
             'Doanh số': 'total_amount'
         }
@@ -464,6 +467,13 @@ class PhucAnRetailEngine:
             elif str(c).lower() in col_map_lower:
                 renamed_cols[c] = col_map_lower[str(c).lower()]
         df = df.rename(columns=renamed_cols)
+        # Loại bỏ các cột trùng lặp nếu có do rename
+        df = df.loc[:, ~df.columns.duplicated(keep='first')].copy()
+
+        # Đảm bảo các cột quan trọng không bị dạng DataFrame đa cột
+        for c in ['transaction_date', 'transaction_id', 'total_amount', 'quantity', 'unit_price', 'unit_cost', 'cogs', 'gross_profit', 'refund_amount', 'discount_rate', 'store_id', 'store_name', 'product_id', 'product_name', 'category', 'status']:
+            if c in df.columns and isinstance(df[c], pd.DataFrame):
+                df[c] = df[c].iloc[:, 0]
 
         # Xử lý store_id & store_name
         if 'store_name' in df.columns and 'store_id' not in df.columns:
@@ -577,6 +587,7 @@ class PhucAnRetailEngine:
     def reset_all_data(self):
         """Đưa toàn bộ hệ thống về trạng thái ban đầu sạch chưa nạp dữ liệu"""
         self.raw_df = None
+        self.original_raw_df = None
         self.cleaned_df = None
         self.active_file_name = None
         self.cleaning_audit_log = {}

@@ -1443,7 +1443,7 @@
 
                     <div class="overflow-x-auto custom-scroll">
                         <table class="w-full text-left text-xs table-blush">
-                            <thead>
+                            <thead id="step1RawTableHead">
                                 <tr>
                                     <th>Mã Yêu Cầu / RFQ</th>
                                     <th>Hạn Triển Khai / Ngày GD</th>
@@ -4836,13 +4836,72 @@
 
                 const pageStr = (json.total && json.total > 0) ? `${json.page} / ${maxPage}` : '0 / 0';
 
+                // ==============================================================
+                // BƯỚC 1 (mode === 'raw'): HIỂN THỊ CHÍNH XÁC DỮ LIỆU GỐC TẢI LÊN
+                // Các cột và giá trị hiển thị 100% động theo tệp người dùng tải lên
+                // ==============================================================
+                if (mode === 'raw') {
+                    const cols = (json.columns && json.columns.length > 0) ? json.columns : [];
+                    const headEl = document.getElementById('step1RawTableHead');
+                    if (headEl && cols.length > 0) {
+                        headEl.innerHTML = '<tr>' + cols.map(c => `<th class="whitespace-nowrap px-4 py-3 font-extrabold text-[11px] text-slate-700 dark:text-slate-200 border-b border-rose-100 dark:border-slate-800 bg-rose-50/70 dark:bg-slate-800/80 uppercase tracking-wider">${c}</th>`).join('') + '</tr>';
+                    }
+
+                    let rawRowsHtml = '';
+                    if (!json.records || json.records.length === 0) {
+                        const colspan = cols.length || 8;
+                        rawRowsHtml = `
+                            <tr>
+                                <td colspan="${colspan}" class="text-center py-14 text-slate-400 font-bold text-xs">
+                                    <div class="flex flex-col items-center justify-center gap-2.5">
+                                        <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-rose-400 text-xl shadow-xs">
+                                            <i class="fa-solid fa-inbox"></i>
+                                        </div>
+                                        <p class="text-sm font-extrabold text-slate-600 dark:text-slate-300">Chưa có tệp dữ liệu giao dịch nào được nạp. Vui lòng tải lên file (.xlsx, .csv) ở Bước 1!</p>
+                                        <p class="text-[11px] font-normal text-slate-400 max-w-md">Hệ thống đang ở trạng thái sạch ban đầu. Hãy tải lên tệp tại Bước 1 khi bạn sẵn sàng.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    } else {
+                        rawRowsHtml = json.records.map(r => {
+                            return '<tr class="hover:bg-rose-50/40 dark:hover:bg-slate-800/40 transition-colors border-b border-slate-100 dark:border-slate-800/60">' + cols.map(c => {
+                                const val = (r[c] !== undefined && r[c] !== null) ? r[c] : '';
+                                const cLow = String(c).toLowerCase();
+                                if (typeof val === 'number') {
+                                    if (cLow.includes('vnd') || cLow.includes('doanh thu') || cLow.includes('lợi nhuận') || cLow.includes('giá') || cLow.includes('tiền')) {
+                                        return `<td class="py-3 px-4 text-right font-mono font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">${fmtVND(val)}</td>`;
+                                    } else if (cLow.includes('%') || cLow.includes('tỷ lệ') || cLow.includes('biên')) {
+                                        const disp = (val <= 1 && val > 0) ? (val * 100).toFixed(1) + '%' : val + '%';
+                                        return `<td class="py-3 px-4 text-center font-mono font-bold text-rose-600 dark:text-rose-400 whitespace-nowrap">${disp}</td>`;
+                                    } else if (cLow.includes('số lượng') || cLow.includes('quantity')) {
+                                        return `<td class="py-3 px-4 text-center font-mono font-bold text-slate-700 dark:text-slate-200 whitespace-nowrap">${fmtNum(val)}</td>`;
+                                    }
+                                }
+                                return `<td class="py-3 px-4 text-slate-700 dark:text-slate-200 whitespace-nowrap">${val}</td>`;
+                            }).join('') + '</tr>';
+                        }).join('');
+                    }
+
+                    const rawTb = document.getElementById('step1RawTableBody');
+                    if (rawTb) rawTb.innerHTML = rawRowsHtml;
+                    const pLbl = document.getElementById('step1PageLabel');
+                    if (pLbl) pLbl.innerText = pageStr;
+                    const cLbl = document.getElementById('step1TableCount');
+                    if (cLbl) cLbl.innerText = `Tổng: ${fmtNum(json.total || 0)} dòng`;
+                    const b1 = document.getElementById('sbBadgeStep1');
+                    if (b1) b1.innerText = fmtNum(json.total || 0);
+                    return;
+                }
+
+                // ==============================================================
+                // BƯỚC 2 (mode === 'cleaned' HOẶC 'excluded'): BẢNG DỮ LIỆU ĐÃ CHUẨN HÓA
+                // ==============================================================
                 let rowsHtml = '';
                 if (!json.records || json.records.length === 0) {
-                    const emptyMsg = mode === 'raw'
-                        ? 'Chưa có tệp dữ liệu giao dịch nào được nạp. Vui lòng tải lên file (.xlsx, .csv) ở Bước 1!'
-                        : (mode === 'excluded'
-                            ? 'Chưa có dòng nào bị loại trừ hoặc chưa thực hiện quy trình làm sạch dữ liệu.'
-                            : 'Chưa có dữ liệu làm sạch. Vui lòng kết nối tệp ở Bước 1 và nhấn Làm Sạch để chuẩn hóa!');
+                    const emptyMsg = mode === 'excluded'
+                        ? 'Chưa có dòng nào bị loại trừ hoặc chưa thực hiện quy trình làm sạch dữ liệu.'
+                        : 'Chưa có dữ liệu làm sạch. Vui lòng kết nối tệp ở Bước 1 và nhấn Làm Sạch để chuẩn hóa!';
                     rowsHtml = `
                         <tr>
                             <td colspan="8" class="text-center py-14 text-slate-400 font-bold text-xs">
@@ -4851,7 +4910,7 @@
                                         <i class="fa-solid fa-inbox"></i>
                                     </div>
                                     <p class="text-sm font-extrabold text-slate-600 dark:text-slate-300">${emptyMsg}</p>
-                                    <p class="text-[11px] font-normal text-slate-400 max-w-md">Hệ thống đang ở trạng thái sạch ban đầu (không có dữ liệu ngầm). Hãy tải lên tệp tại Bước 1 khi bạn sẵn sàng.</p>
+                                    <p class="text-[11px] font-normal text-slate-400 max-w-md">Dữ liệu sẽ tự động bóc tách đơn hủy và đổi trả khi bạn khởi chạy làm sạch.</p>
                                 </div>
                             </td>
                         </tr>
@@ -4884,7 +4943,7 @@
                             : '';
 
                         return `
-                            <tr>
+                            <tr class="hover:bg-rose-50/40 dark:hover:bg-slate-800/40 transition-colors border-b border-slate-100 dark:border-slate-800/60">
                                 <td class="py-3 px-4 font-mono font-bold text-rose-600 dark:text-rose-400">${r.transaction_id || '--'}</td>
                                 <td class="py-3 px-4 text-slate-600 dark:text-slate-300 font-medium">${r.transaction_date || '--'}</td>
                                 <td class="py-3 px-4">
@@ -4906,20 +4965,10 @@
                     }).join('');
                 }
 
-                // Gán đúng vào bảng của từng Bước, không ghi đè lẫn nhau
-                if (mode === 'raw') {
-                    const rawTb = document.getElementById('step1RawTableBody');
-                    if (rawTb) rawTb.innerHTML = rowsHtml;
-                    const pLbl = document.getElementById('step1PageLabel');
-                    if (pLbl) pLbl.innerText = pageStr;
-                    const cLbl = document.getElementById('step1TableCount');
-                    if (cLbl) cLbl.innerText = `Tổng: ${fmtNum(json.total || 0)} dòng`;
-                } else {
-                    const cleanTb = document.getElementById('step2CleanTableBody');
-                    if (cleanTb) cleanTb.innerHTML = rowsHtml;
-                    const pLbl = document.getElementById('step2PageLabel');
-                    if (pLbl) pLbl.innerText = pageStr;
-                }
+                const cleanTb = document.getElementById('step2CleanTableBody');
+                if (cleanTb) cleanTb.innerHTML = rowsHtml;
+                const pLbl = document.getElementById('step2PageLabel');
+                if (pLbl) pLbl.innerText = pageStr;
             } catch (e) {
                 console.error(e);
             }
@@ -6990,9 +7039,16 @@
             try {
                 const res = await fetch('/api/system-state');
                 const state = await res.json();
+                if (state.raw_loaded) {
+                    await loadDataPreview('raw', 1);
+                    const b1 = document.getElementById('sbBadgeStep1');
+                    if (b1) b1.innerText = fmtNum(state.raw_rows || 1000);
+                }
                 if (state.cleaned_done && state.cleaning_audit_log) {
                     appState.cleanInfo = state.cleaning_audit_log;
                     renderStep2Cleaning(state.cleaning_audit_log);
+                    const b2 = document.getElementById('sbBadgeStep2');
+                    if (b2) b2.innerText = fmtNum(state.cleaned_rows || 1000);
                 }
             } catch (e) {
                 console.warn("syncInitialSystemState error:", e);
