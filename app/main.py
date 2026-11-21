@@ -76,9 +76,7 @@ def auto_init_engine():
             target_f = up_csv
         if target_f:
             engine.load_raw_data(target_f)
-            engine.execute_data_cleaning()
-            engine.generate_management_report()
-            engine.perform_cross_check_audit()
+            # Chỉ nạp raw_df, KHÔNG tự ý chạy pipeline làm sạch, báo cáo hay audit
     except Exception as e:
         print("auto_init_engine notice:", e)
 
@@ -126,9 +124,9 @@ def get_system_state():
         if target_f:
             try:
                 engine.load_raw_data(target_f)
-                engine.execute_data_cleaning()
-                engine.generate_management_report()
-                engine.perform_cross_check_audit()
+                # TUÂN THỦ YÊU CẦU: Không tự ý chạy AI Pipeline (làm sạch, báo cáo, audit)
+                # Chỉ nạp raw_df để hiển thị Xem Trước Dữ Liệu Nguồn ở Bước 1.
+                # Người dùng phải chủ động bấm 'Chạy AI Pipeline' hoặc 'Làm Sạch' thì hệ thống mới chạy.
             except Exception:
                 pass
 
@@ -307,7 +305,6 @@ def cleaned_data_preview():
         if target_f:
             try:
                 engine.load_raw_data(target_f)
-                engine.execute_data_cleaning()
             except Exception:
                 pass
 

@@ -765,8 +765,8 @@ class PhucAnRetailEngine:
         """
         Áp dụng ghi chú / yêu cầu tùy biến làm sạch dữ liệu từ người dùng ở Bước 2.
         Hỗ trợ:
-        - Xóa 1 cột (Drop column)
-        - Xóa 1 dòng hoặc theo mã giao dịch (Drop row by ID or index)
+        - Xóa 1 cột (Drop column) - Hỗ trợ cả tiếng Việt và mã kỹ thuật (Doanh thu -> total_amount)
+        - Xóa 1 dòng hoặc theo mã giao dịch (Drop row by ID or index, ví dụ HD00001, TX-1002)
         - Xóa các dòng có doanh thu <= 0 (Filter zero / negative amount)
         - Xóa các dòng NaN / Null
         - Tự động nhận diện lệnh từ ngôn ngữ tự nhiên trong instruction.
@@ -780,41 +780,134 @@ class PhucAnRetailEngine:
         cols_affected = 0
         now_str = datetime.datetime.now().strftime("%H:%M:%S %d/%m/%Y")
 
+        # Bản đồ nhãn tiếng Việt & từ đồng nghĩa cho từng cột trong cleaned_df
+        COL_VI_LABELS = {
+            'total_amount': 'Doanh Thu Ghi Nhận',
+            'transaction_id': 'Mã Giao Dịch',
+            'transaction_date': 'Ngày Giao Dịch',
+            'store_name': 'Cửa Hàng',
+            'store_id': 'Mã Cửa Hàng',
+            'product_name': 'Sản Phẩm',
+            'product_id': 'Mã Sản Phẩm',
+            'quantity': 'Số Lượng (SL)',
+            'unit_price': 'Đơn Giá',
+            'unit_cost': 'Giá Vốn Đơn Vị',
+            'cogs': 'Giá Vốn Hàng Bán (COGS)',
+            'gross_profit': 'Lợi Nhuận Gộp',
+            'gross_margin_pct': 'Biên Lợi Nhuận Gộp',
+            'discount_rate': 'Tỷ Lệ Chiết Khấu',
+            'refund_amount': 'Tiền Chiết Khấu / Hoàn Trả',
+            'status': 'Trạng Thái Chuẩn Hóa',
+            'note': 'Ghi Chú Kiểm Toán',
+            'category': 'Danh Mục Ngành Hàng',
+            'brand': 'Thương Hiệu',
+            'unit': 'Đơn Vị Tính',
+            'customer_id': 'Mã Khách Hàng',
+            'customer_type': 'Loại Khách Hàng',
+            'sales_rep': 'Nhân Viên Bán Hàng',
+            'sales_channel': 'Kênh Bán Hàng',
+            'payment_method': 'Phương Thức Thanh Toán'
+        }
+
+        COLUMN_ALIASES = {
+            'total_amount': ['doanh thu ghi nhận', 'doanh thu thuần', 'doanh thu', 'tổng tiền', 'doanh số', 'tiền', 'net_amount', 'total_amount', 'revenue', 'amount'],
+            'note': ['ghi chú kiểm toán', 'ghi chú', 'note', 'lý do', 'nhận xét', 'audit_note'],
+            'transaction_id': ['mã giao dịch', 'mã hóa đơn', 'mã đơn', 'mã đơn hàng', 'mã gd', 'mã', 'transaction_id', 'order_id', 'invoice_id'],
+            'transaction_date': ['ngày giao dịch', 'ngày bán', 'ngày đơn', 'ngày gd', 'thời gian', 'ngày', 'transaction_date', 'date'],
+            'store_name': ['tên cửa hàng', 'cửa hàng', 'chi nhánh', 'quận/huyện', 'quận', 'huyện', 'store_name', 'store', 'branch', 'location'],
+            'store_id': ['mã cửa hàng', 'mã chi nhánh', 'store_id'],
+            'product_name': ['tên sản phẩm', 'sản phẩm', 'mặt hàng', 'product_name', 'item_name'],
+            'product_id': ['mã sản phẩm', 'mã sp', 'product_id'],
+            'quantity': ['số lượng', 'sl', 'quantity', 'qty'],
+            'unit_price': ['đơn giá', 'giá bán', 'giá niêm yết', 'giá', 'unit_price', 'price'],
+            'unit_cost': ['giá vốn đơn vị', 'giá vốn', 'unit_cost', 'cost'],
+            'cogs': ['giá vốn hàng bán', 'tổng giá vốn', 'cogs'],
+            'gross_profit': ['lợi nhuận gộp', 'lợi nhuận', 'gross_profit', 'profit'],
+            'gross_margin_pct': ['biên lợi nhuận gộp', 'biên lợi nhuận', 'gross_margin_pct', 'margin'],
+            'discount_rate': ['tỷ lệ chiết khấu', 'chiết khấu %', 'discount_rate', 'discount'],
+            'refund_amount': ['tiền chiết khấu', 'tiền hoàn', 'số tiền hoàn', 'hoàn trả', 'refund_amount', 'refund'],
+            'category': ['danh mục', 'ngành hàng', 'loại hàng', 'nhóm hàng', 'category'],
+            'brand': ['thương hiệu', 'nhãn hàng', 'hãng', 'brand'],
+            'unit': ['đơn vị tính', 'đơn vị', 'dvt', 'unit'],
+            'customer_id': ['mã khách hàng', 'mã kh', 'customer_id'],
+            'customer_type': ['loại khách hàng', 'nhóm khách', 'customer_type'],
+            'sales_rep': ['nhân viên bán hàng', 'nhân viên', 'sales_rep'],
+            'sales_channel': ['kênh bán hàng', 'kênh bán', 'sales_channel'],
+            'payment_method': ['phương thức thanh toán', 'hình thức thanh toán', 'payment_method'],
+            'status': ['trạng thái chuẩn hóa', 'trạng thái', 'tình trạng', 'status']
+        }
+
         # 1. XỬ LÝ XÓA CỘT (DROP COLUMN)
-        col_to_drop = None
-        if action_type == "drop_column" and target_column:
-            col_to_drop = target_column
-        elif any(k in inst_lower for k in ["xóa cột", "xoa cot", "loại cột", "loai cot", "bỏ cột", "bo cot", "drop column"]):
-            for c in self.cleaned_df.columns:
-                if c.lower() in inst_lower:
-                    col_to_drop = c
-                    break
-            if not col_to_drop:
-                words = inst_lower.replace(":", " ").replace('"', ' ').replace("'", " ").split()
-                for w in words:
-                    for c in self.cleaned_df.columns:
-                        if c.lower() == w:
-                            col_to_drop = c
+        is_drop_col_intent = (action_type == "drop_column") or any(k in inst_lower for k in [
+            "xóa cột", "xoa cot", "loại cột", "loai cot", "bỏ cột", "bo cot", 
+            "drop column", "remove column", "ẩn cột", "an cot"
+        ])
+
+        if is_drop_col_intent:
+            col_to_drop = None
+            # Bước A: Nếu có target_column tường minh từ dropdown
+            if target_column:
+                t_col = str(target_column).strip()
+                if t_col in self.cleaned_df.columns:
+                    col_to_drop = t_col
+                else:
+                    t_low = t_col.lower()
+                    for can_col, aliases in COLUMN_ALIASES.items():
+                        if (t_low == can_col.lower() or any(t_low == a for a in aliases)) and can_col in self.cleaned_df.columns:
+                            col_to_drop = can_col
                             break
 
-        if col_to_drop and col_to_drop in self.cleaned_df.columns:
-            self.cleaned_df = self.cleaned_df.drop(columns=[col_to_drop]).copy()
-            cols_affected = 1
-            action_log = {
-                "timestamp": now_str,
-                "action": "Xóa cột",
-                "detail": f"Đã xóa cột '{col_to_drop}' khỏi bảng dữ liệu",
-                "rows_affected": 0,
-                "cols_affected": 1
-            }
+            # Bước B: Nhận diện ngôn ngữ tự nhiên từ câu lệnh người dùng
+            if not col_to_drop:
+                # Sắp xếp các cụm từ đồng nghĩa theo chiều dài giảm dần (ưu tiên cụm dài)
+                all_alias_pairs = []
+                for can_col, aliases in COLUMN_ALIASES.items():
+                    if can_col in self.cleaned_df.columns:
+                        for a in aliases:
+                            all_alias_pairs.append((a, can_col))
+                        all_alias_pairs.append((can_col.lower(), can_col))
+                all_alias_pairs.sort(key=lambda x: len(x[0]), reverse=True)
+
+                for alias_text, can_col in all_alias_pairs:
+                    if alias_text in inst_lower:
+                        col_to_drop = can_col
+                        break
+
+            # Bước C: Quét trực tiếp các tên cột đang tồn tại trong DataFrame
+            if not col_to_drop:
+                for c in self.cleaned_df.columns:
+                    if str(c).lower() in inst_lower:
+                        col_to_drop = c
+                        break
+
+            if col_to_drop and col_to_drop in self.cleaned_df.columns:
+                display_name = COL_VI_LABELS.get(col_to_drop, col_to_drop)
+                self.cleaned_df = self.cleaned_df.drop(columns=[col_to_drop]).copy()
+                cols_affected = 1
+                action_log = {
+                    "timestamp": now_str,
+                    "action": "Xóa cột",
+                    "detail": f"Đã xóa cột '{display_name}' ({col_to_drop}) thành công khỏi bảng dữ liệu",
+                    "rows_affected": 0,
+                    "cols_affected": 1
+                }
+            else:
+                action_log = {
+                    "timestamp": now_str,
+                    "action": "Xóa cột không thành công",
+                    "detail": f"Không tìm thấy cột phù hợp trong yêu cầu '{instruction}'. Vui lòng chọn cột từ danh sách hoặc ghi rõ tên cột.",
+                    "rows_affected": 0,
+                    "cols_affected": 0
+                }
 
         # 2. XỬ LÝ XÓA DÒNG (DROP ROW BY ID / INDEX)
         elif action_type == "drop_row" and target_row_id:
             initial_len = len(self.cleaned_df)
-            id_cols = [c for c in self.cleaned_df.columns if "id" in c.lower() or c in ["Quote_ID", "order_id"]]
+            target_str = str(target_row_id).strip().lower()
+            id_cols = [c for c in self.cleaned_df.columns if "id" in c.lower() or c in ["Quote_ID", "order_id", "Mã hóa đơn"]]
             dropped = False
             for c in id_cols:
-                mask = self.cleaned_df[c].astype(str) == str(target_row_id).strip()
+                mask = self.cleaned_df[c].astype(str).str.strip().str.lower() == target_str
                 if mask.any():
                     self.cleaned_df = self.cleaned_df[~mask].copy()
                     dropped = True
@@ -836,17 +929,19 @@ class PhucAnRetailEngine:
                 "cols_affected": 0
             }
 
-        # Nhận diện tự động nếu gõ "Xóa dòng TX-xxx"
-        elif any(k in inst_lower for k in ["xóa dòng", "xoa dong", "loại dòng", "bỏ dòng", "xóa mã", "xoa ma"]):
+        # Nhận diện tự động nếu gõ "Xóa dòng TX-xxx" hoặc "Xóa dòng HD00001"
+        elif any(k in inst_lower for k in ["xóa dòng", "xoa dong", "loại dòng", "loai dong", "bỏ dòng", "bo dong", "xóa mã", "xoa ma", "bỏ mã"]):
             import re
-            m = re.search(r'(tx[-\w]+|[0-9]+)', instruction, re.IGNORECASE)
-            extracted_id = m.group(1) if m else None
+            m = re.search(r'(?:xóa dòng|xoa dong|loại dòng|bỏ dòng|xóa mã|xoa ma|mã|dong)\s+([A-Za-z0-9_\-\.]+)', instruction, re.IGNORECASE)
+            if not m:
+                m = re.search(r'([A-Za-z]+[0-9_\-]+|[0-9]+)', instruction, re.IGNORECASE)
+            extracted_id = m.group(1).strip() if m else None
             if extracted_id:
                 initial_len = len(self.cleaned_df)
-                id_cols = [c for c in self.cleaned_df.columns if "id" in c.lower() or c in ["Quote_ID", "order_id"]]
+                id_cols = [c for c in self.cleaned_df.columns if "id" in c.lower() or c in ["Quote_ID", "order_id", "Mã hóa đơn"]]
                 dropped = False
                 for c in id_cols:
-                    mask = self.cleaned_df[c].astype(str).str.lower() == str(extracted_id).lower()
+                    mask = self.cleaned_df[c].astype(str).str.strip().str.lower() == extracted_id.lower()
                     if mask.any():
                         self.cleaned_df = self.cleaned_df[~mask].copy()
                         dropped = True
@@ -859,9 +954,19 @@ class PhucAnRetailEngine:
                     "rows_affected": rows_affected,
                     "cols_affected": 0
                 }
+            else:
+                action_log = {
+                    "timestamp": now_str,
+                    "action": "Xóa dòng không thành công",
+                    "detail": f"Không nhận diện được mã dòng trong '{instruction}'. Vui lòng nhập rõ mã (ví dụ: HD00001 hoặc TX-1002).",
+                    "rows_affected": 0,
+                    "cols_affected": 0
+                }
 
         # 3. XỬ LÝ LỌC / XÓA THEO ĐIỀU KIỆN (DOANH THU <= 0 HOẶC NULL)
-        elif action_type == "filter_zero" or any(k in inst_lower for k in ["doanh thu <= 0", "doanh thu = 0", "doanh thu bằng 0", "đơn 0đ", "tiền <= 0", "<= 0", "= 0"]):
+        elif action_type == "filter_zero" or any(k in inst_lower for k in [
+            "doanh thu <= 0", "doanh thu = 0", "doanh thu bằng 0", "đơn 0đ", "đơn 0 đ", "đơn 0", "tiền <= 0", "<= 0", "= 0"
+        ]):
             initial_len = len(self.cleaned_df)
             amount_col = None
             for c in ["total_amount", "amount", "revenue", "Gross_Amount_VND", "Net_Amount_VND"]:
@@ -876,6 +981,14 @@ class PhucAnRetailEngine:
                     "action": "Lọc đơn giá trị 0đ hoặc âm",
                     "detail": f"Đã loại bỏ {rows_affected} dòng giao dịch có giá trị <= 0",
                     "rows_affected": rows_affected,
+                    "cols_affected": 0
+                }
+            else:
+                action_log = {
+                    "timestamp": now_str,
+                    "action": "Lọc đơn giá trị 0đ",
+                    "detail": "Cột doanh thu đã bị xóa hoặc không tồn tại trong bảng",
+                    "rows_affected": 0,
                     "cols_affected": 0
                 }
 
