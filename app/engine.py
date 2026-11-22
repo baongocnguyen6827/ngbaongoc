@@ -466,7 +466,25 @@ class PhucAnRetailEngine:
             'Tháng': 'month',
             'Năm': 'year',
             'Doanh thu (VND)': 'total_amount',
-            'Doanh số': 'total_amount'
+            'Doanh số': 'total_amount',
+            'Mã dòng': 'transaction_id',
+            'Mã Dòng': 'transaction_id',
+            'Mã': 'transaction_id',
+            'Mã đơn hàng': 'transaction_id',
+            'Mã số': 'transaction_id',
+            'Giá trị': 'total_amount',
+            'Giá trị đơn': 'total_amount',
+            'Giá trị đơn hàng': 'total_amount',
+            'Giá trị giao dịch': 'total_amount',
+            'Thành tiền': 'total_amount',
+            'Thành tiền (VND)': 'total_amount',
+            'Thành Tiền': 'total_amount',
+            'Thành Tiền (VND)': 'total_amount',
+            'Số tiền': 'total_amount',
+            'Số tiền (VND)': 'total_amount',
+            'Tiền': 'total_amount',
+            'Value': 'total_amount',
+            'Amount': 'total_amount'
         }
         col_map_lower = {k.lower(): v for k, v in col_map.items()}
         renamed_cols = {}
@@ -527,57 +545,109 @@ class PhucAnRetailEngine:
                 'NONE': 'COMPLETED'
             })
 
-        # Xử lý quantity
-        if 'quantity' not in df.columns:
-            df['quantity'] = 1
-        else:
-            df['quantity'] = pd.to_numeric(df['quantity'], errors='coerce').fillna(1).abs().astype(int)
-
-        # Xử lý total_amount
-        if 'total_amount' not in df.columns:
-            if 'unit_price' in df.columns:
-                df['total_amount'] = df['quantity'] * pd.to_numeric(df['unit_price'], errors='coerce').fillna(0)
-            else:
-                df['total_amount'] = 0
-        df['total_amount'] = pd.to_numeric(df['total_amount'], errors='coerce').fillna(0).abs()
-
-        # Xử lý unit_price
-        if 'unit_price' not in df.columns:
-            df['unit_price'] = (df['total_amount'] / df['quantity'].replace(0, 1)).astype(int)
-        else:
-            df['unit_price'] = pd.to_numeric(df['unit_price'], errors='coerce').fillna(0).abs()
-
-        # Xử lý transaction_date
-        if 'transaction_date' not in df.columns:
-            df['transaction_date'] = '2026-03-19'
-        else:
-            df['transaction_date'] = pd.to_datetime(df['transaction_date'], errors='coerce').dt.strftime('%Y-%m-%d').fillna('2026-01-01')
+        # Danh mục sản phẩm chuẩn đối chiếu (Đại lý sữa & Bán lẻ FMCG)
+        CATALOG_PRODUCTS = {
+            'SP001': {'name': 'Sữa tươi tiệt trùng 180ml', 'category': 'Sữa nước', 'brand': 'Vinamilk', 'unit': 'Hộp', 'price': 6500, 'cost': 4700},
+            'SP002': {'name': 'Sữa tươi tiệt trùng 1L', 'category': 'Sữa nước', 'brand': 'Vinamilk', 'unit': 'Hộp', 'price': 28500, 'cost': 21800},
+            'SP003': {'name': 'Sữa đặc có đường 380g', 'category': 'Sữa đặc', 'brand': 'Ông Thọ', 'unit': 'Lon', 'price': 26000, 'cost': 19700},
+            'SP004': {'name': 'Sữa bột trẻ em 900g', 'category': 'Sữa bột', 'brand': 'Dielac', 'unit': 'Lon', 'price': 315000, 'cost': 258000},
+            'SP005': {'name': 'Sữa chua ăn lốc 4 hộp', 'category': 'Sữa chua', 'brand': 'Vinamilk', 'unit': 'Lốc', 'price': 28000, 'cost': 19800},
+            'SP006': {'name': 'Sữa chua uống túi yogurt', 'category': 'Sữa chua uống', 'brand': 'Probi', 'unit': 'Lốc', 'price': 32000, 'cost': 22900},
+            'SP007': {'name': 'Sữa hạt 180ml', 'category': 'Sữa hạt', 'brand': 'TH true NUT', 'unit': 'Hộp', 'price': 12000, 'cost': 8400},
+            'SP008': {'name': 'Sữa tươi ít đường hộp 1L', 'category': 'Sữa nước', 'brand': 'TH true MILK', 'unit': 'Hộp', 'price': 31000, 'cost': 23800},
+            'SP009': {'name': 'Sữa bột người lớn 900g', 'category': 'Sữa bột', 'brand': 'Ensure', 'unit': 'Lon', 'price': 520000, 'cost': 438000},
+            'SP010': {'name': 'Sữa chua uống men sống 65ml', 'category': 'Sữa chua uống', 'brand': 'Yakult', 'unit': 'Lốc', 'price': 27000, 'cost': 19000},
+            'SP011': {'name': 'Sữa tươi có đường 180ml', 'category': 'Sữa nước', 'brand': 'TH true MILK', 'unit': 'Hộp', 'price': 7000, 'cost': 5100},
+            'SP012': {'name': 'Phô mai lát econo', 'category': 'Sản phẩm từ sữa', 'brand': 'Con Bò Cười', 'unit': 'Gói', 'price': 36000, 'cost': 26500}
+        }
 
         # Xử lý transaction_id
         if 'transaction_id' not in df.columns:
             df['transaction_id'] = [f"HD{i+1:05d}" for i in range(len(df))]
 
-        # Xử lý product_id & product_name & category
-        if 'product_id' not in df.columns:
-            df['product_id'] = [f"SP{i+1:03d}" for i in range(len(df))]
-        if 'product_name' not in df.columns:
-            df['product_name'] = df['product_id']
-        if 'category' not in df.columns:
-            df['category'] = 'Thiết bị công nghệ'
+        # Xử lý transaction_date
+        if 'transaction_date' not in df.columns:
+            df['transaction_date'] = '2026-03-19'
+        else:
+            df['transaction_date'] = pd.to_datetime(df['transaction_date'], errors='coerce').dt.strftime('%Y-%m-%d').fillna('2026-03-19')
 
-        # Xử lý unit_cost
+        # Xử lý product_id (nếu thiếu, gán tuần hoàn theo 12 sản phẩm chuẩn của đại lý)
+        if 'product_id' not in df.columns:
+            df['product_id'] = [f"SP{(i % 12) + 1:03d}" for i in range(len(df))]
+
+        # Xử lý product_name & category
+        if 'product_name' not in df.columns or df['product_name'].isna().all() or (df['product_name'] == df['product_id']).all():
+            df['product_name'] = df['product_id'].map(lambda x: CATALOG_PRODUCTS.get(x, {}).get('name', str(x)))
+        if 'category' not in df.columns or df['category'].isna().all() or (df['category'] == 'Thiết bị công nghệ').all():
+            df['category'] = df['product_id'].map(lambda x: CATALOG_PRODUCTS.get(x, {}).get('category', 'Sữa nước'))
+        if 'brand' not in df.columns:
+            df['brand'] = df['product_id'].map(lambda x: CATALOG_PRODUCTS.get(x, {}).get('brand', 'Vinamilk'))
+        if 'unit' not in df.columns:
+            df['unit'] = df['product_id'].map(lambda x: CATALOG_PRODUCTS.get(x, {}).get('unit', 'Hộp'))
+
+        # Xử lý quantity
+        if 'quantity' not in df.columns:
+            df['quantity'] = 1
+        else:
+            df['quantity'] = pd.to_numeric(df['quantity'], errors='coerce').fillna(1).abs().astype(int)
+        df['quantity'] = df['quantity'].replace(0, 1)
+
+        # Xử lý unit_price (Đơn giá)
+        if 'unit_price' not in df.columns:
+            df['unit_price'] = df['product_id'].map(lambda x: CATALOG_PRODUCTS.get(x, {}).get('price', 6500))
+        else:
+            df['unit_price'] = pd.to_numeric(df['unit_price'], errors='coerce').fillna(0).abs()
+            zero_p = df['unit_price'] <= 0
+            if zero_p.any():
+                fallback_prices = df.loc[zero_p, 'product_id'].map(lambda x: CATALOG_PRODUCTS.get(x, {}).get('price', 6500))
+                df.loc[zero_p, 'unit_price'] = fallback_prices
+
+        # Xử lý discount_rate
+        if 'discount_rate' not in df.columns:
+            df['discount_rate'] = 0.0
+        else:
+            df['discount_rate'] = pd.to_numeric(df['discount_rate'], errors='coerce').fillna(0.0).clip(0, 0.5)
+
+        # Xử lý total_amount (DOANH THU GHI NHẬN - TUYỆT ĐỐI KHÔNG ĐỂ 0đ NẾU CÓ THỂ TÍNH TOÁN ĐƯỢC)
+        if 'total_amount' not in df.columns:
+            df['total_amount'] = 0
+        else:
+            df['total_amount'] = pd.to_numeric(df['total_amount'], errors='coerce').fillna(0).abs()
+
+        # Tính toán doanh thu dự kiến theo Số lượng * Đơn giá * (1 - Chiết khấu)
+        expected_amount = (df['quantity'] * df['unit_price'] * (1 - df['discount_rate'])).round().astype(int)
+        # Nếu total_amount <= 0 hoặc < 1.000đ (dữ liệu test dummy / giá trị rỗng), tự động tính theo công thức chuẩn
+        zero_amt_mask = (df['total_amount'] < 1000) & (expected_amount >= 1000)
+        if zero_amt_mask.any():
+            df.loc[zero_amt_mask, 'total_amount'] = expected_amount[zero_amt_mask]
+        if (df['total_amount'] <= 0).any():
+            df.loc[df['total_amount'] <= 0, 'total_amount'] = expected_amount[df['total_amount'] <= 0]
+
+        # Đảm bảo nếu unit_price vẫn bằng 0 thì lấy ngược lại từ total_amount / quantity
+        zero_p_again = (df['unit_price'] <= 0)
+        if zero_p_again.any():
+            df.loc[zero_p_again, 'unit_price'] = (df.loc[zero_p_again, 'total_amount'] / df.loc[zero_p_again, 'quantity']).astype(int)
+
+        # Xử lý unit_cost (Giá vốn đơn vị)
         if 'unit_cost' not in df.columns:
-            if 'cogs' in df.columns:
-                df['unit_cost'] = (pd.to_numeric(df['cogs'], errors='coerce').fillna(0) / df['quantity'].replace(0, 1)).astype(int)
-            elif 'gross_profit' in df.columns:
-                df['unit_cost'] = ((df['total_amount'] - pd.to_numeric(df['gross_profit'], errors='coerce').fillna(0)) / df['quantity'].replace(0, 1)).astype(int)
-            elif self.products_df is not None:
-                cost_map = self.products_df.set_index('product_id')['cost_price'].to_dict()
-                df['unit_cost'] = df['product_id'].map(cost_map).fillna(df['unit_price'] * 0.75).astype(int)
-            else:
-                df['unit_cost'] = (df['unit_price'] * 0.75).astype(int)
+            df['unit_cost'] = df['product_id'].map(lambda x: CATALOG_PRODUCTS.get(x, {}).get('cost', 4700))
         else:
             df['unit_cost'] = pd.to_numeric(df['unit_cost'], errors='coerce').fillna(df['unit_price'] * 0.75).astype(int)
+        zero_cost = (df['unit_cost'] <= 0)
+        if zero_cost.any():
+            fallback_costs = df.loc[zero_cost, 'product_id'].map(lambda x: CATALOG_PRODUCTS.get(x, {}).get('cost', 4700))
+            df.loc[zero_cost, 'unit_cost'] = fallback_costs.fillna(df.loc[zero_cost, 'unit_price'] * 0.75).astype(int)
+
+        # Xử lý cogs & gross_profit
+        if 'cogs' not in df.columns:
+            df['cogs'] = (df['quantity'] * df['unit_cost']).round().astype(int)
+        else:
+            df['cogs'] = pd.to_numeric(df['cogs'], errors='coerce').fillna(df['quantity'] * df['unit_cost']).astype(int)
+
+        if 'gross_profit' not in df.columns:
+            df['gross_profit'] = df['total_amount'] - df['cogs']
+        else:
+            df['gross_profit'] = pd.to_numeric(df['gross_profit'], errors='coerce').fillna(df['total_amount'] - df['cogs']).astype(int)
 
         df = df.loc[:, ~df.columns.duplicated()].copy()
         self.raw_df = df

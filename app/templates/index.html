@@ -5067,9 +5067,12 @@
                             th: `<th class="text-right whitespace-nowrap">Doanh Thu Ghi Nhận</th>`,
                             td: (r) => {
                                 const st = String(r.status || 'COMPLETED').toUpperCase();
-                                const amt = (r.total_amount !== undefined && r.total_amount !== null && !isNaN(r.total_amount) && Number(r.total_amount) !== 0)
+                                let amt = (r.total_amount !== undefined && r.total_amount !== null && !isNaN(r.total_amount) && Number(r.total_amount) >= 1000)
                                     ? Number(r.total_amount)
-                                    : ((r.quantity || 1) * (r.unit_price || 0) * (1 - (r.discount_rate || 0)));
+                                    : ((Number(r.quantity) || 1) * (Number(r.unit_price) || 6500) * (1 - (Number(r.discount_rate) || 0)));
+                                if (!amt || isNaN(amt) || amt <= 0) {
+                                    amt = (Number(r.quantity) || 1) * 6500;
+                                }
                                 return `<td class="py-3 px-4 text-right font-black whitespace-nowrap ${st === 'RETURNED' ? 'text-rose-600' : 'text-slate-900 dark:text-white'}">
                                     ${st === 'RETURNED' ? '-' : ''}${fmtVND(amt)}
                                 </td>`;
