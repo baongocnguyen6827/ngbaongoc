@@ -2835,9 +2835,9 @@
     </div>
 
     <!-- ===================================================================== -->
-    <!-- MODAL: AUTO 4-STEP PIPELINE PROGRESS & DELIVERABLES (TỰ ĐỘNG 4 BƯỚC)  -->
+    <!-- MODAL: AUTO 4-STEP PIPELINE PROGRESS & DELIVERABLES (ĐÃ TẮT POPUP THEO YÊU CẦU) -->
     <!-- ===================================================================== -->
-    <div id="pipelineProgressModal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-md">
+    <div id="pipelineProgressModal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-md" style="display: none !important;">
         <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-pink-200/90 dark:border-rose-900/60 max-w-3xl w-full overflow-hidden flex flex-col max-h-[92vh] view-fade animate-in">
             <!-- Modal Header -->
             <div class="p-4 sm:p-5 bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 text-white flex items-center justify-between shadow-sm">
@@ -3424,39 +3424,13 @@
 
         // ======================== AUTO 4-STEP PIPELINE MODAL & ENGINE ========================
         function openPipelineModal(fileName) {
+            // TUYỆT ĐỐI KHÔNG BẬT POPUP MODAL NÀY (ĐÃ TẮT THEO YÊU CẦU NGƯỜI DÙNG)
             const modal = document.getElementById('pipelineProgressModal');
-            if (!modal) return;
-            const fNameEl = document.getElementById('pipelineFileName');
-            if (fNameEl) fNameEl.innerText = fileName || 'Tệp dữ liệu giao dịch';
-            
-            const badge = document.getElementById('pipelineGlobalBadge');
-            if (badge) {
-                badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-white/25 text-white uppercase tracking-wider';
-                badge.innerText = 'Đang Xử Lý';
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                modal.style.display = 'none';
             }
-            const icon = document.getElementById('pipelineHeaderIcon');
-            if (icon) {
-                icon.className = 'fa-solid fa-bolt-lightning text-amber-200 animate-pulse';
-            }
-            const sub = document.getElementById('pipelineSubTitle');
-            if (sub) {
-                sub.innerText = 'AI Agent đang tự động nạp dữ liệu, làm sạch qua 4 chốt chặn, lập dashboard, đối soát & sinh slide...';
-            }
-            const comp = document.getElementById('pipelineCompletedSection');
-            if (comp) comp.classList.add('hidden');
-            const verif = document.getElementById('pipelineVerificationSection');
-            if (verif) verif.classList.add('hidden');
-            
-            // Reset Progress Bar
-            setPipelineProgress(10, 'Bước 1: Tiếp nhận & Phân tích cấu trúc tệp...');
-
-            // Reset Steps Cards
-            for (let s = 1; s <= 4; s++) {
-                updatePipelineStepUI(s, s === 1 ? 'running' : 'waiting');
-            }
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
         }
 
         function closePipelineModal() {
@@ -3464,9 +3438,10 @@
             if (modal) {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
+                modal.style.display = 'none';
             }
             if (appState.reportData && (appState.currentTab === 'step1' || appState.currentTab === 'welcome')) {
-                switchTab('step3');
+                switchTab('step2');
             }
         }
 
@@ -3571,13 +3546,10 @@
 
         async function runAutomated4StepPipeline(options = {}) {
             const fileName = options.fileName || (appState.pickedFile ? appState.pickedFile.name : 'Tệp dữ liệu giao dịch');
-            openPipelineModal(fileName);
+            notify(`Đang xử lý quy trình 4 bước cho tệp: ${fileName}...`, 'pink');
 
             try {
                 // ================= BƯỚC 1: TIẾP NHẬN & NẠP DỮ LIỆU NGUỒN =================
-                setPipelineProgress(15, 'Bước 1: Đang nạp tệp & phân tích metadata cấu trúc bảng...');
-                updatePipelineStepUI(1, 'running', 'Đang quét cấu trúc hàng cột và nhận diện tiêu đề thông minh...');
-
                 let r1;
                 if (options.action === 'upload') {
                     const fileToSend = options.file || appState.pickedFile;
@@ -3594,7 +3566,6 @@
                 }
 
                 if (!r1.success) {
-                    updatePipelineStepUI(1, 'error', `Lỗi tiếp nhận: ${r1.error || 'Không xác định'}`);
                     notify('Lỗi nạp tệp: ' + (r1.error || 'Không xác định'), 'warn');
                     return;
                 }
@@ -3606,15 +3577,11 @@
                 if (fileNameLabel) fileNameLabel.innerText = activeName;
                 const sbBadge = document.getElementById('sbBadgeStep1');
                 if (sbBadge) sbBadge.innerText = fmtNum(totalRows);
-                updatePipelineStepUI(1, 'done', `Đã tiếp nhận <b>${fmtNum(totalRows)} dòng</b> giao dịch từ tệp <i>${activeName}</i>.`);
 
                 // ================= BƯỚC 2: 4 CHỐT CHẶN AI GUARDRAILS & BẢNG DỮ LIỆU SẠCH =================
-                setPipelineProgress(40, 'Bước 2: Đang thực thi 4 chốt chặn kiểm soát làm sạch...');
-                updatePipelineStepUI(2, 'running', 'Đang khử trùng, tách kỳ T09, loại đơn hủy, khấu trừ đơn hoàn trả...');
-
+                notify('Bước 2: Đang thực thi 4 chốt chặn kiểm soát làm sạch...', 'pink');
                 const r2 = await (await fetch('/api/execute-cleaning', { method: 'POST' })).json();
                 if (!r2.success) {
-                    updatePipelineStepUI(2, 'error', `Lỗi làm sạch: ${r2.error || 'Không xác định'}`);
                     notify('Lỗi quy trình làm sạch: ' + (r2.error || 'Không xác định'), 'warn');
                     return;
                 }
@@ -3622,47 +3589,53 @@
                 appState.cleanInfo = r2.data;
                 renderStep2Cleaning(r2.data);
                 const cleanRows = r2.data.clean_rows || totalRows;
-                const dedup = r2.data.dedup ? r2.data.dedup.removed_rows : 0;
-                const sync = r2.data.period_sync ? r2.data.period_sync.out_of_period_rows : 0;
-                const canc = r2.data.cancelled_filter ? r2.data.cancelled_filter.cancelled_rows : 0;
-                const ret = r2.data.returns_handling ? r2.data.returns_handling.returned_rows : 0;
-                const totalEx = dedup + sync + canc + ret;
-                updatePipelineStepUI(2, 'done', `Giữ lại <b>${fmtNum(cleanRows)} dòng sạch</b> (Bóc tách ${fmtNum(totalEx)} dòng vi phạm quy tắc).`);
+                const sbBadge2 = document.getElementById('sbBadgeStep2');
+                if (sbBadge2) sbBadge2.innerText = fmtNum(cleanRows);
 
-                // ================= BƯỚC 2 HOÀN TẤT: HIỂN THỊ BẢN XEM TRƯỚC & CHỜ XÁC NHẬN =================
-                setPipelineProgress(50, 'Bước 2 hoàn tất: Bản xem trước dữ liệu sạch • Chờ bạn xác nhận để tiếp tục');
-                
-                const badge = document.getElementById('pipelineGlobalBadge');
-                if (badge) {
-                    badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-amber-950 uppercase tracking-wider animate-pulse';
-                    badge.innerText = 'Chờ Xác Nhận';
-                }
-                const icon = document.getElementById('pipelineHeaderIcon');
-                if (icon) {
-                    icon.className = 'fa-solid fa-user-check text-amber-200';
-                }
-                const sub = document.getElementById('pipelineSubTitle');
-                if (sub) {
-                    sub.innerText = 'Dữ liệu đã được làm sạch qua 4 chốt chặn. Vui lòng kiểm tra bản xem trước và bấm xác nhận để tiến hành Bước 3 & Bước 4.';
+                // Cập nhật bảng dữ liệu sạch Bước 2
+                await loadDataPreview('cleaned', 1);
+
+                // ================= BƯỚC 3: PHÂN TÍCH ĐA CHIỀU & DASHBOARD CHỈ SỐ =================
+                notify('Bước 3: Đang tính toán 4 Golden KPIs & phân tích chỉ số kinh doanh...', 'pink');
+                const r3 = await (await fetch('/api/generate-report', { method: 'POST' })).json();
+                if (r3.success) {
+                    appState.reportData = r3.data;
+                    const sbBadge3 = document.getElementById('sbBadgeStep3');
+                    if (sbBadge3) sbBadge3.innerText = '100%';
                 }
 
-                // Nạp bản xem trước dữ liệu sạch vào Modal
-                await populateCleanedPreviewInModal(r2.data, cleanRows, dedup, sync, canc + ret);
+                // ================= BƯỚC 4: ĐỐI SOÁT 3 CHIỀU & TẠO SLIDE PITCH DECK =================
+                notify('Bước 4: Đang đối soát 3 chiều & xuất bản kết quả...', 'pink');
+                const r4 = await (await fetch('/api/cross-check-audit', { method: 'POST' })).json();
+                if (r4.success) {
+                    appState.auditData = r4.data;
+                }
 
-                // Hiển thị khung xem trước và nút xác nhận
-                const pvSection = document.getElementById('pipelineVerificationSection');
-                if (pvSection) pvSection.classList.remove('hidden');
+                try {
+                    const rSlide = await (await fetch('/api/generate-pitch-deck')).json();
+                    if (rSlide.success && (rSlide.slides || (rSlide.preview && rSlide.preview.slides))) {
+                        pitchDeckData = rSlide.slides || (rSlide.preview && rSlide.preview.slides);
+                        renderPitchDeckTabs();
+                    }
+                } catch (eSlide) {
+                    console.warn('Auto pitch deck generation note:', eSlide);
+                }
 
-                // Cập nhật giao diện nền Bước 2
-                loadDataPreview('cleaned', 1);
+                // CẬP NHẬT TOÀN BỘ GIAO DIỆN HỆ THỐNG
                 updateTopKpiCards();
+                renderMainAnalysisTable();
+                renderStep4AuditAndPriority();
+                renderAuditTrailView();
+                loadSignedDecisions();
+                initCopilotForLoadedData(activeName, totalRows);
+                updateGovernanceAlerts(appState.cleanInfo, appState.auditData);
 
-                notify(`Đã làm sạch thành công ${fmtNum(cleanRows)} dòng! Vui lòng xem trước và nhấn nút "Xác Nhận" để tiếp tục sang Bước 3 & Bước 4.`, 'green');
+                notify(`✓ Đã hoàn tất 100% quy trình 4 bước cho ${activeName}!`, 'success');
+                switchTab('step2');
 
             } catch (err) {
                 console.error('runAutomated4StepPipeline error:', err);
                 notify('Lỗi thực thi quy trình: ' + err.message, 'warn');
-                setPipelineProgress(100, 'Quy trình gặp lỗi: ' + err.message);
             }
         }
 
