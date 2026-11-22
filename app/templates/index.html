@@ -1411,11 +1411,11 @@
 
                     <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
                         <span class="text-[11px] text-slate-400">
-                            <i class="fa-solid fa-circle-info text-rose-400 mr-1"></i>Sau khi chọn tệp, nhấp vào nút bên cạnh hoặc nút <b>Chạy AI Pipeline</b> ở thanh tiêu đề để bắt đầu.
+                            <i class="fa-solid fa-circle-info text-rose-400 mr-1"></i>Sau khi chọn tệp, nhấp vào nút <b>Tải Lên Dữ Liệu Nguồn</b> để xem trước dữ liệu ở Bước 1. Nhấn nút <b>Chạy AI Pipeline</b> ở thanh tiêu đề khi bạn muốn khởi chạy phân tích.
                         </span>
                         <button type="button" id="btnUploadNow" onclick="submitUploadedFile()" disabled class="btn-pink-pill px-5 py-2.5 text-xs flex items-center gap-2 opacity-50 cursor-not-allowed transition hover:scale-105">
-                            <i class="fa-solid fa-play"></i>
-                            <span>Tải Lên &amp; Khởi Chạy Pipeline</span>
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Tải Lên Dữ Liệu Nguồn</span>
                         </button>
                     </div>
                 </div>
@@ -4686,19 +4686,19 @@
                 return;
             }
             appState.pickedFile = file;
-            document.getElementById('pickedFileName').innerText = file.name;
-            document.getElementById('pickedFileSize').innerText = (file.size / 1024).toFixed(1) + ' KB';
-            document.getElementById('pickedFileBadge').classList.remove('hidden');
+            const nameEl = document.getElementById('pickedFileName');
+            if (nameEl) nameEl.innerText = file.name;
+            const sizeEl = document.getElementById('pickedFileSize');
+            if (sizeEl) sizeEl.innerText = (file.size / 1024).toFixed(1) + ' KB';
+            const badge = document.getElementById('pickedFileBadge');
+            if (badge) badge.classList.remove('hidden');
             const btn = document.getElementById('btnUploadNow');
             if (btn) {
                 btn.disabled = false;
                 btn.classList.remove('opacity-50', 'cursor-not-allowed');
             }
-            notify(`Đã nhận diện tệp: ${file.name}. Đang tải lên và khởi chạy phân tích...`, 'pink');
-            // TỰ ĐỘNG KHỞI CHẠY TẢI LÊN NGAY LẬP TỨC
-            setTimeout(() => {
-                submitUploadedFile();
-            }, 300);
+            notify(`Đã chọn tệp: ${file.name}. Vui lòng bấm "Tải Lên Dữ Liệu Nguồn" để xem trước dữ liệu ở Bước 1.`, 'pink');
+            // TUÂN THỦ YÊU CẦU: TUYỆT ĐỐI KHÔNG TỰ Ý CHẠY PIPELINE HOẶC TỰ SUBMIT KHI CHỌN TỆP
         }
         function clearPickedFile(e) {
             if (e) e.stopPropagation();
@@ -4861,26 +4861,100 @@
             const btn = document.getElementById('btnUploadNow');
             if (btn) {
                 btn.disabled = true;
-                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Đang xử lý 4 bước...</span>`;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Đang nạp tệp...</span>`;
             }
             try {
-                await runAutomated4StepPipeline({ action: 'upload', fileName: appState.pickedFile.name });
+                notify('Đang nạp tệp dữ liệu nguồn...', 'pink');
+                const fd = new FormData();
+                fd.append('file', appState.pickedFile);
+                const res = await (await fetch('/api/upload-raw', { method: 'POST', body: fd })).json();
+                if (res.success) {
+                    notify('✓ ' + (res.message || 'Đã nạp dữ liệu thô thành công!'), 'success');
+                    appState.rawInfo = res.data;
+                    const totalRows = res.data.total_rows || 0;
+                    const activeName = res.data.file_name || appState.pickedFile.name;
+                    const fileNameLabel = document.getElementById('activeFileNameLabel');
+                    if (fileNameLabel) fileNameLabel.innerText = activeName;
+                    const sbBadge = document.getElementById('sbBadgeStep1');
+                    if (sbBadge) sbBadge.innerText = fmtNum(totalRows);
+
+                    // Reset các bước sau về trạng thái chờ
+                    const sbBadge2 = document.getElementById('sbBadgeStep2');
+                    if (sbBadge2) sbBadge2.innerText = '0';
+                    const sbBadge3 = document.getElementById('sbBadgeStep3');
+                    if (sbBadge3) sbBadge3.innerText = '0';
+
+                    // Hiển thị xem trước dữ liệu thô ở Bước 1
+                    await loadDataPreview('raw', 1);
+                    switchTab('step1');
+                } else {
+                    notify('Lỗi nạp tệp: ' + (res.error || 'Không xác định'), 'warn');
+                }
+            } catch (err) {
+                console.error(err);
+                notify('Lỗi tải tệp: ' + err.message, 'warn');
             } finally {
                 if (btn) {
                     btn.disabled = false;
-                    btn.innerHTML = `<i class="fa-solid fa-play"></i><span>Tải Lên &amp; Khởi Chạy Pipeline</span>`;
+                    btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i><span>Tải Lên Dữ Liệu Nguồn</span>`;
                 }
             }
         }
 
         async function loadUploadedExcel() {
             notify('Đang nạp dữ liệu giao dịch chuẩn...', 'green');
-            await runAutomated4StepPipeline({ action: 'load-uploaded', fileName: 'raw_transactions_oct2026.csv (Dữ liệu chuẩn)' });
+            try {
+                const res = await (await fetch('/api/load-sample', { method: 'POST' })).json();
+                if (res.success) {
+                    notify('✓ ' + res.message, 'success');
+                    appState.rawInfo = res.data;
+                    const fileNameLabel = document.getElementById('activeFileNameLabel');
+                    if (fileNameLabel) fileNameLabel.innerText = res.data.file_name || 'uploaded_raw.xlsx';
+                    const sbBadge = document.getElementById('sbBadgeStep1');
+                    if (sbBadge) sbBadge.innerText = fmtNum(res.data.total_rows || 1000);
+
+                    // Reset các bước sau
+                    const sbBadge2 = document.getElementById('sbBadgeStep2');
+                    if (sbBadge2) sbBadge2.innerText = '0';
+                    const sbBadge3 = document.getElementById('sbBadgeStep3');
+                    if (sbBadge3) sbBadge3.innerText = '0';
+
+                    await loadDataPreview('raw', 1);
+                    switchTab('step1');
+                } else {
+                    notify('Lỗi nạp tệp: ' + res.error, 'warn');
+                }
+            } catch (e) {
+                notify('Lỗi: ' + e.message, 'warn');
+            }
         }
 
         async function loadSample60k() {
             notify('Đang nạp bộ dữ liệu mẫu 60.000 dòng...', 'pink');
-            await runAutomated4StepPipeline({ action: 'sample-60k', fileName: 'raw_transactions_oct2026.csv (60.000 dòng mẫu)' });
+            try {
+                const res = await (await fetch('/api/load-sample', { method: 'POST' })).json();
+                if (res.success) {
+                    notify('✓ ' + res.message, 'success');
+                    appState.rawInfo = res.data;
+                    const fileNameLabel = document.getElementById('activeFileNameLabel');
+                    if (fileNameLabel) fileNameLabel.innerText = res.data.file_name || 'raw_transactions_oct2026.csv';
+                    const sbBadge = document.getElementById('sbBadgeStep1');
+                    if (sbBadge) sbBadge.innerText = fmtNum(res.data.total_rows || 60000);
+
+                    // Reset các bước sau
+                    const sbBadge2 = document.getElementById('sbBadgeStep2');
+                    if (sbBadge2) sbBadge2.innerText = '0';
+                    const sbBadge3 = document.getElementById('sbBadgeStep3');
+                    if (sbBadge3) sbBadge3.innerText = '0';
+
+                    await loadDataPreview('raw', 1);
+                    switchTab('step1');
+                } else {
+                    notify('Lỗi nạp tệp: ' + res.error, 'warn');
+                }
+            } catch (e) {
+                notify('Lỗi: ' + e.message, 'warn');
+            }
         }
 
         function changePreviewPage(delta) {
