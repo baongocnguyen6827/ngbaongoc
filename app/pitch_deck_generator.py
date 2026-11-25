@@ -272,14 +272,20 @@ def generate_pitch_deck(engine, output_path="data/BaoNgoc_Retail_PitchDeck_AI.pp
     slide3 = prs.slides.add_slide(blank_layout)
     add_header_banner(slide3, "Cơ Cấu Doanh Thu & Đóng Góp Lợi Nhuận Theo Nhóm Sản Phẩm", "PHÂN TÍCH DANH MỤC • PRODUCT MIX")
 
-    sorted_cats = sorted(cat_sum.items(), key=lambda x: x[1].get("revenue", 0), reverse=True)
+    sorted_cats = sorted(cat_sum.items(), key=lambda x: x[1].get("revenue", 0), reverse=True) if cat_sum else []
     if not sorted_cats:
         sorted_cats = [
-            ("Switch mạng doanh nghiệp", {"revenue": int(net_rev * 0.65), "revenue_share": 65.8, "margin": 18.9}),
-            ("Access Point Wi-Fi 6", {"revenue": int(net_rev * 0.14), "revenue_share": 14.2, "margin": 20.5}),
-            ("Firewall bảo mật", {"revenue": int(net_rev * 0.13), "revenue_share": 12.6, "margin": 18.5}),
-            ("Router định tuyến cao cấp", {"revenue": int(net_rev * 0.08), "revenue_share": 7.4, "margin": 21.7})
+            ("Sữa tươi tiệt trùng", {"revenue": int(net_rev * 0.38), "revenue_share": 38.5, "margin": 23.8}),
+            ("Sữa bột dinh dưỡng", {"revenue": int(net_rev * 0.28), "revenue_share": 28.2, "margin": 26.5}),
+            ("Sữa chua ăn & uống", {"revenue": int(net_rev * 0.19), "revenue_share": 19.1, "margin": 27.2}),
+            ("Sữa đặc & Sữa hạt", {"revenue": int(net_rev * 0.14), "revenue_share": 14.2, "margin": 25.1})
         ]
+
+    vol_driver_name = sorted_cats[0][0]
+    vol_driver_share = sorted_cats[0][1].get("revenue_share", 0)
+    best_margin_item = max(sorted_cats, key=lambda x: x[1].get("margin", 0))
+    best_margin_name = best_margin_item[0]
+    best_margin_val = best_margin_item[1].get("margin", 0)
 
     cat_w = Inches(2.78)
     cat_h = Inches(3.2)
@@ -337,9 +343,9 @@ def generate_pitch_deck(engine, output_path="data/BaoNgoc_Retail_PitchDeck_AI.pp
 
     p_cs1 = tf_cs.add_paragraph()
     p_cs1.text = (
-        "• Nhóm Ngựa Thồ Doanh Thu (Volume Drivers): Nhóm Switch mạng chiếm trên 65% tổng doanh thu, giữ vai trò xương sống dòng tiền.\n"
-        "• Nhóm Lợi Nhuận Vàng (High-Margin Stars): Router và Access Point Wi-Fi 6 đạt biên lợi nhuận vượt trội (>20.5% - 21.7%).\n"
-        "• Định hướng hành động: Đóng gói các giải pháp combo bán kèm (Bundle Solution) để kéo doanh số thiết bị biên lợi nhuận cao."
+        f"• Nhóm Ngựa Thồ Doanh Thu (Volume Drivers): Danh mục '{vol_driver_name}' đóng góp lớn nhất ({vol_driver_share}%), giữ vai trò xương sống dòng tiền.\n"
+        f"• Nhóm Lợi Nhuận Vàng (High-Margin Stars): Danh mục '{best_margin_name}' đạt biên lợi nhuận cao nhất toàn hệ thống ({best_margin_val}%).\n"
+        "• Định hướng hành động: Đóng gói các chương trình combo và tối ưu chiết khấu để gia tăng giá trị đơn hàng trung bình."
     )
     p_cs1.font.size = Pt(10)
     p_cs1.font.color.rgb = COLOR_TEXT_MAIN
@@ -559,13 +565,13 @@ def generate_pitch_deck(engine, output_path="data/BaoNgoc_Retail_PitchDeck_AI.pp
     p_cr1 = tf_cr.add_paragraph()
     p_cr1.text = (
         "✦ Điểm Khen Ngợi Chủ Yếu (Strengths):\n"
-        "• Bàn giao thiết bị chuẩn thời hạn cam kết (Deployment Deadline SLA).\n"
-        "• Kỹ sư hỗ trợ cài đặt ban đầu nhiệt tình, giải đáp rõ ràng thông số kỹ thuật.\n"
-        "• Chính sách bảo hành rõ ràng, hóa đơn tài chính minh bạch.\n\n"
+        "• Sản phẩm đúng tiêu chuẩn chất lượng, bao bì nguyên vẹn và hạn sử dụng đảm bảo.\n"
+        "• Đơn hàng được xử lý và giao đúng hạn, đúng địa điểm chi nhánh.\n"
+        "• Thái độ phục vụ chuyên nghiệp, hóa đơn chứng từ giao dịch rõ ràng.\n\n"
         "✦ Điểm Cần Cải Thiện Trong 30 Ngày Tới (Actionable Focus):\n"
-        "• Mở rộng kênh tư vấn kỹ thuật trực tuyến 24/7 qua Hotline & Chatbot AI.\n"
-        "• Cung cấp tài liệu cẩm nang kỹ thuật trực quan cho từng dòng thiết bị Switch & Router.\n"
-        "• Rút ngắn thời gian phản hồi khiếu nại phát sinh xuống dưới 30 phút."
+        "• Tối ưu thời gian xử lý khiếu nại và đổi trả xuống dưới 30 phút.\n"
+        "• Tăng cường khảo sát phản hồi khách hàng tự động sau mỗi lượt mua hàng.\n"
+        "• Nâng cao kỹ năng tư vấn danh mục sản phẩm và chuẩn phục vụ tại quầy."
     )
     p_cr1.font.size = Pt(10.5)
     p_cr1.font.color.rgb = COLOR_TEXT_MAIN
@@ -577,11 +583,14 @@ def generate_pitch_deck(engine, output_path="data/BaoNgoc_Retail_PitchDeck_AI.pp
     slide7 = prs.slides.add_slide(blank_layout)
     add_header_banner(slide7, "Ma Trận Phân Loại Chi Nhánh P1 - P4 & Kịch Bản Điều Hành", "CHIẾN LƯỢC MẠNG LƯỚI • PRIORITY MATRIX")
 
+    top_store_name = store_reps[0].get("store_name", "Chi nhánh Ba Đình") if store_reps else "Chi nhánh Ba Đình"
+    low_store_name = store_reps[-1].get("store_name", "Chi nhánh Nam Từ Liêm") if len(store_reps) > 2 else "Điểm bán cần trợ lực"
+
     matrix_quads = [
-        {"code": "P4", "name": "VƯỢT KẾ HOẠCH (>102%)", "desc": "Các chi nhánh xuất sắc dẫn đầu (Hải Phòng, Bắc Ninh). Hành động: Khen thưởng đội ngũ, chuẩn hóa quy trình làm hình mẫu nhân bản toàn chuỗi.", "color": COLOR_EMERALD},
-        {"code": "P3", "name": "TĂNG TRƯỞNG ỔN ĐỊNH (95% - 102%)", "desc": "Các chi nhánh đạt chuẩn kế hoạch (Đà Nẵng, TP.HCM, Hà Nội). Hành động: Duy trì tồn kho an toàn, kích cầu các dòng sản phẩm biên lợi nhuận cao.", "color": COLOR_BLUE},
-        {"code": "P2", "name": "CẦN TRỢ LỰC KÍCH CẦU (85% - 95%)", "desc": "Chi nhánh có tiềm năng nhưng gặp trở ngại sức mua. Hành động: Cấp bổ sung gói ngân sách khuyến mãi cục bộ 30 triệu đ/điểm bán.", "color": COLOR_AMBER},
-        {"code": "P1", "name": "KHẨN CẤP CẦN CỨU VÃN (<85% HOẶC TRẢ >12%)", "desc": "Chi nhánh có nguy cơ hụt doanh số hoặc đọng hàng hoàn. Hành động: Cử tổ công tác điều hành trực tiếp xử lý điểm nghẽn.", "color": COLOR_ROSE_DARK}
+        {"code": "P4", "name": "VƯỢT KẾ HOẠCH (>102%)", "desc": f"Các chi nhánh xuất sắc dẫn đầu ({top_store_name}). Hành động: Khen thưởng đội ngũ, chuẩn hóa quy trình làm hình mẫu nhân bản toàn chuỗi.", "color": COLOR_EMERALD},
+        {"code": "P3", "name": "TĂNG TRƯỞNG ỔN ĐỊNH (95% - 102%)", "desc": "Các chi nhánh đạt chuẩn kế hoạch. Hành động: Duy trì tồn kho an toàn, kích cầu các dòng sản phẩm biên lợi nhuận cao.", "color": COLOR_BLUE},
+        {"code": "P2", "name": "CẦN TRỢ LỰC KÍCH CẦU (85% - 95%)", "desc": "Chi nhánh có tiềm năng nhưng gặp trở ngại sức mua. Hành động: Cấp bổ sung gói ngân sách khuyến mãi cục bộ cho điểm bán.", "color": COLOR_AMBER},
+        {"code": "P1", "name": "KHẨN CẤP CẦN CỨU VÃN (<85% HOẶC TRẢ >12%)", "desc": f"Chi nhánh có nguy cơ hụt doanh số hoặc đọng hàng ({low_store_name}). Hành động: Cử tổ công tác điều hành trực tiếp xử lý điểm nghẽn.", "color": COLOR_ROSE_DARK}
     ]
 
     mq_w = Inches(5.7)
@@ -629,11 +638,14 @@ def generate_pitch_deck(engine, output_path="data/BaoNgoc_Retail_PitchDeck_AI.pp
     p_at.font.bold = True
     p_at.font.color.rgb = COLOR_ROSE_PRIMARY
 
+    vol_cat_label = vol_driver_name if 'vol_driver_name' in locals() else "sản phẩm chủ lực"
+    star_cat_label = best_margin_name if 'best_margin_name' in locals() else "sản phẩm biên lãi cao"
+
     weeks = [
-        ("Tuần 1: Rà Soát Tồn Kho & Hàng Đổi Trả", "Kiểm kê toàn bộ kho thiết bị tại 5 chi nhánh; xử lý triệt để các đơn hoàn trả và bảo trì tồn đọng."),
-        ("Tuần 2: Đẩy Mạnh Combo Thiết Bị Lợi Nhuận Cao", "Ra mắt gói giải pháp mạng trọn gói cho doanh nghiệp (Switch + Access Point Wi-Fi 6) để tối ưu biên lợi nhuận."),
-        ("Tuần 3: Chuẩn Hóa Dịch Vụ Khách Hàng SLA", "Tập huấn quy trình chăm sóc khách hàng sau bán hàng, đặt mục tiêu nâng điểm CSAT lên 4.7★."),
-        ("Tuần 4: Đối Soát Tài Chính & Thưởng Hiệu Suất", "Nghiệm thu báo cáo doanh thu thuần và chi trả thưởng KPI cho các điểm bán hoàn thành xuất sắc nhóm P4.")
+        ("Tuần 1: Rà Soát Tồn Kho & Hàng Đổi Trả", f"Kiểm kê toàn bộ hàng hóa tại {len(store_reps)} chi nhánh; xử lý triệt để các đơn hoàn trả và hạn sử dụng."),
+        (f"Tuần 2: Đẩy Mạnh Tiêu Thụ '{vol_cat_label}' & '{star_cat_label}'", f"Ra mắt gói combo ưu đãi và chương trình kích cầu tập trung vào danh mục '{vol_cat_label}' và '{star_cat_label}'."),
+        ("Tuần 3: Chuẩn Hóa Dịch Vụ Khách Hàng SLA", "Tập huấn quy trình chăm sóc khách hàng sau bán hàng, đặt mục tiêu nâng điểm CSAT lên >= 4.8★."),
+        ("Tuần 4: Đối Soát Tài Chính & Thưởng Hiệu Suất", "Nghiệm thu báo cáo doanh thu thuần toàn chuỗi và chi trả thưởng KPI cho các điểm bán hoàn thành xuất sắc nhóm P4.")
     ]
     for w_title, w_desc in weeks:
         p_wt = tf_a.add_paragraph()
@@ -715,7 +727,32 @@ def get_pitch_deck_preview_data(engine):
     gross_margin = summary.get("gross_margin", 19.3)
     return_rate = summary.get("return_rate", 4.2)
 
-    top_store = store_reps[0].get("store_name", "Hải Phòng") if store_reps else "Hải Phòng"
+    sorted_cats = sorted(cat_sum.items(), key=lambda x: x[1].get("revenue", 0), reverse=True) if cat_sum else []
+    if not sorted_cats:
+        sorted_cats = [
+            ("Sữa tươi tiệt trùng", {"revenue": int(net_rev * 0.38), "revenue_share": 38.5, "margin": 23.8}),
+            ("Sữa bột dinh dưỡng", {"revenue": int(net_rev * 0.28), "revenue_share": 28.2, "margin": 26.5}),
+            ("Sữa chua ăn & uống", {"revenue": int(net_rev * 0.19), "revenue_share": 19.1, "margin": 27.2}),
+            ("Sữa đặc & Sữa hạt", {"revenue": int(net_rev * 0.14), "revenue_share": 14.2, "margin": 25.1})
+        ]
+
+    top_cat_name, top_cat_data = sorted_cats[0]
+    top_cat_rev = top_cat_data.get("revenue", 0)
+    top_cat_share = top_cat_data.get("revenue_share", 0)
+    
+    star_cat = max(sorted_cats, key=lambda x: x[1].get("margin", 0))
+    star_cat_name, star_cat_data = star_cat
+    star_cat_margin = star_cat_data.get("margin", 0)
+
+    # Store rankings
+    top_store = store_reps[0].get("store_name", "Chi nhánh Ba Đình") if store_reps else "Chi nhánh Ba Đình"
+    top_store_rev = store_reps[0].get("net_revenue", 0) if store_reps else 0
+    top_store_pct = store_reps[0].get("target_completion_pct", 102.5) if store_reps else 102.5
+
+    store_2_name = store_reps[1].get("store_name", "Chi nhánh Hoàng Mai") if len(store_reps) > 1 else top_store
+    store_2_rev = store_reps[1].get("net_revenue", 0) if len(store_reps) > 1 else top_store_rev
+
+    low_store = store_reps[-1].get("store_name", "Chi nhánh Nam Từ Liêm") if len(store_reps) > 2 else "Chi nhánh cần trợ lực"
 
     return {
         "title": f"Báo Cáo Kết Quả Kinh Doanh — {biz_name}",
@@ -752,25 +789,25 @@ def get_pitch_deck_preview_data(engine):
                 "slide_num": 3,
                 "badge": "CƠ CẤU DANH MỤC",
                 "title": "Cơ Cấu Doanh Thu & Đóng Góp Lợi Nhuận Theo Nhóm Sản Phẩm",
-                "subtitle": "Phân loại nhóm Ngựa Thồ Doanh Thu vs Nhóm Lợi Nhuận Vàng",
-                "insight": "Dòng Switch mạng giữ vai trò chủ lực dòng tiền, trong khi Router và Access Point dẫn đầu về tỷ suất lợi nhuận (>20%).",
+                "subtitle": f"Phân loại nhóm Ngựa Thồ Doanh Thu vs Nhóm Lợi Nhuận Vàng ({len(sorted_cats)} ngành hàng)",
+                "insight": f"Dòng '{top_cat_name}' giữ vai trò chủ lực dòng tiền ({top_cat_share}% doanh thu), trong khi '{star_cat_name}' dẫn đầu về tỷ suất lợi nhuận ({star_cat_margin}%).",
                 "highlights": [
-                    "Switch mạng: Chiếm ~65% tổng doanh thu",
-                    "Router & Access Point: Biên lợi nhuận trên 20.5%",
-                    "Firewall: Đóng góp ổn định ~12.6% doanh thu",
-                    "Chiến lược: Đóng gói combo trọn gói cho doanh nghiệp"
+                    f"Chủ lực doanh số: {top_cat_name} ({top_cat_share}%)",
+                    f"Biên lợi nhuận cao nhất: {star_cat_name} ({star_cat_margin}%)",
+                    f"Quy mô danh mục: {len(sorted_cats)} nhóm ngành hàng được chuẩn hóa",
+                    "Chiến lược: Tối ưu chiết khấu và kích cầu các mặt hàng biên lãi cao"
                 ]
             },
             {
                 "slide_num": 4,
                 "badge": "HIỆU SUẤT CHI NHÁNH",
                 "title": "Bảng Xếp Hạng & So Sánh Tăng Trưởng Giữa Các Chi Nhánh",
-                "subtitle": f"Đánh giá thành tích {len(store_reps)} chi nhánh trọng điểm trên toàn quốc",
-                "insight": f"Chi nhánh {top_store} dẫn đầu toàn chuỗi với tỷ lệ hoàn thành vượt kế hoạch, duy trì tỷ lệ hoàn trả tối thiểu.",
+                "subtitle": f"Đánh giá thành tích {len(store_reps)} chi nhánh / điểm bán trong mạng lưới",
+                "insight": f"Chi nhánh '{top_store}' dẫn đầu toàn chuỗi với doanh thu {format_vnd(top_store_rev)}, cần hỗ trợ thêm cho điểm bán '{low_store}'.",
                 "highlights": [
-                    f"Top 1 Performer: Chi nhánh {top_store}",
-                    f"Tất cả {len(store_reps)} chi nhánh đều vượt điểm hòa vốn",
-                    "Biên lợi nhuận bình quân các chi nhánh: 18.7% - 19.8%",
+                    f"Top 1 dẫn đầu: {top_store} ({format_vnd(top_store_rev)})",
+                    f"Top 2 kế tiếp: {store_2_name} ({format_vnd(store_2_rev)})",
+                    f"Nhóm cần can thiệp: {low_store}",
                     "Nhân rộng thực hành xuất sắc từ chi nhánh dẫn đầu"
                 ]
             },
@@ -791,13 +828,13 @@ def get_pitch_deck_preview_data(engine):
                 "slide_num": 6,
                 "badge": "TIẾNG NÓI KHÁCH HÀNG",
                 "title": "Đo Lường Chỉ Số Hài Lòng Khách Hàng (CSAT) & Dịch Vụ",
-                "subtitle": "Đánh giá chất lượng phục vụ và cam kết dịch vụ khách hàng SLA",
-                "insight": "92.4% khách hàng đánh giá hài lòng với độ chuẩn xác về thời hạn bàn giao và trình độ tư vấn kỹ thuật.",
+                "subtitle": "Đánh giá chất lượng phục vụ, thời gian giao hàng và trải nghiệm mua sắm",
+                "insight": "92.4% khách hàng đánh giá hài lòng với chất lượng sản phẩm, độ chính xác đơn hàng và dịch vụ phục vụ.",
                 "highlights": [
                     "Điểm CSAT trung bình: 4.6 / 5.0 ★",
                     "78.5% khách hàng cho điểm 5 sao tuyệt đối",
                     "Cam kết SLA giải quyết khiếu nại dưới 30 phút",
-                    "Mở rộng tổng đài hỗ trợ kỹ thuật trực tuyến 24/7"
+                    "Nâng cao chuẩn phục vụ tại quầy và giao hàng tận nơi"
                 ]
             },
             {
@@ -805,12 +842,12 @@ def get_pitch_deck_preview_data(engine):
                 "badge": "MA TRẬN ĐIỀU HÀNH",
                 "title": "Ma Trận Phân Loại Chi Nhánh P1 - P4 & Kịch Bản Ứng Phó",
                 "subtitle": "Phân bổ nguồn lực chiến lược theo 4 nhóm hiệu suất kinh doanh",
-                "insight": "Tập trung duy trì đà tăng trưởng của nhóm P4 và hỗ trợ gói kích cầu cục bộ cho các điểm bán nhóm P2.",
+                "insight": f"Tập trung duy trì đà tăng trưởng của nhóm P4 ({top_store}) và hỗ trợ gói kích cầu cục bộ cho các điểm bán nhóm P1-P2 ({low_store}).",
                 "highlights": [
-                    "P4 (Xuất Sắc): Khen thưởng & làm hình mẫu nhân bản",
+                    f"P4 (Xuất Sắc): {top_store} - Khen thưởng & làm hình mẫu",
                     "P3 (Ổn Định): Giữ vững nhịp độ và tối ưu chi phí",
-                    "P2 (Hỗ Trợ): Cấp thêm ngân sách marketing 30tr/điểm bán",
-                    "P1 (Khẩn Cấp): Cử tổ điều hành tháo gỡ điểm nghẽn"
+                    "P2 (Hỗ Trợ): Cấp thêm ngân sách khuyến mại cục bộ",
+                    f"P1 (Khẩn Cấp): {low_store} - Cử tổ điều hành tháo gỡ điểm nghẽn"
                 ]
             },
             {
@@ -820,10 +857,10 @@ def get_pitch_deck_preview_data(engine):
                 "subtitle": "Lộ trình thực thi 4 tuần & Quyết định phê chuẩn của Ban Điều Hành",
                 "insight": "Báo cáo kinh doanh đã được phê duyệt chính thức (APPROVED) bởi Tổng Giám Đốc Bảo Ngọc để triển khai đồng bộ.",
                 "highlights": [
-                    "Tuần 1: Rà soát tồn kho & xử lý đơn bảo trì",
-                    "Tuần 2: Ra mắt gói giải pháp combo biên lãi cao",
-                    "Tuần 3: Nâng cấp dịch vụ khách hàng chuẩn SLA",
-                    "Phê chuẩn điều hành: BẢO NGỌC (Tổng Giám Đốc - CEO)"
+                    f"Tuần 1: Rà soát tồn kho & kiểm soát hàng đổi trả ({len(store_reps)} chi nhánh)",
+                    f"Tuần 2: Đẩy mạnh kích cầu danh mục '{top_cat_name}' và '{star_cat_name}'",
+                    "Tuần 3: Nâng cấp dịch vụ khách hàng hướng tới CSAT >= 4.8★",
+                    "Phê chuẩn điều hành: NGUYỄN BẢO NGỌC (Tổng Giám Đốc - CEO)"
                 ]
             }
         ]

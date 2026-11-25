@@ -3185,22 +3185,22 @@
                     Slide 1: Bìa Báo Cáo
                 </button>
                 <button onclick="selectPitchDeckSlide(1)" id="slideTab1" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
-                    Slide 2: Mục Đích AI Agent
+                    Slide 2: Tổng Quan Tài Chính
                 </button>
                 <button onclick="selectPitchDeckSlide(2)" id="slideTab2" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
-                    Slide 3: Antigravity & Gemini API
+                    Slide 3: Cơ Cấu Danh Mục
                 </button>
                 <button onclick="selectPitchDeckSlide(3)" id="slideTab3" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
-                    Slide 4: Quy Trình Bước 1 & 2
+                    Slide 4: Hiệu Suất Chi Nhánh
                 </button>
                 <button onclick="selectPitchDeckSlide(4)" id="slideTab4" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
-                    Slide 5: Quy Trình Bước 3 & 4
+                    Slide 5: Kiểm Soát Rủi Ro
                 </button>
                 <button onclick="selectPitchDeckSlide(5)" id="slideTab5" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
-                    Slide 6: 4 Chỉ Số Vàng
+                    Slide 6: Tiếng Nói Khách Hàng (CSAT)
                 </button>
                 <button onclick="selectPitchDeckSlide(6)" id="slideTab6" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
-                    Slide 7: Điểm Nóng & Chi Nhánh
+                    Slide 7: Ma Trận Điều Hành
                 </button>
                 <button onclick="selectPitchDeckSlide(7)" id="slideTab7" class="pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60">
                     Slide 8: Kế Hoạch 30 Ngày & Ký Duyệt
@@ -3855,12 +3855,12 @@
             if (!container || !pitchDeckData || pitchDeckData.length === 0) return;
             const tabTitles = [
                 "Slide 1: Bìa Báo Cáo",
-                "Slide 2: Mục Đích AI Agent",
-                "Slide 3: Antigravity & Gemini API",
-                "Slide 4: Quy Trình Bước 1 & 2",
-                "Slide 5: Quy Trình Bước 3 & 4",
-                "Slide 6: 4 Chỉ Số Vàng",
-                "Slide 7: Điểm Nóng & Chi Nhánh",
+                "Slide 2: Tổng Quan Tài Chính",
+                "Slide 3: Cơ Cấu Danh Mục",
+                "Slide 4: Hiệu Suất Chi Nhánh",
+                "Slide 5: Kiểm Soát Rủi Ro",
+                "Slide 6: Tiếng Nói Khách Hàng (CSAT)",
+                "Slide 7: Ma Trận Điều Hành",
                 "Slide 8: Kế Hoạch 30 Ngày & Ký Duyệt"
             ];
             container.innerHTML = `<span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 flex-shrink-0 mr-1"><i class="fa-solid fa-layer-group text-rose-500 mr-1"></i>Chọn Slide (${pitchDeckData.length}):</span>`;
@@ -3871,7 +3871,12 @@
                 btn.className = (i === currentSlideIdx) 
                     ? 'pitch-tab-btn active px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer bg-rose-500 text-white shadow-xs'
                     : 'pitch-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 cursor-pointer text-slate-600 dark:text-slate-300 hover:bg-rose-100/60';
-                btn.innerText = tabTitles[i] || `Slide ${i + 1}`;
+                
+                let titleLabel = tabTitles[i] || `Slide ${i + 1}`;
+                if (s && s.badge) {
+                    titleLabel = `Slide ${i + 1}: ${s.badge}`;
+                }
+                btn.innerText = titleLabel;
                 container.appendChild(btn);
             });
         }
@@ -3899,13 +3904,13 @@
 
             const defaultInsights = [
                 "Báo cáo thuyết trình điều hành chuẩn bị sẵn sàng cho Nguyễn Bảo Ngọc trình chiếu trước Ban Giám Đốc và các Trưởng Chi Nhánh.",
-                "AI Agent loại bỏ hoàn toàn các thao tác thủ công dễ sai sót, chuyển hóa dữ liệu thô thành quyết định điều hành tự động.",
-                "Google Gemini API kết hợp cùng Google Antigravity tạo nên sức mạnh nhận thức và thực thi tự động vượt trội.",
-                "Cơ chế Safe Gate bảo vệ dữ liệu đầu vào; 4 bộ lọc AI Guardrails bảo vệ tính toàn vẹn của doanh thu thuần và giá vốn.",
-                "Báo cáo tài chính đa chiều kết hợp cùng phân tích cảm xúc CSAT giúp Ban Giám Đốc phản ứng kịp thời trước mọi biến động.",
-                "Tổng doanh thu thuần chuỗi đạt tỷ lệ hoàn thành ấn tượng 98.2%, lợi nhuận gộp vững vàng ở biên độ 40.0%.",
-                "Cần kích hoạt ngay gói giải pháp can thiệp P1 cho Chi nhánh Hoàn Kiếm, Hoàng Mai và Nam Từ Liêm nhằm tối ưu giá vốn, chiết khấu và tăng tốc độ tiêu thụ.",
-                "Lộ trình hành động 30 ngày tập trung tháo gỡ điểm nghẽn tồn kho, tái phân bổ nguồn lực và chữ ký phê duyệt điều hành chính thức."
+                "Tổng quan 4 chỉ số hiệu suất vàng (Golden KPIs): Doanh thu thuần, Biên lợi nhuận gộp, Số lượng giao dịch và CSAT.",
+                "Cơ cấu doanh thu theo từng nhóm ngành hàng, phân định rõ nhóm sản phẩm tạo doanh số chủ lực và nhóm biên lãi cao.",
+                "Bảng xếp hạng hiệu suất kinh doanh giữa các chi nhánh, xác định rõ điểm bán dẫn đầu và điểm bán cần can thiệp.",
+                "Quản trị chặt chẽ tỷ lệ đổi trả và đơn hủy, kiểm soát rủi ro dòng tiền và tối ưu quy trình xử lý giao dịch.",
+                "Khảo sát đo lường mức độ hài lòng khách hàng (CSAT), nâng cao chất lượng phục vụ và duy trì tỷ lệ đánh giá tích cực.",
+                "Ma trận điều hành P1 - P4 phân loại chi nhánh theo hiệu quả thực tế để xây dựng phương án can thiệp kịp thời.",
+                "Lộ trình hành động 30 ngày tập trung tháo gỡ điểm nghẽn tồn kho, tái phân bổ nguồn lực và quyết định phê chuẩn điều hành."
             ];
             document.getElementById('previewSlideInsight').innerText = slide.insight || defaultInsights[idx] || defaultInsights[0];
 
