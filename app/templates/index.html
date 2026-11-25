@@ -1107,10 +1107,10 @@
                                     <p class="text-[10.5px] text-slate-600 dark:text-slate-300 font-medium leading-tight">
                                         Thả file <b class="text-rose-600 dark:text-rose-400 font-bold font-mono">.xlsx, .csv</b> vào đây hoặc <span class="text-rose-600 dark:text-rose-400 font-black underline pointer-events-auto">nhấp chọn</span>
                                     </p>
-                                    <!-- 1 dòng trạng thái khóa/mở khóa gọn gàng, không che khuất đám mây -->
-                                    <div id="heroLockStatusBadge" class="mt-1.5 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500 text-white text-[9px] font-black shadow-xs">
-                                        <i class="fa-solid fa-lock text-[8px]"></i>
-                                        <span id="heroLockStatusText">Tải tệp đang bị khóa (cần xác nhận hồ sơ)</span>
+                                    <!-- 1 dòng trạng thái sẵn sàng tải tệp, không che khuất đám mây -->
+                                    <div id="heroLockStatusBadge" class="mt-1.5 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white text-[9px] font-black shadow-xs">
+                                        <i class="fa-solid fa-lock-open text-[8px]"></i>
+                                        <span id="heroLockStatusText">Đã mở khóa tải tệp • Sẵn sàng nhận file</span>
                                     </div>
                                 </div>
                             </div>
@@ -1118,8 +1118,8 @@
 
                         <!-- 1 dòng thông báo trạng thái dưới đám mây -->
                         <p id="heroProfileStatusTip" class="text-[11px] text-slate-500 dark:text-slate-400 italic flex items-center gap-1.5 pt-1">
-                            <i class="fa-solid fa-lock text-amber-500"></i>
-                            <span class="text-amber-700 dark:text-amber-300 font-medium">Tải tệp đang bị khóa — vui lòng xác nhận hồ sơ bên cạnh để mở khóa.</span>
+                            <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                            <span class="text-emerald-700 dark:text-emerald-300 font-medium">Bạn có thể chọn hoặc kéo thả tệp (.xlsx, .csv) vào Đám mây để xem trước dữ liệu ngay.</span>
                         </p>
                     </div>
 
@@ -1151,11 +1151,11 @@
 
                             <!-- Hàng 2: Trạng thái Khóa + Phụ đề hướng dẫn -->
                             <div class="flex flex-wrap items-center gap-2 text-[10.5px] text-slate-500 dark:text-slate-400">
-                                <span id="profileStatusBadge" class="px-2.5 py-1 rounded-full text-[9.5px] font-black bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-300/80 inline-flex items-center flex-shrink-0 shadow-2xs">
-                                    <i class="fa-solid fa-lock text-[9px] mr-1 text-amber-600"></i>CHƯA XÁC THỰC • ĐANG KHÓA TẢI FILE
+                                <span id="profileStatusBadge" class="px-2.5 py-1 rounded-full text-[9.5px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-300/80 inline-flex items-center flex-shrink-0 shadow-2xs">
+                                    <i class="fa-solid fa-circle-check text-[9px] mr-1 text-emerald-600"></i>ĐÃ XÁC THỰC • ĐÃ MỞ KHÓA TẢI FILE
                                 </span>
                                 <span id="profileStatusDesc" class="leading-tight">
-                                    Điền thông tin &amp; tối đa 10 câu hỏi để mở khóa khu vực tải tệp dữ liệu và định hướng phân tích cho AI
+                                    Hồ sơ doanh nghiệp &amp; định hướng phân tích đã sẵn sàng. Bạn có thể tải file hoặc tùy chỉnh thông tin bên dưới.
                                 </span>
                             </div>
                         </div>
@@ -1411,7 +1411,7 @@
 
                     <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
                         <span class="text-[11px] text-slate-400">
-                            <i class="fa-solid fa-circle-info text-rose-400 mr-1"></i>Sau khi chọn tệp, nhấp vào nút <b>Tải Lên Dữ Liệu Nguồn</b> để xem trước dữ liệu ở Bước 1. Nhấn nút <b>Chạy AI Pipeline</b> ở thanh tiêu đề khi bạn muốn khởi chạy phân tích.
+                            <i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i>Hệ thống tự động tải lên và hiển thị bảng dữ liệu thô ngay khi bạn chọn tệp. Nhấn nút <b>Chạy AI Pipeline</b> ở thanh tiêu đề khi bạn muốn khởi chạy phân tích 4 bước.
                         </span>
                         <button type="button" id="btnUploadNow" onclick="submitUploadedFile()" disabled class="btn-pink-pill px-5 py-2.5 text-xs flex items-center gap-2 opacity-50 cursor-not-allowed transition hover:scale-105">
                             <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -4552,19 +4552,11 @@
         }
 
         function isBusinessProfileConfirmed() {
-            return Boolean(
-                businessProfile &&
-                businessProfile.is_confirmed &&
-                businessProfile.business_type &&
-                businessProfile.business_type.trim().length > 0 &&
-                businessProfile.context &&
-                businessProfile.context.trim().length > 0
-            );
+            return true;
         }
 
         function showProfileLockWarning() {
-            notify("Khu vực tải tệp đang KHÓA! Vui lòng nhập & xác nhận Hồ sơ doanh nghiệp trước (hoặc bấm 'Ví Dụ Thông Tin Mẫu') để mở khóa.", "warning");
-            scrollToProfileForm();
+            // Không khóa tải file - hồ sơ luôn sẵn sàng
         }
 
         function scrollToProfileForm() {
@@ -4582,10 +4574,6 @@
         }
 
         function triggerFileInputWithGuardrail() {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             const input = document.getElementById('fileInputElem');
             if (input) input.click();
         }
@@ -4604,60 +4592,55 @@
         }
 
         async function loadSavedBusinessProfile() {
-            // MẶC ĐỊNH BẮT ĐẦU TRỐNG & KHÓA: Chỉ nạp khi người dùng chủ động bấm 'Ví Dụ Thông Tin Mẫu' hoặc đã từng xác nhận
             const local = localStorage.getItem('ai301_biz_profile');
             let hasConfirmedProfile = false;
             if (local) {
                 try {
                     const p = JSON.parse(local);
-                    if (p && p.filledByUser && p.business_type && p.is_confirmed) {
+                    if (p && p.business_type) {
                         businessProfile = p;
                         hasConfirmedProfile = true;
-                    } else {
-                        localStorage.removeItem('ai301_biz_profile');
                     }
-                } catch (e) {
-                    localStorage.removeItem('ai301_biz_profile');
-                }
+                } catch (e) {}
+            }
+            if (!hasConfirmedProfile) {
+                try {
+                    const res = await (await fetch('/api/business-profile')).json();
+                    if (res && res.success && res.data && res.data.business_type) {
+                        businessProfile = res.data;
+                        hasConfirmedProfile = true;
+                    }
+                } catch (e) {}
+            }
+            if (!hasConfirmedProfile || !businessProfile.business_type) {
+                // Tự động nạp mẫu đề thi AI301 chuẩn sẵn sàng
+                quickFillAI301Profile();
+                return;
             }
             populateProfileFormUI();
-            updateProfileLockUI(hasConfirmedProfile && isBusinessProfileConfirmed());
+            updateProfileLockUI(true);
         }
 
         // ======================== STEP 1 & 2: FILE UPLOAD & PREVIEW ========================
         function onDragOver(e) {
             e.preventDefault();
-            if (!isBusinessProfileConfirmed()) {
-                if (e.dataTransfer) e.dataTransfer.dropEffect = 'none';
-                return;
-            }
-            document.getElementById('uploadDropZone').classList.add('border-rose-500', 'bg-rose-50');
+            const z = document.getElementById('uploadDropZone');
+            if (z) z.classList.add('border-rose-500', 'bg-rose-50');
         }
-        function onDragLeave(e) { e.preventDefault(); document.getElementById('uploadDropZone').classList.remove('border-rose-500', 'bg-rose-50'); }
+        function onDragLeave(e) { e.preventDefault(); const z = document.getElementById('uploadDropZone'); if (z) z.classList.remove('border-rose-500', 'bg-rose-50'); }
         function onFileDrop(e) {
             onDragLeave(e);
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                 selectUploadFile(e.dataTransfer.files[0]);
             }
         }
         function onFilePicked(e) {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             if (e.target.files && e.target.files.length > 0) {
                 selectUploadFile(e.target.files[0]);
             }
         }
         function selectUploadFile(file) {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
+            if (!file) return;
             appState.pickedFile = file;
             const nameEl = document.getElementById('pickedFileName');
             if (nameEl) nameEl.innerText = file.name;
@@ -4670,8 +4653,10 @@
                 btn.disabled = false;
                 btn.classList.remove('opacity-50', 'cursor-not-allowed');
             }
-            notify(`Đã chọn tệp: ${file.name}. Vui lòng bấm "Tải Lên Dữ Liệu Nguồn" để xem trước dữ liệu ở Bước 1.`, 'pink');
-            // TUÂN THỦ YÊU CẦU: TUYỆT ĐỐI KHÔNG TỰ Ý CHẠY PIPELINE HOẶC TỰ SUBMIT KHI CHỌN TỆP
+            // TỰ ĐỘNG NẠP VÀ HIỂN THỊ XEM TRƯỚC DỮ LIỆU THÔ BƯỚC 1 (TUYỆT ĐỐI KHÔNG TỰ Ý CHẠY 4 BƯỚC)
+            setTimeout(() => {
+                submitUploadedFile();
+            }, 80);
         }
         function clearPickedFile(e) {
             if (e) e.stopPropagation();
@@ -4685,20 +4670,12 @@
 
         // ======================== HERO DRAG & DROP ZONE ========================
         function triggerHeroUpload() {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             const input = document.getElementById('heroFileInput');
             if (input) input.click();
         }
         function onHeroDragOver(e) {
             e.preventDefault();
             e.stopPropagation();
-            if (!isBusinessProfileConfirmed()) {
-                if (e.dataTransfer) e.dataTransfer.dropEffect = 'none';
-                return;
-            }
             const p = document.getElementById('cloudDashedPath');
             if (p) {
                 p.setAttribute('stroke-width', '2.8');
@@ -4720,30 +4697,17 @@
         }
         function onHeroDrop(e) {
             onHeroDragLeave(e);
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                 processHeroPickedFile(e.dataTransfer.files[0]);
             }
         }
         function onHeroFileSelected(e) {
-            if (!isBusinessProfileConfirmed()) {
-                showProfileLockWarning();
-                return;
-            }
             if (e.target.files && e.target.files.length > 0) {
                 processHeroPickedFile(e.target.files[0]);
             }
         }
         function processHeroPickedFile(file) {
             selectUploadFile(file);
-            switchTab('step1');
-            const btn = document.getElementById('btnUploadNow');
-            if (btn) {
-                btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
         }
 
         // ======================== GOVERNANCE & RISK ALERTS ========================

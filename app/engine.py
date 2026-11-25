@@ -317,14 +317,21 @@ class PhucAnRetailEngine:
 
                 df = pd.read_excel(file_path, sheet_name=sheet_to_read)
         else:
-            # Đọc file CSV
+            # Đọc file CSV (bảo vệ an toàn tuyệt đối với cả file rỗng 0 dòng, không gây lỗi 500)
             try:
                 df = pd.read_csv(file_path, encoding="utf-8-sig")
+            except pd.errors.EmptyDataError:
+                df = pd.DataFrame(columns=['transaction_id', 'transaction_date', 'store_id', 'store_name', 'product_id', 'product_name', 'category', 'brand', 'unit', 'quantity', 'unit_price', 'discount_rate', 'total_amount', 'status'])
             except Exception:
                 try:
                     df = pd.read_csv(file_path, encoding="utf-8")
+                except pd.errors.EmptyDataError:
+                    df = pd.DataFrame(columns=['transaction_id', 'transaction_date', 'store_id', 'store_name', 'product_id', 'product_name', 'category', 'brand', 'unit', 'quantity', 'unit_price', 'discount_rate', 'total_amount', 'status'])
                 except Exception:
-                    df = pd.read_csv(file_path, encoding="latin1")
+                    try:
+                        df = pd.read_csv(file_path, encoding="latin1")
+                    except Exception:
+                        df = pd.DataFrame(columns=['transaction_id', 'transaction_date', 'store_id', 'store_name', 'product_id', 'product_name', 'category', 'brand', 'unit', 'quantity', 'unit_price', 'discount_rate', 'total_amount', 'status'])
 
         # Tự động phát hiện dòng Header nếu dòng đầu là Unnamed hoặc tiêu đề
         unnamed_cols = [c for c in df.columns if str(c).startswith("Unnamed:")]
@@ -661,15 +668,17 @@ class PhucAnRetailEngine:
         self.audit_results = None
         
         total_rows = len(self.raw_df)
-        raw_gross_sales = int(self.raw_df["total_amount"].sum())
-        status_dist = self.raw_df["status"].value_counts().to_dict()
+        raw_gross_sales = int(self.raw_df["total_amount"].sum()) if (total_rows > 0 and "total_amount" in self.raw_df.columns) else 0
+        status_dist = self.raw_df["status"].value_counts().to_dict() if (total_rows > 0 and "status" in self.raw_df.columns) else {}
+        stores_count = int(self.raw_df["store_id"].nunique()) if (total_rows > 0 and "store_id" in self.raw_df.columns) else 0
+        date_range = [str(self.raw_df["transaction_date"].min()), str(self.raw_df["transaction_date"].max())] if (total_rows > 0 and "transaction_date" in self.raw_df.columns) else ["N/A", "N/A"]
         
         return {
             "total_rows": total_rows,
             "raw_gross_sales": raw_gross_sales,
             "status_distribution": status_dist,
-            "stores_count": int(self.raw_df["store_id"].nunique()),
-            "date_range": [str(self.raw_df["transaction_date"].min()), str(self.raw_df["transaction_date"].max())],
+            "stores_count": stores_count,
+            "date_range": date_range,
             "file_name": self.active_file_name
         }
 

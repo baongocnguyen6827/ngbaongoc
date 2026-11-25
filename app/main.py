@@ -267,6 +267,26 @@ def execute_cleaning():
     """Giai đoạn 1: AI Agent thực hiện làm sạch dữ liệu tự động"""
     try:
         if engine.raw_df is None:
+            # Tự động nạp dữ liệu từ tệp tải lên gần nhất hoặc dữ liệu chuẩn nếu chưa có trong RAM
+            up_xlsx = resolve_data_file("uploaded_raw.xlsx")
+            up_csv = resolve_data_file("uploaded_raw.csv")
+            sample_csv = resolve_data_file("raw_transactions_oct2026.csv")
+            target_f = None
+            if os.path.exists(up_xlsx) and os.path.exists(up_csv):
+                target_f = up_xlsx if os.path.getmtime(up_xlsx) >= os.path.getmtime(up_csv) else up_csv
+            elif os.path.exists(up_xlsx):
+                target_f = up_xlsx
+            elif os.path.exists(up_csv):
+                target_f = up_csv
+            elif os.path.exists(sample_csv):
+                target_f = sample_csv
+            if target_f:
+                try:
+                    engine.load_raw_data(target_f)
+                except Exception:
+                    pass
+
+        if engine.raw_df is None:
             return jsonify({"success": False, "error": "Chưa có dữ liệu thô. Vui lòng tải lên tệp tại Bước 1 trước!"}), 400
         log = engine.execute_data_cleaning()
         return jsonify({"success": True, "data": log, "message": "Đã làm sạch dữ liệu thành công!"})
